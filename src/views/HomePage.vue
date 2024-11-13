@@ -21,9 +21,12 @@
         />
       </div>
 
-      <!-- Activities List -->
+      <!-- User's Agenda Component -->
+      <UserAgenda v-if="isLoggedIn" :username="username" />
+
+      <!-- All Activities List -->
       <div v-if="activities.length">
-        <h2>Activities</h2>
+        <h2>All Activities</h2>
         <div v-for="activity in activities" :key="activity.id">
           <ActivityItem
             :activity="activity"
@@ -38,9 +41,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { supabase } from '../supabase';
-import LoginComponent from './components/LoginComponent.vue';
-import AddActivityForm from './components/AddActivityForm.vue';
-import ActivityItem from './components/ActivityItem.vue';
+import LoginComponent from '../components/LoginComponent.vue';
+import AddActivityForm from '../components/AddActivityForm.vue';
+import ActivityItem from '../components/ActivityItem.vue';
 import { Activity } from '../types';
 
 // State management
@@ -64,17 +67,6 @@ const activities = ref<Activity[]>([]);
 async function login(userName: string) {
   username.value = userName;
   isLoggedIn.value = true;
-  
-  // Insert user into the subscriptions table
-  const { data, error } = await supabase.from('subscriptions').insert([
-    { user_name: username.value }
-  ]);
-
-  if (error) {
-    console.error('Error logging in:', error);
-  } else {
-    console.log('User logged in:', data);
-  }
 }
 
 // Handle logout
@@ -102,7 +94,8 @@ async function addActivity() {
     price: form.value.price,
     discount: form.value.discount,
     max_participants: form.value.max_participants,
-    deadline: form.value.deadline
+    deadline: form.value.deadline,
+    owner: username.value
   }).select('*');
 
   if (error) {
