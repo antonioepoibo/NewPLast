@@ -1,32 +1,35 @@
-<!-- src/views/Home.vue -->
 <template>
   <div>
     <h1>Home</h1>
 
-    <!-- Login Form -->
+    <!-- Only display Login Form if the user is not logged in -->
     <LoginComponent v-if="!isLoggedIn" @login="login" />
 
-    <!-- Show Add Activity Button & Form if Logged In -->
-    <div v-if="isLoggedIn">
+    <!-- Show content only when the user is logged in -->
+    <div v-else>
       <h2>Welcome, {{ username }}</h2>
       <button @click="showForm = !showForm">Add Activity</button>
 
+      <!-- Logout Button -->
+      <button @click="logout" style="margin-left: 1em;">Logout</button>
+
+      <!-- Add Activity Form -->
       <div v-if="showForm">
         <AddActivityForm
           :form="form"
           :addActivity="addActivity"
         />
       </div>
-    </div>
 
-    <!-- Activities List -->
-    <div v-if="activities.length">
-      <h2>Activities</h2>
-      <div v-for="activity in activities" :key="activity.id">
-        <ActivityItem
-          :activity="activity"
-          :subscribeToActivity="subscribeToActivity"
-        />
+      <!-- Activities List -->
+      <div v-if="activities.length">
+        <h2>Activities</h2>
+        <div v-for="activity in activities" :key="activity.id">
+          <ActivityItem
+            :activity="activity"
+            :subscribeToActivity="subscribeToActivity"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -37,13 +40,13 @@ import { ref, onMounted } from 'vue';
 import { supabase } from '../supabase';
 import LoginComponent from './components/LoginComponent.vue';
 import AddActivityForm from './components/AddActivityForm.vue';
-import ActivityItem from './components/ActivityItem.vue';  // Import the new ActivityItem component
+import ActivityItem from './components/ActivityItem.vue';
 import { Activity } from '../types';
 
 // State management
 const showForm = ref(false);
-const isLoggedIn = ref(false);  // Track whether the user is logged in or not
-const username = ref('');  // User's name input
+const isLoggedIn = ref(false);
+const username = ref('');
 const form = ref<Activity>({
   name: 'Preconfigured Activity - Yoga Class',
   type: 'Fitness',
@@ -61,7 +64,7 @@ const activities = ref<Activity[]>([]);
 async function login(userName: string) {
   username.value = userName;
   isLoggedIn.value = true;
-
+  
   // Insert user into the subscriptions table
   const { data, error } = await supabase.from('subscriptions').insert([
     { user_name: username.value }
@@ -72,6 +75,13 @@ async function login(userName: string) {
   } else {
     console.log('User logged in:', data);
   }
+}
+
+// Handle logout
+function logout() {
+  isLoggedIn.value = false;
+  username.value = '';
+  alert('You have logged out.');
 }
 
 // Fetch existing activities from Supabase

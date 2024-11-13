@@ -30,6 +30,8 @@
   input {
     margin: 0.5em 0;
     padding: 0.5em;
+    color: white; /* Set text color to white */
+    background-color: #333;
   }
   button {
     padding: 0.5em;
