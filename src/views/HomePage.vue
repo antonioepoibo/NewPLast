@@ -17,7 +17,22 @@
         
         <div>
           <label for="location">Location</label>
-          <input id="location" v-model="form.location" placeholder="e.g., Central Park" required />
+          <input 
+            id="location" 
+            v-model="form.location" 
+            placeholder="e.g., Central Park"
+            @input="fetchLocationSuggestions"
+            required 
+          />
+          <ul v-if="locationSuggestions.length" class="suggestions-list">
+            <li 
+              v-for="(suggestion, index) in locationSuggestions" 
+              :key="index"
+              @click="selectLocation(suggestion)">
+              {{ suggestion.place_name }}
+            </li>
+          </ul>
+          <p v-if="locationError" class="text-red-500">{{ locationError }}</p>
         </div>
         
         <div>
@@ -54,7 +69,7 @@
       </form>
     </div>
 
-    <div v-if="activities.length">
+    <div v-if="activities.length" class="text-3xl font-semibold text-gray-900 text-center">
       <h2>Activities</h2>
       <div v-for="activity in activities" :key="activity.id" class="activity">
         <p><strong>{{ activity.name }}</strong> - {{ activity.type }}</p>
@@ -71,18 +86,21 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { supabase } from '../supabase';
+import mapboxgl from 'mapbox-gl';
 
 interface Activity {
-  id?: number;
-  name: string;
-  type: string;
-  location: string;
-  start_time: string;
-  end_time: string;
-  price: number;
-  discount: number;
-  max_participants: number;
-  deadline: string;
+    id?: number;
+    name: string;
+    type: string;
+    location: string;
+    start_time: string;
+    end_time: string;
+    price: number;
+    discount: number;
+    max_participants: number;
+    deadline: string;
+    longitude?: number;
+    latitude?: number;
 }
 
 // State management
@@ -99,6 +117,11 @@ const form = ref<Activity>({
   deadline: ''
 });
 const activities = ref<Activity[]>([]);
+const locationSuggestions = ref<any[]>([]); // Store suggestions from Mapbox
+const locationError = ref('');
+
+// Mapbox setup
+mapboxgl.accessToken = 'pk.eyJ1IjoicG5ndXllbjEyIiwiYSI6ImNtM2ZwdTJ4dzBzM3YyanIzMHM2bHNiNHoifQ._n6g1Z7ti29lquFEJrPDog'; // Replace with your Mapbox API key
 
 // Fetch existing activities from Supabase
 async function fetchActivities() {
@@ -118,7 +141,9 @@ async function addActivity() {
     price: form.value.price,
     discount: form.value.discount,
     max_participants: form.value.max_participants,
-    deadline: form.value.deadline
+    deadline: form.value.deadline,
+    latitude: form.value.latitude,
+    longitude: form.value.longitude
   }).select('*'); // Fetch the inserted record
   
   if (error) {
@@ -130,7 +155,6 @@ async function addActivity() {
     showForm.value = false;
   }
 }
-
 
 // Reset the form after submission
 function resetForm() {
@@ -145,6 +169,41 @@ function resetForm() {
     max_participants: 0,
     deadline: ''
   };
+}
+
+// Fetch location suggestions from Mapbox
+async function fetchLocationSuggestions() {
+  if (!form.value.location.trim()) {
+    locationSuggestions.value = [];
+    return;
+  }
+
+  const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(form.value.location)}.json?access_token=${mapboxgl.accessToken}&limit=5`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.features && data.features.length) {
+      locationSuggestions.value = data.features;
+      locationError.value = '';
+    } else {
+      locationSuggestions.value = [];
+      locationError.value = 'No matching location found.';
+    }
+  } catch (error) {
+    console.error(error);
+    locationSuggestions.value = [];
+    locationError.value = 'Error fetching location suggestions.';
+  }
+}
+
+// Select location from suggestions and fetch coordinates
+function selectLocation(suggestion: any) {
+  form.value.location = suggestion.place_name;
+  form.value.latitude = suggestion.geometry.coordinates[1];
+  form.value.longitude = suggestion.geometry.coordinates[0];
+  locationSuggestions.value = []; // Clear suggestions after selection
 }
 
 // Fetch activities on component mount
@@ -175,5 +234,24 @@ input {
   padding: 0.5em;
   width: 100%;
   box-sizing: border-box;
+}
+.suggestions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  position: absolute;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 10;
+}
+.suggestions-list li {
+  padding: 0.5em;
+  cursor: pointer;
+}
+.suggestions-list li:hover {
+  background-color: #f0f0f0;
 }
 </style>
