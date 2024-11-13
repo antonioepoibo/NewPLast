@@ -44,6 +44,7 @@ import { supabase } from '../supabase';
 import LoginComponent from '../components/LoginComponent.vue';
 import AddActivityForm from '../components/AddActivityForm.vue';
 import ActivityItem from '../components/ActivityItem.vue';
+import UserAgenda from '../components/UserAgenda.vue';  // Import UserAgenda
 import { Activity } from '../types';
 
 // State management
