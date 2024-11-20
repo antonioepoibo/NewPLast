@@ -1,3 +1,4 @@
+
 <!-- src/components/LoginComponent.vue -->
 <template>
     <div>
