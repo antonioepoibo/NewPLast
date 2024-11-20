@@ -144,36 +144,34 @@ async function subscribeToActivity(activityId: number) {
   }
 }
 
-// Handle login state on mount
 onMounted(async () => {
   // Listen for changes in auth state
-  const { data: session, error: sessionError } = await supabase.auth.getSession();
+  const { data, error: sessionError } = await supabase.auth.getSession();
   if (sessionError) {
     console.error('Error getting session:', sessionError);
   }
 
   // If session exists, user is logged in
-  if (session?.session) {
+  if (data?.session) {
     isLoggedIn.value = true;
-    username.value = session.session.user.email || '';
+    username.value = data.session.user.email || '';
   } else {
     isLoggedIn.value = false;
   }
 
   // Set up auth state change listener
   supabase.auth.onAuthStateChange((event, newSession) => {
-  session.value = newSession; // Update session ref
-  if (event === 'SIGNED_IN' && newSession?.user) {
-    isLoggedIn.value = true;
-    username.value = newSession.user.email || '';
-    fetchActivities(); // Fetch activities after login
-    console.log('Parent session:', session.value);
-  } else if (event === 'SIGNED_OUT') {
-    isLoggedIn.value = false;
-    username.value = '';
-  }
-});
-
+    session.value = newSession; // Update session ref with the new session
+    if (event === 'SIGNED_IN' && newSession?.user) {
+      isLoggedIn.value = true;
+      username.value = newSession.user.email || '';
+      fetchActivities(); // Fetch activities after login
+      console.log('Updated session:', session.value); // Log updated session data
+    } else if (event === 'SIGNED_OUT') {
+      isLoggedIn.value = false;
+      username.value = '';
+    }
+  });
 
   // Fetch activities on page load if logged in
   if (isLoggedIn.value) {
@@ -183,9 +181,15 @@ onMounted(async () => {
 
 // Navigation function for Account page
 const router = useRouter();
+
 function goToAccountPage() {
-  router.push({ name: 'Account', state: { session: session.value } }); // Redirect to account page
+  console.log('Navigating to account page with session:', session.value);
+  router.push({ 
+    name: 'Account', 
+    props: { session: session.value } // Pass the session directly as a prop
+  });
 }
+
 </script>
 
 <style scoped>
