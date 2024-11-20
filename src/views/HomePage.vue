@@ -8,6 +8,9 @@
     <!-- Show content only when the user is logged in -->
     <div v-else>
       <h2>Welcome, {{ username }}</h2>
+      <!-- Account button that navigates to the Account page -->
+      <button @click="goToAccountPage" style="margin-top: 1em;">Account</button>
+
       <button @click="showForm = !showForm">Add Activity</button>
 
       <!-- Logout Button -->
@@ -46,11 +49,13 @@ import AddActivityForm from '../components/AddActivityForm.vue';
 import ActivityItem from '../components/ActivityItem.vue';
 import UserAgenda from '../components/UserAgenda.vue';  // Import UserAgenda
 import { Activity } from '../types';
+import { useRouter } from 'vue-router';
 
 // State management
 const showForm = ref(false);
 const isLoggedIn = ref(false);
 const username = ref('');
+const session = ref(null);
 const form = ref<Activity>({
   name: 'Preconfigured Activity - Yoga Class',
   type: 'Fitness',
@@ -63,12 +68,6 @@ const form = ref<Activity>({
   deadline: '2024-11-30T23:59'
 });
 const activities = ref<Activity[]>([]);
-
-// Handle login from LoginComponent
-async function login(userName: string) {
-  username.value = userName;
-  isLoggedIn.value = true;
-}
 
 // Handle logout
 function logout() {
@@ -145,11 +144,56 @@ async function subscribeToActivity(activityId: number) {
   }
 }
 
-// Fetch activities on component mount
-onMounted(() => {
-  fetchActivities();
+// Handle login state on mount
+onMounted(async () => {
+  // Listen for changes in auth state
+  const { data: session, error: sessionError } = await supabase.auth.getSession();
+  if (sessionError) {
+    console.error('Error getting session:', sessionError);
+  }
+
+  // If session exists, user is logged in
+  if (session?.session) {
+    isLoggedIn.value = true;
+    username.value = session.session.user.email || '';
+  } else {
+    isLoggedIn.value = false;
+  }
+
+  // Set up auth state change listener
+  supabase.auth.onAuthStateChange((event, newSession) => {
+  session.value = newSession; // Update session ref
+  if (event === 'SIGNED_IN' && newSession?.user) {
+    isLoggedIn.value = true;
+    username.value = newSession.user.email || '';
+    fetchActivities(); // Fetch activities after login
+    console.log('Parent session:', session.value);
+  } else if (event === 'SIGNED_OUT') {
+    isLoggedIn.value = false;
+    username.value = '';
+  }
 });
+
+
+  // Fetch activities on page load if logged in
+  if (isLoggedIn.value) {
+    fetchActivities();
+  }
+});
+
+// Navigation function for Account page
+const router = useRouter();
+function goToAccountPage() {
+  router.push({ name: 'Account', state: { session: session.value } }); // Redirect to account page
+}
 </script>
+
+<style scoped>
+button {
+  margin: 1em 0;
+  padding: 0.5em;
+}
+</style>
 
 <style scoped>
 button {
