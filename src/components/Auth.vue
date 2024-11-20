@@ -11,6 +11,9 @@ const handleLogin = async () => {
     loading.value = true
     const { error } = await supabase.auth.signInWithOtp({
       email: email.value,
+      options: {
+        redirectTo: `${window.location.origin}/HomePage`, // Redirige toujours vers HomePage
+      },
     })
     if (error) throw error
     alert('Check your email for the login link!')
@@ -22,6 +25,14 @@ const handleLogin = async () => {
     loading.value = false
   }
 }
+
+supabase.auth.onAuthStateChange(async (event, session) => {
+  if (session) {
+    router.push('/HomePage'); // Redirige manuellement vers HomePage
+  }
+});
+
+
 </script>
 
 <template>
