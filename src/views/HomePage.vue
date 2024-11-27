@@ -1,21 +1,44 @@
 <template>
-  <div>
-    <h1>Home</h1>
+  <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover" alt="Fond d'écran">
+
+  <div class="relative z-20 flex w-full flex-col h-full gap-6">
+    <router-link to="/"><img :src="newP" class="w-[12rem] mt-6 m-auto" alt=""></router-link>
 
     <!-- Only display Login Form if the user is not logged in -->
     <LoginComponent v-if="!isLoggedIn" @login="login" />
 
     <!-- Show content only when the user is logged in -->
-    <div v-else>
-      <h2>Welcome, {{ username }}</h2>
-      <!-- Account button that navigates to the Account page -->
-      <button @click="goToAccountPage" style="margin-top: 1em;">Account</button>
-
-      <button @click="showForm = !showForm">Add Activity</button>
-
-      <!-- Logout Button -->
-      <button @click="logout" style="margin-left: 1em;">Logout</button>
-
+    <div v-else class="w-[70%] m-auto">
+      <div class="flex flex-col gap-6 items-center justify-center m-auto">
+        <div class="flex flex-col justify-center items-center">
+        <h1 class="text-[30px] font-bold text-white">Bienvenue {{ username.split('.')[0] }} !</h1>
+        <p class="italic text-white">Content de vous revoir !</p>
+        <div class="flex gap-6 text-white ">
+          <button @click="logout" style="margin-left: 1em;">Se déconnecter</button>
+          <button @click="goToAccountPage" style="margin-top: 1em;">Account</button>
+        </div>
+        </div>
+          <div class="flex gap-4 items-center border border-white rounded-full px-10 py-2 bg-white">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" class="bg-transparent border-transparent w-[20rem]" placeholder="Que faire aujourd'hui ?">
+          <i class="fa-solid fa-align-left"></i>
+        </div>
+        <div class="flex gap-6 text-center">
+          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Cinéma</span>
+          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Bowling</span>
+          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Foot</span>
+          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Soirée bar</span>
+          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Paintball</span>
+          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Lazer Game</span>
+      </div>
+    </div>
+    <div class="container flex flex-col gap-6">
+      <div class="flex justify-between">
+        <h2 class="text-white text-[30px] font-bold">Vos prochaine activités</h2>
+        <button class="text-white opacity-50 duration-100 hover:opacity-100" @click="showForm = !showForm">Add Activity</button>
+        <!-- <router-link to="/" class="text-white opacity-50 duration-100 hover:opacity-100">Voir tout</router-link> -->
+      </div>
+    </div>
       <!-- Add Activity Form -->
       <div v-if="showForm">
         <AddActivityForm
@@ -30,13 +53,16 @@
       <!-- All Activities List -->
       <div v-if="activities.length">
         <h2>All Activities</h2>
-        <div v-for="activity in activities" :key="activity.id">
-          <ActivityItem
-            :activity="activity"
-            :subscribeToActivity="subscribeToActivity"
-          />
+        <div class="flex gap-6 overflow-hidden">
+          <div v-for="activity in activities" :key="activity.id">
+            <ActivityItem
+              :activity="activity"
+              :subscribeToActivity="subscribeToActivity"
+            />
+          </div>
         </div>
       </div>
+      <div id="map-container" class="w-full flex-grow"></div>
     </div>
   </div>
 </template>
@@ -50,6 +76,8 @@ import ActivityItem from '../components/ActivityItem.vue';
 import UserAgenda from '../components/UserAgenda.vue';  // Import UserAgenda
 import { Activity } from '../types';
 import { useRouter } from 'vue-router';
+import fond from '../assets/img/fond.svg';
+import newP from '../assets/img/newP_logo.svg'
 
 // State management
 const showForm = ref(false);
@@ -180,6 +208,8 @@ onMounted(async () => {
     fetchActivities();
   }
 });
+
+
 
 // Navigation function for Account page
 const router = useRouter();
