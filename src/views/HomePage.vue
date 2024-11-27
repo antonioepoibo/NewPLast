@@ -1,44 +1,45 @@
 <template>
   <div>
-    <h1>Home</h1>
+    
+      <h1>Home</h1>
 
-    <!-- Only display Login Form if the user is not logged in -->
-    <LoginComponent v-if="!isLoggedIn" @login="login" />
+      <!-- Only display Login Form if the user is not logged in -->
+      <LoginComponent v-if="!sessionStore.isLoggedIn" @login="login" />
 
-    <!-- Show content only when the user is logged in -->
-    <div v-else>
-      <h2>Welcome, {{ username }}</h2>
-      <!-- Account button that navigates to the Account page -->
-      <button @click="goToAccountPage" style="margin-top: 1em;">Account</button>
+      <!-- Show content only when the user is logged in -->
+      <div v-else>
+        <h2>Welcome, {{ sessionStore.mail }}</h2>
+        <!-- Account button that navigates to the Account page -->
+        <button @click="goToAccountPage" style="margin-top: 1em;">Account</button>
 
-      <button @click="showForm = !showForm">Add Activity</button>
+        <button @click="showForm = !showForm">Add Activity</button>
 
-      <!-- Logout Button -->
-      <button @click="logout" style="margin-left: 1em;">Logout</button>
+        <!-- Logout Button -->
+        <button @click="logout" style="margin-left: 1em;">Logout</button>
 
-      <!-- Add Activity Form -->
-      <div v-if="showForm">
-        <AddActivityForm
-          :form="form"
-          :addActivity="addActivity"
-        />
-      </div>
-
-      <!-- User's Agenda Component -->
-      <UserAgenda v-if="isLoggedIn" :username="username" />
-
-      <!-- All Activities List -->
-      <div v-if="activities.length">
-        <h2>All Activities</h2>
-        <div v-for="activity in activities" :key="activity.id">
-          <ActivityItem
-            :activity="activity"
-            :subscribeToActivity="subscribeToActivity"
+        <!-- Add Activity Form -->
+        <div v-if="showForm">
+          <AddActivityForm
+            :form="form"
+            :addActivity="addActivity"
           />
+        </div>
+
+        <!-- User's Agenda Component -->
+        <UserAgenda v-if="sessionStore.isLoggedIn" :username="sessionStore.mail" />
+
+        <!-- All Activities List -->
+        <div v-if="activities.length">
+          <h2>All Activities</h2>
+          <div v-for="activity in activities" :key="activity.id">
+            <ActivityItem
+              :activity="activity"
+              :subscribeToActivity="subscribeToActivity"
+            />
+          </div>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -50,12 +51,10 @@ import ActivityItem from '../components/ActivityItem.vue';
 import UserAgenda from '../components/UserAgenda.vue';  // Import UserAgenda
 import { Activity } from '../types';
 import { useRouter } from 'vue-router';
+import { useSessionStore } from '../stores/sessions';
 
 // State management
 const showForm = ref(false);
-const isLoggedIn = ref(false);
-const username = ref('');
-const session = ref(null);
 const form = ref<Activity>({
   name: 'Preconfigured Activity - Yoga Class',
   type: 'Fitness',
@@ -68,11 +67,13 @@ const form = ref<Activity>({
   deadline: '2024-11-30T23:59'
 });
 const activities = ref<Activity[]>([]);
-
-// Handle logout
+const sessionStore = useSessionStore();
 function logout() {
-  isLoggedIn.value = false;
-  username.value = '';
+  const sessionStore = useSessionStore(); // Access the Pinia session store
+
+  // Clear the session using the store's action
+  sessionStore.clearSession();
+
   alert('You have logged out.');
 }
 
@@ -95,7 +96,7 @@ async function addActivity() {
     discount: form.value.discount,
     max_participants: form.value.max_participants,
     deadline: form.value.deadline,
-    owner: username.value
+    owner: sessionStore.mail
   }).select('*');
 
   if (error) {
@@ -124,14 +125,14 @@ function resetForm() {
 
 // Subscribe user to an activity
 async function subscribeToActivity(activityId: number) {
-  if (!isLoggedIn.value) {
+  if (!sessionStore.isLoggedIn) {
     alert('Please log in to subscribe to this activity.');
     return;
   }
 
   const { data, error } = await supabase.from('subscriptions').insert({
     activity_id: activityId,
-    user_name: username.value
+    mail: sessionStore.mail
   });
 
   if (error) {
@@ -145,48 +146,41 @@ async function subscribeToActivity(activityId: number) {
 }
 
 onMounted(async () => {
-  // Listen for changes in auth state
+  const sessionStore = useSessionStore(); // Access the Pinia store
+
+  // Retrieve the current session
   const { data, error: sessionError } = await supabase.auth.getSession();
   if (sessionError) {
     console.error('Error getting session:', sessionError);
   }
 
-  // If session exists, user is logged in
+  // If session exists, update the store
   if (data?.session) {
-    isLoggedIn.value = true;
-    username.value = data.session.user.email || '';
+    sessionStore.setSession(sessionStore.session); // Update the session in the store
   } else {
-    isLoggedIn.value = false;
+    sessionStore.clearSession(); // Clear session if none exists
   }
 
-  // Set up auth state change listener
+  
   supabase.auth.onAuthStateChange((event, newSession) => {
-    session.value = newSession; // Update session ref with the new session
-    if (event === 'SIGNED_IN' && newSession?.user) {
-      isLoggedIn.value = true;
-      username.value = newSession.user.email || '';
-      fetchActivities(); // Fetch activities after login
-      console.log('Updated session:', session.value); // Log updated session data
-    } else if (event === 'SIGNED_OUT') {
-      isLoggedIn.value = false;
-      username.value = '';
-    }
-  });
-
-  // Fetch activities on page load if logged in
-  if (isLoggedIn.value) {
-    fetchActivities();
+  if (event === 'SIGNED_IN' && newSession?.user) {
+    sessionStore.setSession(newSession);  // Wait until session is fully set
+    fetchActivities();  // Fetch activities only after session is set
+    console.log('Updated session:', sessionStore.session);
+  } else if (event === 'SIGNED_OUT') {
+    sessionStore.clearSession();
   }
+});
+
 });
 
 // Navigation function for Account page
 const router = useRouter();
 
 function goToAccountPage() {
-  console.log('Navigating to account page with session:', session.value);
-  router.push({ 
-    name: 'Account', 
-    props: { session: session.value } // Pass the session directly as a prop
+  console.log('Navigating to account page with session:', sessionStore.session);
+  router.push({
+    name: 'Account',  // The route name
   });
 }
 

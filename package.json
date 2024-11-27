@@ -16,6 +16,7 @@
     "@supabase/supabase-js": "^2.46.1",
     "leaflet": "^1.9.4",
     "mapbox-gl": "^3.8.0",
+    "pinia": "^2.2.6",
     "vue": "^3.5.12",
     "vue-leaflet": "^0.1.0",
     "vue-router": "^4.4.5"
