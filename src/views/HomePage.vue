@@ -1,38 +1,71 @@
 <template>
   <div>
-    
-      <h1>Home</h1>
+    <h1>Home</h1>
+    <img
+      :src="fond"
+      class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover"
+      alt="Fond d'écran"
+    />
 
-      <!-- Only display Login Form if the user is not logged in -->
+    <div class="relative z-20 flex w-full flex-col h-full gap-6">
+      <router-link to="/"><img :src="newP" class="w-[12rem] mt-6 m-auto" alt="Logo"></router-link>
+
+      <!-- Display Login Form if the user is not logged in -->
       <LoginComponent v-if="!sessionStore.isLoggedIn" @login="login" />
 
-      <!-- Show content only when the user is logged in -->
+      <!-- Show content when the user is logged in -->
       <div v-else>
         <h2>Welcome, {{ sessionStore.mail }}</h2>
-        <!-- Account button that navigates to the Account page -->
+
+        <!-- Account button -->
         <button @click="goToAccountPage" style="margin-top: 1em;">Account</button>
 
-        <button @click="showForm = !showForm">Add Activity</button>
+        <!-- Add Activity Button -->
+        <button @click="toggleActivityForm" style="margin-top: 1em;">Add Activity</button>
 
         <!-- Logout Button -->
         <button @click="logout" style="margin-left: 1em;">Logout</button>
 
         <!-- Add Activity Form -->
         <div v-if="showForm">
-          <AddActivityForm
-            :form="form"
-            :addActivity="addActivity"
-          />
+          <AddActivityForm :form="form" @submit="addActivity" />
         </div>
 
-        <!-- User's Agenda Component -->
-        <UserAgenda v-if="sessionStore.isLoggedIn" :username="sessionStore.mail" />
+        <!-- User's Agenda -->
+        <UserAgenda :username="sessionStore.mail" />
+      </div>
 
-        <!-- All Activities List -->
+      <!-- Search Bar -->
+      <div class="flex gap-4 items-center border border-white rounded-full px-10 py-2 bg-white">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" class="bg-transparent border-transparent w-[20rem]" placeholder="Que faire aujourd'hui ?">
+        <i class="fa-solid fa-align-left"></i>
+      </div>
+
+      <!-- Suggested Categories -->
+      <div class="flex gap-6 text-center">
+        <span
+          v-for="category in categories"
+          :key="category"
+          class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">
+          {{ category }}
+        </span>
+      </div>
+
+      <!-- Activities Section -->
+      <div class="container flex flex-col gap-6">
+        <div class="flex justify-between">
+          <h2 class="text-white text-[30px] font-bold">Vos prochaines activités</h2>
+          <button class="text-white opacity-50 duration-100 hover:opacity-100" @click="toggleActivityForm">Add Activity</button>
+        </div>
+
+        <!-- Activities List -->
         <div v-if="activities.length">
           <h2>All Activities</h2>
-          <div v-for="activity in activities" :key="activity.id">
+          <div class="flex gap-6 overflow-hidden">
             <ActivityItem
+              v-for="activity in activities"
+              :key="activity.id"
               :activity="activity"
               :subscribeToActivity="subscribeToActivity"
             />
@@ -40,6 +73,7 @@
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -48,59 +82,63 @@ import { supabase } from '../supabase';
 import LoginComponent from '../components/LoginComponent.vue';
 import AddActivityForm from '../components/AddActivityForm.vue';
 import ActivityItem from '../components/ActivityItem.vue';
-import UserAgenda from '../components/UserAgenda.vue';  // Import UserAgenda
+import UserAgenda from '../components/UserAgenda.vue';
 import { Activity } from '../types';
 import { useRouter } from 'vue-router';
 import { useSessionStore } from '../stores/sessions';
+import fond from '../assets/img/fond.svg';
+import newP from '../assets/img/newP_logo.svg';
 
-// State management
-const showForm = ref(false);
-const form = ref<Activity>({
-  name: 'Preconfigured Activity - Yoga Class',
-  type: 'Fitness',
-  location: 'Central Park',
-  start_time: '2024-12-01T09:00',
-  end_time: '2024-12-01T10:00',
-  price: 20,
-  discount: 10,
-  max_participants: 20,
-  deadline: '2024-11-30T23:59'
-});
-const activities = ref<Activity[]>([]);
+// Reactive state
 const sessionStore = useSessionStore();
+const router = useRouter();
+const showForm = ref(false);
+const activities = ref<Activity[]>([]);
+const form = ref<Activity>({
+  name: '',
+  type: '',
+  location: '',
+  start_time: '',
+  end_time: '',
+  price: 0,
+  discount: 0,
+  max_participants: 0,
+  deadline: ''
+});
+const categories = ['Cinéma', 'Bowling', 'Foot', 'Soirée bar', 'Paintball', 'Lazer Game'];
+
+// Toggle activity form
+function toggleActivityForm() {
+  showForm.value = !showForm.value;
+}
+
+// Logout function
 function logout() {
-  const sessionStore = useSessionStore(); // Access the Pinia session store
-
-  // Clear the session using the store's action
   sessionStore.clearSession();
-
   alert('You have logged out.');
 }
 
-// Fetch existing activities from Supabase
+// Navigate to Account page
+function goToAccountPage() {
+  router.push({ name: 'Account' });
+}
+
+// Fetch activities
 async function fetchActivities() {
   const { data, error } = await supabase.from('activity').select('*');
   if (error) console.error(error);
   else activities.value = data as Activity[];
 }
 
-// Add new activity to Supabase
+// Add activity
 async function addActivity() {
   const { data, error } = await supabase.from('activity').insert({
-    name: form.value.name,
-    type: form.value.type,
-    location: form.value.location,
-    start_time: form.value.start_time,
-    end_time: form.value.end_time,
-    price: form.value.price,
-    discount: form.value.discount,
-    max_participants: form.value.max_participants,
-    deadline: form.value.deadline,
+    ...form.value,
     owner: sessionStore.mail
-  }).select('*');
+  });
 
   if (error) {
-    console.error(error);
+    console.error('Error adding activity:', error);
   } else if (data) {
     activities.value.push(data[0]);
     resetForm();
@@ -108,35 +146,35 @@ async function addActivity() {
   }
 }
 
-// Reset the form after submission
+// Reset the form
 function resetForm() {
   form.value = {
-    name: 'Preconfigured Activity - Yoga Class',
-    type: 'Fitness',
-    location: 'Central Park',
-    start_time: '2024-12-01T09:00',
-    end_time: '2024-12-01T10:00',
-    price: 20,
-    discount: 10,
-    max_participants: 20,
-    deadline: '2024-11-30T23:59'
+    name: '',
+    type: '',
+    location: '',
+    start_time: '',
+    end_time: '',
+    price: 0,
+    discount: 0,
+    max_participants: 0,
+    deadline: ''
   };
 }
 
-// Subscribe user to an activity
+// Subscribe to activity
 async function subscribeToActivity(activityId: number) {
   if (!sessionStore.isLoggedIn) {
     alert('Please log in to subscribe to this activity.');
     return;
   }
 
-  const { data, error } = await supabase.from('subscriptions').insert({
+  const { error } = await supabase.from('subscriptions').insert({
     activity_id: activityId,
     mail: sessionStore.mail
   });
 
   if (error) {
-    console.error(error);
+    console.error('Error subscribing to activity:', error);
   } else {
     const activity = activities.value.find(a => a.id === activityId);
     if (activity) {
@@ -145,56 +183,32 @@ async function subscribeToActivity(activityId: number) {
   }
 }
 
+// Monitor session state
 onMounted(async () => {
-  const sessionStore = useSessionStore(); // Access the Pinia store
+  const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+  if (sessionError) console.error('Error getting session:', sessionError);
 
-  // Retrieve the current session
-  const { data, error: sessionError } = await supabase.auth.getSession();
-  if (sessionError) {
-    console.error('Error getting session:', sessionError);
-  }
-
-  // If session exists, update the store
-  if (data?.session) {
-    sessionStore.setSession(sessionStore.session); // Update the session in the store
+  if (sessionData?.session) {
+    sessionStore.setSession(sessionData.session);
+    fetchActivities();
   } else {
-    sessionStore.clearSession(); // Clear session if none exists
-  }
-
-  
-  supabase.auth.onAuthStateChange((event, newSession) => {
-  if (event === 'SIGNED_IN' && newSession?.user) {
-    sessionStore.setSession(newSession);  // Wait until session is fully set
-    fetchActivities();  // Fetch activities only after session is set
-    console.log('Updated session:', sessionStore.session);
-  } else if (event === 'SIGNED_OUT') {
     sessionStore.clearSession();
   }
-});
 
-});
-
-// Navigation function for Account page
-const router = useRouter();
-
-function goToAccountPage() {
-  console.log('Navigating to account page with session:', sessionStore.session);
-  router.push({
-    name: 'Account',  // The route name
+  supabase.auth.onAuthStateChange((event, newSession) => {
+    if (event === 'SIGNED_IN' && newSession) {
+      sessionStore.setSession(newSession);
+      fetchActivities();
+    } else if (event === 'SIGNED_OUT') {
+      sessionStore.clearSession();
+    }
   });
-}
-
+});
 </script>
 
 <style scoped>
 button {
   margin: 1em 0;
   padding: 0.5em;
-}
-</style>
-
-<style scoped>
-button {
-  margin-top: 1em;
 }
 </style>

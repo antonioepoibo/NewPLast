@@ -2,7 +2,7 @@
   <div>
     <h2>Your Agenda</h2>
     <!-- Check if the user has any subscribed activities -->
-    <div v-if="activities.length > 0">
+    <!-- <div v-if="activities.length > 0">
       <ul>
         <li v-for="activity in activities" :key="activity.id">
           <div>
@@ -13,8 +13,24 @@
           </div>
         </li>
       </ul>
-    </div>
+    </div> -->
     <!-- If no activities, show a message -->
+    <div v-if="activities.length > 0" class="flex flex-wrap gap-[2rem] justify-between my-6 mx-4">
+      <div v-for="activity in activities" :key="activity.id" class="flex gap-4 items-center">
+          
+                <span class="flex flex-col items-start border-[.15rem] border-white text-white px-6 py-1 text-[24px] font-bold rounded-lg">{{activity.start_time.replace('T', ' ').split(' ')[0].split('-')[2] }} <br>{{activity.start_time.replace('T', ' ').split(' ')[0].split('-')[1] }}</span>
+                <div class="flex flex-col text-white">
+                  <h1 class="text-[20px] font-bold w-[14rem]">{{ activity.name }}</h1>
+                  <p class="text-[14px] opacity-50">{{ activity.type + ' ' + username.split('.')[0] }}</p>
+                </div>
+                <div v class="flex gap-4 text-2xl items-center">
+                <p class="text-white">{{ activity.price }}€</p>
+                <p class="text-green-600">12/2</p>
+                <i class="text-white fa-solid fa-user-group"></i>
+
+                </div>
+          </div>
+    </div>
     <div v-else>
       <p>You have no upcoming activities.</p>
     </div>
@@ -31,8 +47,10 @@ const props = defineProps<{
   username: string;  // This will receive the username from the parent
 }>();
 
+
 // State to store the list of subscribed activities
 const activities = ref<Activity[]>([]);
+
 
 // Fetch the subscribed activities for the logged-in user
 async function fetchUserAgenda(username: string) {
@@ -62,6 +80,7 @@ async function fetchUserAgenda(username: string) {
   }
 }
 
+const actDate = activities.value
 // Fetch the user's agenda when the component is mounted
 onMounted(() => {
   // Fetch the agenda using the username prop passed from the parent component
