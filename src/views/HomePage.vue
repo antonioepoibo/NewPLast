@@ -198,6 +198,7 @@ onMounted(async () => {
   supabase.auth.onAuthStateChange((event, newSession) => {
     if (event === 'SIGNED_IN' && newSession) {
       sessionStore.setSession(newSession);
+      console.log(sessionStore.userId);
       fetchActivities();
     } else if (event === 'SIGNED_OUT') {
       sessionStore.clearSession();
