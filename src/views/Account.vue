@@ -1,3 +1,141 @@
+<script setup>
+import { supabase } from '../supabase'
+import { onMounted, ref, toRefs } from 'vue'
+import { useRouter } from 'vue-router'
+
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const session = ref(route.state.session);
+
+const props = defineProps(['session'])
+const router = useRouter()
+
+const loading = ref(true)
+const username = ref('')
+const full_name = ref('')
+const firstname = ref('')
+const lastname = ref('')
+const age = ref(null)
+const gender = ref('')
+const selectedInterests = ref([])
+
+// Liste d'intérêts prédéfinis
+const availableInterests = [
+  'Sports', 'Musique', 'Voyages', 'Lecture', 'Cinéma', 'Cuisine', 'Danse', 'Art', 'Nature',
+  'Photographie', 'Mode', 'Jeux vidéo', 'Fitness', 'Yoga', 'Peinture', 'Écriture', 'Théâtre', 'Randonnée',
+  'Camping', 'Animaux', 'Astronomie', 'Films', 'Séries TV', 'Jardinage', 
+  'DIY (Do It Yourself)', 'Méditation',
+  'Esport', 'Marathon', 'Crossfit', 'Natation', 'Surf', 'Ski', 'Snowboard', 'Escalade', 'Voyage en sac à dos',
+  'Road trips', 'Architecture', 'Blogging', 'Vlogging', 'Langues étrangères', 'Animaux de compagnie', 
+  'Automobile', 'Moto', 'Parcs d’attractions', 'Poésie', 'Bien-être', 'Café', 'Thé', 
+  'Pêche', 'Chasse', 'Arts martiaux', 'Boxe',  
+  'Pâtisserie', 'Astrologie', 'Alpinisme', 'Planche à voile',
+  'Bricolage', 'Escrime', 'Musculation', 'Roller', 'Patinage artistique','Street art',
+  'Mode vintage', 'Tatouages', 'Piercings', 'Artisanat', 'Vin', 'Bières artisanales', 'Mindfulness', 
+  'Thérapies naturelles', 'Danse classique', 'Hip-hop', 'Street dance', 'K-pop', 'Culture japonaise', 
+  'Culture coréenne', 'Manga', 'Anime', 'Comics', 'Jeux de société', 'Jeux de rôle', 
+  'Littérature jeunesse', 'Activités de plein air', 'Bowling', 'Mini-golf', 'Golf', 
+  'Tennis', 'Football', 'Basketball', 'Rugby', 'Handball', 'Volley-ball', 'Badminton', 'Esport', 'Chant',
+  'Instruments de musique', 'Piano', 'Guitare', 'Batterie', 'Violon', 'Flûte', 'Opéra', 'Rap', 'Jazz', 'Blues',
+  'Rock', 'Musique classique', 'Funk', 'Soul', 'R&B', 'Techno', 'House', 'Électro', 'Salsa', 'Bachata', 
+  'Tango', 'Kizomba', 'Reggae', 'Rock alternatif', 'Metal', 'Pop', 'Country', 'Musique latine', 'Cyclisme', 
+  'Vélo de montagne', 'Football américain', 'Baseball', 'Cricket', 'Sports extrêmes', 'Motocross', 
+  'Plongée sous-marine', 'Snorkeling', 'Kitesurf', 'Parachutisme', 'Parapente', 'Wing suiting', 'Base jump'
+];
+
+
+onMounted(() => {
+  if (!session.value) {
+    // Si la session est vide, rediriger vers /auth
+    router.push('/auth');
+  } else {
+    getProfile();
+  }
+});
+
+async function getProfile() {
+  try {
+    loading.value = true
+    const { user } = session.value
+
+    const { data, error, status } = await supabase
+      .from('profiles')
+      .select(`username, full_name, firstname, lastname, age, gender, interest`)
+      .eq('id', user.id)
+      .single()
+
+    if (error && status !== 406) throw error
+
+    if (data) {
+      username.value = data.username
+      full_name.value = data.full_name
+      firstname.value = data.firstname
+      lastname.value = data.lastname
+      age.value = data.age
+      gender.value = data.gender
+      selectedInterests.value = data.interest ? data.interest.split(', ') : []
+    }
+  } catch (error) {
+    alert(error.message)
+  } finally {
+    loading.value = false
+  }
+}
+
+async function updateProfile() {
+  try {
+    loading.value = true
+    const { user } = session.value
+
+    const updates = {
+      id: user.id,
+      username: username.value,
+      full_name: full_name.value,
+      firstname: firstname.value,
+      lastname: lastname.value,
+      age: age.value,
+      gender: gender.value,
+      interest: selectedInterests.value.join(', '),
+      updated_at: new Date(),
+    }
+
+    const { error } = await supabase.from('profiles').upsert(updates)
+
+    if (error) throw error
+  } catch (error) {
+    alert(error.message)
+  } finally {
+    loading.value = false
+  }
+}
+
+function goToHomePage() {
+  router.push('/HomePage')
+}
+
+function toggleInterest(interest) {
+  if (selectedInterests.value.includes(interest)) {
+    selectedInterests.value = selectedInterests.value.filter(i => i !== interest)
+  } else if (selectedInterests.value.length < 3) {
+    selectedInterests.value.push(interest)
+  }
+}
+
+async function signOut() {
+  try {
+    loading.value = true
+    const { error } = await supabase.auth.signOut()
+    if (error) throw error
+  } catch (error) {
+    alert(error.message)
+  } finally {
+    loading.value = false
+  }
+}
+</script>
+
+
 <template>
   <div class="form-container">
     <h1>Profil Utilisateur</h1>
@@ -63,125 +201,118 @@
   </div>
 </template>
 
-<script setup>
-import { supabase } from '../supabase';
-import { ref, onMounted, computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
 
-// Retrieve session from the route's state
-const route = useRoute();
-const router = useRouter();
-const session = ref(route.state?.session);  // Access session from route state
-
-const loading = ref(true);
-const username = ref('');
-const full_name = ref('');
-const firstname = ref('');
-const lastname = ref('');
-const age = ref(null);
-const gender = ref('');
-const selectedInterests = ref([]);
-
-const availableInterests = [
-  'Sports', 'Musique', 'Voyages', 'Lecture', 'Cinéma', 'Cuisine', 'Danse', 'Art', 'Nature',
-  'Photographie', 'Mode', 'Jeux vidéo', 'Fitness', 'Yoga', 'Peinture', 'Écriture', 'Théâtre', 'Randonnée',
-  'Camping', 'Animaux', 'Astronomie', 'Films', 'Séries TV', 'Jardinage'
-];
-
-// Safely computed property for email (using session value)
-const userEmail = computed(() => {
-  return session.value?.user?.email || '';
-});
-
-onMounted(() => {
-  console.log('Account page mounted');
-  console.log('Session:', session.value);
-
-  // Only attempt to load the profile if session exists
-  if (session.value) {
-    getProfile();
-  } else {
-    console.error("Session is not available");
-  }
-});
-
-async function getProfile() {
-  try {
-    loading.value = true;
-    const user = session.value?.user;
-
-    if (!user) {
-      throw new Error('User not found in session.');
-    }
-
-    const { data, error, status } = await supabase
-      .from('profiles')
-      .select(`username, full_name, firstname, lastname, age, gender, interest`)
-      .eq('id', user.id)
-      .single();
-
-    if (error && status !== 406) throw error;
-
-    if (data) {
-      username.value = data.username;
-      full_name.value = data.full_name;
-      firstname.value = data.firstname;
-      lastname.value = data.lastname;
-      age.value = data.age;
-      gender.value = data.gender;
-      selectedInterests.value = data.interest ? data.interest.split(', ') : [];
-    }
-  } catch (error) {
-    alert(error.message);
-  } finally {
-    loading.value = false;
-  }
+<style scoped>
+.form-container {
+  max-width: 500px;
+  margin: 2em auto;
+  padding: 2em;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
 }
 
-async function updateProfile() {
-  try {
-    loading.value = true;
-    const user = session.value?.user;
-
-    if (!user) {
-      throw new Error('User not found in session.');
-    }
-
-    const updates = {
-      id: user.id,
-      username: username.value,
-      full_name: full_name.value,
-      firstname: firstname.value,
-      lastname: lastname.value,
-      age: age.value,
-      gender: gender.value,
-      interest: selectedInterests.value.join(', '),
-      updated_at: new Date(),
-    };
-
-    const { error } = await supabase.from('profiles').upsert(updates);
-
-    if (error) throw error;
-  } catch (error) {
-    alert(error.message);
-  } finally {
-    loading.value = false;
-  }
+h1 {
+  color: #333;
+  margin-bottom: 1em;
 }
 
-function goToHomePage() {
-  router.push('/home');  // Ensure this path matches the route
+.form-group {
+  margin-bottom: 1.5em;
+  text-align: left;
 }
 
-async function signOut() {
-  try {
-    loading.value = true;
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
-  } catch (error) {
-    alert(error.message);
-  } finally {
-    loading.value = false;
-  }
+label {
+  display: block;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 0.5em;
 }
-</script>
+
+.input-field {
+  width: 100%;
+  padding: 0.75em;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  transition: border-color 0.3s;
+}
+
+.input-field:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+.interests-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  margin-top: 0.5em;
+}
+
+.interest-button {
+  padding: 0.5em 1em;
+  border: 1px solid #007bff;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+  color: #007bff;
+  background-color: white;
+}
+
+.interest-button.selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.interest-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.selected-interests {
+  font-size: 0.9em;
+  color: #555;
+  margin-top: 0.5em;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  margin-top: 1em;
+}
+
+.button {
+  flex: 1;
+  padding: 0.75em;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.button.primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.button.primary:hover {
+  background-color: #0056b3;
+}
+
+.button.secondary {
+  background-color: #f44336;
+  color: white;
+}
+
+.button.secondary:hover {
+  background-color: #d32f2f;
+}
+
+.button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+</style>

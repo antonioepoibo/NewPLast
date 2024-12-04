@@ -8,9 +8,7 @@
     <!-- Show content only when the user is logged in -->
     <div v-else>
       <h2>Welcome, {{ username }}</h2>
-      <!-- Account button that navigates to the Account page -->
-      <button @click="goToAccountPage" style="margin-top: 1em;">Account</button>
-
+      
       <button @click="showForm = !showForm">Add Activity</button>
 
       <!-- Logout Button -->
