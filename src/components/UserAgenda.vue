@@ -1,6 +1,16 @@
 <template>
   <div>
-    <h2>Your Agenda</h2>
+    <button 
+      @click="toggleAgenda" 
+      class="btn btn-primary"
+    >
+      Show Your Agenda
+    </button>
+    
+    <UserAgenda 
+      v-if="showAgenda" 
+      :username="sessionStore.mail" 
+    />
     <!-- Check if the user has any subscribed activities -->
     <!-- <div v-if="activities.length > 0">
       <ul>
@@ -41,6 +51,8 @@
 import { ref, onMounted } from 'vue';
 import { supabase } from '../supabase';
 import { Activity } from '../types';
+import { useSessionStore } from '../stores/sessions';
+
 
 // Props
 const props = defineProps<{
@@ -50,14 +62,21 @@ const props = defineProps<{
 
 // State to store the list of subscribed activities
 const activities = ref<Activity[]>([]);
+const showAgenda = ref(false); // State to track whether the agenda should be shown
 
+// Toggle the agenda visibility
+function toggleAgenda() {
+  showAgenda.value = !showAgenda.value;
+
+  
+}
 
 // Fetch the subscribed activities for the logged-in user
-async function fetchUserAgenda(username: string) {
+async function fetchUserAgenda(usertId: string) {
   const { data, error } = await supabase
     .from('subscriptions')
     .select('activity_id')
-    .eq('user_name', username);  // Fetch activities by the logged-in username
+    .eq('userId', usertId);  // Fetch activities by the logged-in username
   
   if (error) {
     console.error('Error fetching subscriptions:', error);
@@ -81,10 +100,11 @@ async function fetchUserAgenda(username: string) {
 }
 
 const actDate = activities.value
+const sessionStore = useSessionStore();
 // Fetch the user's agenda when the component is mounted
 onMounted(() => {
   // Fetch the agenda using the username prop passed from the parent component
-  fetchUserAgenda(props.username);
+  fetchUserAgenda(sessionStore.userId);
 });
 </script>
 

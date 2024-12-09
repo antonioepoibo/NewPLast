@@ -163,24 +163,46 @@ function resetForm() {
 
 // Subscribe to activity
 async function subscribeToActivity(activityId: number) {
+  
   if (!sessionStore.isLoggedIn) {
     alert('Please log in to subscribe to this activity.');
     return;
   }
 
+  const { data: existingSubscription, error: fetchError } = await supabase
+    .from('subscriptions')
+    .select('*')
+    .eq('activity_id', activityId)
+    .eq('userId', sessionStore.userId);
+
+  if (fetchError) {
+    console.error('Error checking subscription:', fetchError);
+    alert('An error occurred while checking your subscription. Please try again later.');
+    return;
+  }
+
+  if (existingSubscription) {
+    alert('You are already subscribed to this activity.');
+    return;
+  }
+
   const { error } = await supabase.from('subscriptions').insert({
     activity_id: activityId,
-    mail: sessionStore.mail
+    userId: sessionStore.userId,
+    // user_name: sessionStore
   });
 
   if (error) {
     console.error('Error subscribing to activity:', error);
   } else {
+    alert('LOL');
     const activity = activities.value.find(a => a.id === activityId);
     if (activity) {
       activity.subscribed = true;
+
     }
   }
+  
 }
 
 // Monitor session state
