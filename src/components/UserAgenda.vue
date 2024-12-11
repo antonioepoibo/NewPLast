@@ -1,16 +1,6 @@
 <template>
   <div>
-    <button 
-      @click="toggleAgenda" 
-      class="btn btn-primary"
-    >
-      Show Your Agenda
-    </button>
     
-    <UserAgenda 
-      v-if="showAgenda" 
-      :username="sessionStore.mail" 
-    />
     <!-- Check if the user has any subscribed activities -->
     <!-- <div v-if="activities.length > 0">
       <ul>
@@ -62,14 +52,9 @@ const props = defineProps<{
 
 // State to store the list of subscribed activities
 const activities = ref<Activity[]>([]);
-const showAgenda = ref(false); // State to track whether the agenda should be shown
+ // State to track whether the agenda should be shown
 
-// Toggle the agenda visibility
-function toggleAgenda() {
-  showAgenda.value = !showAgenda.value;
 
-  
-}
 
 // Fetch the subscribed activities for the logged-in user
 async function fetchUserAgenda(usertId: string) {

@@ -31,8 +31,9 @@
           <AddActivityForm :form="form" @submit="addActivity" />
         </div>
 
-        <!-- User's Agenda -->
-        <UserAgenda :username="sessionStore.mail" />
+        <button @click="toggleAgenda" class="btn btn-primary">Show Your Agenda</button>
+    
+      <UserAgenda v-if="showAgenda" :username="sessionStore.mail" />
       </div>
 
       <!-- Search Bar -->
@@ -106,6 +107,14 @@ const form = ref<Activity>({
   deadline: ''
 });
 const categories = ['Cinéma', 'Bowling', 'Foot', 'Soirée bar', 'Paintball', 'Lazer Game'];
+const showAgenda = ref(false);
+
+// Toggle the agenda visibility
+function toggleAgenda() {
+  showAgenda.value = !showAgenda.value;
+
+  
+}
 
 // Toggle activity form
 function toggleActivityForm() {
