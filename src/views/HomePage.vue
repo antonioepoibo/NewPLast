@@ -2,67 +2,91 @@
   <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover" alt="Fond d'écran">
 
   <div class="relative z-20 flex w-full flex-col h-full gap-6">
-    <router-link to="/"><img :src="newP" class="w-[12rem] mt-6 m-auto" alt=""></router-link>
+    <router-link to="/" v-if="!isLoggedIn"><img :src="newP" class="w-[12rem] mt-6 m-auto" alt=""></router-link>
 
     <!-- Only display Login Form if the user is not logged in -->
     <LoginComponent v-if="!isLoggedIn" @login="login" />
 
     <!-- Show content only when the user is logged in -->
-    <div v-else class="w-[70%] m-auto">
-      <div class="flex flex-col gap-6 items-center justify-center m-auto">
-        <div class="flex flex-col justify-center items-center">
-        <h1 class="text-[30px] font-bold text-white">Bienvenue {{ username.split('.')[0] }} !</h1>
-        <p class="italic text-white">Content de vous revoir !</p>
-        <div class="flex gap-6 text-white ">
-          <button @click="logout" style="margin-left: 1em;">Se déconnecter</button>
-          <button @click="goToAccountPage" style="margin-top: 1em;">Account</button>
-        </div>
-        </div>
-          <div class="flex gap-4 items-center border border-white rounded-full px-10 py-2 bg-white">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <input type="text" class="bg-transparent border-transparent w-[20rem]" placeholder="Que faire aujourd'hui ?">
-          <i class="fa-solid fa-align-left"></i>
-        </div>
-        <div class="flex gap-6 text-center">
-          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Cinéma</span>
-          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Bowling</span>
-          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Foot</span>
-          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Soirée bar</span>
-          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Paintball</span>
-          <span class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">Lazer Game</span>
-      </div>
-    </div>
-    <div class="container flex flex-col gap-6">
-      <div class="flex justify-between">
-        <h2 class="text-white text-[30px] font-bold">Vos prochaine activités</h2>
-        <button class="text-white opacity-50 duration-100 hover:opacity-100" @click="showForm = !showForm">Add Activity</button>
-        <!-- <router-link to="/" class="text-white opacity-50 duration-100 hover:opacity-100">Voir tout</router-link> -->
-      </div>
-    </div>
-      <!-- Add Activity Form -->
-      <div v-if="showForm">
-        <AddActivityForm
-          :form="form"
-          :addActivity="addActivity"
-        />
-      </div>
-
-      <!-- User's Agenda Component -->
-      <UserAgenda v-if="isLoggedIn" :username="username" />
-
-      <!-- All Activities List -->
-      <div v-if="activities.length">
-        <h2>All Activities</h2>
-        <div class="flex gap-6 overflow-hidden">
-          <div v-for="activity in activities" :key="activity.id">
-            <ActivityItem
-              :activity="activity"
-              :subscribeToActivity="subscribeToActivity"
-            />
+    <div v-else>
+      <div class="flex flex-col gap-6 items-center w-[100%] justify-center m-auto">
+        <div class="relative z-20 flex flex-col h-full w-full overflow-hidden gap-6">
+          <div class="flex justify-between w-full h-[auto] bg-[#021925] py-6 px-[10rem] max-[600px]:px-[6rem] max-[600px]:py-3">
+            <div class="flex gap-10 items-center text-white text-[18px] flex-shrink-0">
+              <router-link to="/"><img :src="newP" class="w-[8rem] hover:opacity-50 duration-200 hover:underline max-[600px]:w-[6rem]" alt=""></router-link>
+              <router-link to="/" class="max-[1100px]:hidden "><p class="hover:opacity-50 duration-200 hover:underline text-white">Home</p></router-link>
+              <router-link to="/agenda" class="max-[1100px]:hidden"><p class="hover:opacity-50 duration-200 hover:underline text-white">Agenda</p></router-link>
+              <router-link to="/finder" class="max-[1100px]:hidden"><p class="hover:opacity-50 duration-200 hover:underline text-white">Finder</p></router-link>
+              <router-link to="/message" class="max-[1100px]:hidden"><p class="hover:opacity-50 duration-200 hover:underline text-white">Message</p></router-link>
+            </div>
+            <div class="flex gap-10 items-center text-white text-[18px] flex-shrink-0">
+              <router-link to="/activite/add/" class="max-[1100px]:hidden"><i class="fa-solid fa-plus text-[24px]"></i></router-link>
+              <router-link to="/profil"><img class="rounded-full w-[4rem] h-[4rem] object-cover" :src="image_url" alt=""></router-link>
+              <button @click="logout" class="max-[1100px]:hidden"><i class="text-red-600 text-[24px] hover:text-red-400 duration-200 fa-solid fa-arrow-right-from-bracket"></i></button>
+              <div id="spanCont" class="flex flex-col gap-2 hidden">
+                <span class="flex w-6 h-[3px] bg-white rounded-full"></span>
+                <span class="flex w-8 h-[3px] bg-white rounded-full"></span>
+                <span class="flex w-6 h-[3px] bg-white rounded-full"></span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-6 items-center justify-center m-auto">
+              <div class="flex flex-col justify-center items-center">
+              <h1 class="text-[30px] font-bold text-white max-[600px]:text-[20px]">Bienvenue {{ username.split('.')[0] }} !</h1>
+              <p class="italic text-white">Content de vous revoir !</p>
+              </div>
           </div>
         </div>
+        <div class="flex gap-4 items-center border border-white rounded-full px-10 py-2 bg-white">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" class="bg-transparent border-transparent w-[20rem] max-[600px]:w-[10rem] max-[600px]:text-[12px]" placeholder="Que faire aujourd'hui ?">
+        <i class="fa-solid fa-align-left"></i>
       </div>
-      <div id="map-container" class="w-full flex-grow"></div>
+      <div class="flex gap-6 text-center max-[600px]:gap-2">
+        <span class="btn">Cinéma</span>
+        <span class="btn">Bowling</span>
+        <span class="btn ">Foot</span>
+        <span class="btn ">Soirée bar</span>
+        <span class="btn ">Paintball</span>
+        <span class="btn">Lazer Game</span>
+    </div>
+    </div>
+    <div class="containers">
+      <div class="container flex flex-col gap-6">
+        <div class="flex justify-between">
+          <h2 class="text-white text-[30px] font-bold max-[600px]:text-[20px]">Vos prochaine activités</h2>
+          <button class="text-white opacity-50 duration-100 hover:opacity-100 max-[600px]:text-[12px] flex items-center"  @click="showForm = !showForm">Add Activity</button>
+          <!-- <router-link to="/" class="text-white opacity-50 duration-100 hover:opacity-100">Voir tout</router-link> -->
+        </div>
+      </div>
+        <!-- Add Activity Form -->
+        <div v-if="showForm">
+          <AddActivityForm
+            :form="form"
+            :addActivity="addActivity"
+          />
+        </div>
+
+        <!-- User's Agenda Component -->
+        <UserAgenda v-if="isLoggedIn" :username="username" />
+*        <!-- All Activities List -->
+        <div v-if="activities.length">
+        <div class="flex justify-between">
+          <h2 class="text-white text-[30px] font-bold">All Activities</h2>
+          <button class="text-white opacity-50 duration-100 hover:opacity-100" @click="showForm = !showForm">Add Activity</button>
+
+        </div>
+          <div class="flex gap-6 overflow-hidden">
+            <div v-for="activity in activities" :key="activity.id">
+              <ActivityItem
+                :activity="activity"
+                :subscribeToActivity="subscribeToActivity"
+              />
+            </div>
+          </div>
+        </div>
+        <div id="map-container" class="w-full flex-grow"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -96,6 +120,7 @@ const form = ref<Activity>({
   deadline: '2024-11-30T23:59'
 });
 const activities = ref<Activity[]>([]);
+const image_url = 'https://gujeiecqangbzroveklt.supabase.co/storage/v1/object/public/Images/default_img.png'
 
 // Handle logout
 function logout() {
@@ -222,11 +247,64 @@ function goToAccountPage() {
 button {
   margin: 1em 0;
   padding: 0.5em;
+  margin-top: 1em;
+
 }
+
+.btn{
+  border: 0.1rem solid white;
+  font-size: 14px;
+  width: auto;
+  padding-left: 1.5rem;  /* px-6 */
+  padding-right: 1.5rem; /* px-6 */
+  padding-top: 0.75rem;  /* py-3 */
+  padding-bottom: 0.75rem; /* py-3 */
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  color: white;
+  height: 1.5rem;
+  border-radius: 9999px; /* rounded-full */
+  opacity: 0.5;
+  transition-duration: 200ms;
+}
+.btn:hover{
+  opacity: 1;
+}
+
+
+@media (max-width: 1100px) {
+  #spanCont{
+    display: flex !important;
+  }
+}
+
+@media (max-width: 860px){
+  .btn {
+    font-size: 10px;
+    padding-left: 1rem;  /* px-8 */
+    padding-right: 1rem; /* px-8 */
+    padding-top: 0.625rem;  /* py-3 */
+    padding-bottom: 0.625rem; /* py-3 */
+    height: 1rem;  /* Adjust height for smaller screens */
+  }
+}
+
+@media (max-width: 600px) {
+  #spanCont {
+    display: none !important;
+  }
+  .btn {
+    font-size: 8px;
+    padding-left: .8rem;  /* px-4 */
+    padding-right: .8rem; /* px-4 */
+    padding-top: 0.5rem;  /* py-2 */
+    padding-bottom: 0.5rem; /* py-2 */
+    height: 1.25rem;  /* Adjust height for smaller screens */
+  }
+}
+
 </style>
 
-<style scoped>
-button {
-  margin-top: 1em;
-}
-</style>
+
+
