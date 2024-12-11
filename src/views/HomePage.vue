@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, nextTick } from 'vue';
 import { supabase } from '../supabase';
 import LoginComponent from '../components/LoginComponent.vue';
 import AddActivityForm from '../components/AddActivityForm.vue';
@@ -141,16 +141,22 @@ async function fetchActivities() {
 
 // Add activity
 async function addActivity() {
+  
   const { data, error } = await supabase.from('activity').insert({
     ...form.value,
     owner: sessionStore.mail
-  });
-
+  })
+  .select();
+  const activityId = data[0]?.id
+  console.log("lol",activityId);
   if (error) {
     console.error('Error adding activity:', error);
   } else if (data) {
     activities.value.push(data[0]);
+    subscribeToActivity(activityId);
+
     resetForm();
+    
     showForm.value = false;
   }
 }
@@ -177,20 +183,20 @@ async function subscribeToActivity(activityId: number) {
     alert('Please log in to subscribe to this activity.');
     return;
   }
-
+ 
   const { data: existingSubscription, error: fetchError } = await supabase
     .from('subscriptions')
     .select('*')
     .eq('activity_id', activityId)
     .eq('userId', sessionStore.userId);
-
+  
   if (fetchError) {
     console.error('Error checking subscription:', fetchError);
     alert('An error occurred while checking your subscription. Please try again later.');
     return;
   }
 
-  if (existingSubscription) {
+  if (existingSubscription.length > 0) {
     alert('You are already subscribed to this activity.');
     return;
   }
@@ -198,21 +204,25 @@ async function subscribeToActivity(activityId: number) {
   const { error } = await supabase.from('subscriptions').insert({
     activity_id: activityId,
     userId: sessionStore.userId,
-    // user_name: sessionStore
   });
+
 
   if (error) {
     console.error('Error subscribing to activity:', error);
   } else {
-    alert('LOL');
+    alert('Successfully subscribed!');
     const activity = activities.value.find(a => a.id === activityId);
     if (activity) {
       activity.subscribed = true;
-
     }
+
+    // Trigger re-mount by toggling showAgenda
+    showAgenda.value = false;  // Temporarily hide the agenda
+    await nextTick();  // Wait for DOM to update
+    showAgenda.value = true;  // Show the agenda again to re-render
   }
-  
 }
+
 
 // Monitor session state
 onMounted(async () => {

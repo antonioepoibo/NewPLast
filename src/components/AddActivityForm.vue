@@ -70,8 +70,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { supabase } from '../supabase';
-import mapboxgl from 'mapbox-gl';
+
 
 // Définir votre token Mapbox
 const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoicG5ndXllbjEyIiwiYSI6ImNtM2ZwdTJ4dzBzM3YyanIzMHM2bHNiNHoifQ._n6g1Z7ti29lquFEJrPDog';
