@@ -242,6 +242,7 @@ async function subscribeToActivity(activityId: number) {
 
   if (existingSubscription.length > 0) {
     alert('You are already subscribed to this activity.');
+    
     return;
   }
 

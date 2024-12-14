@@ -4,7 +4,6 @@
             <div class="flex gap-10 items-center text-white text-[18px] flex-shrink-0">
               <router-link to="/"><img :src="newP" class="w-[8rem] hover:opacity-50 duration-200 hover:underline max-[600px]:w-[6rem]" alt=""></router-link>
               <router-link to="/" class="max-[1100px]:hidden "><p :class="{ underline: $route.path === '/' }" class="text-white hover:opacity-50 duration-200 hover:underline">Home</p></router-link>
-              <p @click="toggleAgenda" class="max-[1100px]:hidden"><p :class="{ underline: $route.path === '/Aganda' }" class="text-white hover:opacity-50 duration-200 hover:underline">Agenda</p></p>
               <router-link to="/finder" class="max-[1100px]:hidden"><p :class="{ underline: $route.path === '/Finder' }" class="text-white hover:opacity-50 duration-200 hover:underline">Finder</p></router-link>
               <router-link to="/message" class="max-[1100px]:hidden"><p :class="{ underline: $route.path === '/Message' }" class="text-white hover:opacity-50 duration-200 hover:underline">Message</p></router-link>
             </div>
@@ -41,9 +40,11 @@
 <script setup>
 import newP from '../assets/img/newP_logo.svg';
 import { defineProps } from "vue";
+import { useSessionStore } from '../stores/sessions';
 
 
-// const sessionStore = useSessionStore();
+
+const sessionStore = useSessionStore();
 const categories = ['Cinéma', 'Bowling', 'Foot', 'Soirée bar', 'Paintball', 'Lazer Game'];
 const props = defineProps({
     username: String
