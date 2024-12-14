@@ -4,6 +4,13 @@
 
     <div class="relative z-20 flex w-full flex-col h-full">
 
+      <div v-if="sessionStore.isCompany">
+        <p>Bienvenue, utilisateur entreprise !</p>
+      </div>
+      <div v-else>
+        <p>Bienvenue, utilisateur classique !</p>
+      </div>
+      
       <!-- Display Login Form if the user is not logged in -->
       <LoginComponent v-if="!sessionStore.isLoggedIn" @login="login" />
 
