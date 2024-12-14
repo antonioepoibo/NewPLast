@@ -14,6 +14,8 @@
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/vue3": "^6.1.15",
     "@supabase/supabase-js": "^2.46.1",
+    "@vue-leaflet/vue-leaflet": "^0.10.1",
+    "axios": "^1.7.9",
     "leaflet": "^1.9.4",
     "mapbox-gl": "^3.8.0",
     "pinia": "^2.2.6",

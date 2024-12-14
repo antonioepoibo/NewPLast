@@ -1,76 +1,58 @@
 <template>
   <div>
-    <h1>Home</h1>
-    <img
-      :src="fond"
-      class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover"
-      alt="Fond d'écran"
-    />
+    <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover" alt="Fond d'écran"/>
 
-    <div class="relative z-20 flex w-full flex-col h-full gap-6">
-      <router-link to="/"><img :src="newP" class="w-[12rem] mt-6 m-auto" alt="Logo"></router-link>
+    <div class="relative z-20 flex w-full flex-col h-full">
 
       <!-- Display Login Form if the user is not logged in -->
       <LoginComponent v-if="!sessionStore.isLoggedIn" @login="login" />
 
-      <!-- Show content when the user is logged in -->
-      <div v-else>
-        <h2>Welcome, {{ sessionStore.mail }}</h2>
-
-        <!-- Account button -->
-        <button @click="goToAccountPage" style="margin-top: 1em;">Account</button>
-
-        <!-- Add Activity Button -->
-        <button @click="toggleActivityForm" style="margin-top: 1em;">Add Activity</button>
-
-        <!-- Logout Button -->
-        <button @click="logout" style="margin-left: 1em;">Logout</button>
-
-        <!-- Add Activity Form -->
-        <div v-if="showForm">
-          <AddActivityForm :form="form" @submit="addActivity" />
-        </div>
-
-        <button @click="toggleAgenda" class="btn btn-primary">Show Your Agenda</button>
-    
-      <UserAgenda v-if="showAgenda" :username="sessionStore.mail" />
+      <div v-if="sessionStore.isLoggedIn" class="relative z-20 flex flex-col h-full gap-6">
+          <HeadEr :username="sessionStore.mail" />
       </div>
 
-      <!-- Search Bar -->
-      <div class="flex gap-4 items-center border border-white rounded-full px-10 py-2 bg-white">
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" class="bg-transparent border-transparent w-[20rem]" placeholder="Que faire aujourd'hui ?">
-        <i class="fa-solid fa-align-left"></i>
-      </div>
-
-      <!-- Suggested Categories -->
-      <div class="flex gap-6 text-center">
-        <span
-          v-for="category in categories"
-          :key="category"
-          class="border-[.1rem] text-[14px] border-white w-[auto] px-6 py-3 flex items-center text-nowrap text-white h-[1.5rem] rounded-full opacity-50 duration-200 hover:opacity-100">
-          {{ category }}
-        </span>
-      </div>
-
-      <!-- Activities Section -->
-      <div class="container flex flex-col gap-6">
-        <div class="flex justify-between">
-          <h2 class="text-white text-[30px] font-bold">Vos prochaines activités</h2>
-          <button class="text-white opacity-50 duration-100 hover:opacity-100" @click="toggleActivityForm">Add Activity</button>
-        </div>
-
-        <!-- Activities List -->
-        <div v-if="activities.length">
-          <h2>All Activities</h2>
-          <div class="flex gap-6 overflow-hidden">
-            <ActivityItem
-              v-for="activity in activities"
-              :key="activity.id"
-              :activity="activity"
-              :subscribeToActivity="subscribeToActivity"
-            />
+      <div v-if="sessionStore.isLoggedIn" class="container">
+        <!-- Activities Section -->
+        <div class="flex flex-col">
+          <div class="flex justify-between">
+            <h2 class="text-white text-[30px] font-bold">Vos prochaines activités</h2>
+            <button class="text-white opacity-50 duration-100 hover:opacity-100" @click="toggleActivityForm">Add Activity</button>
           </div>
+          <UserAgenda :username="sessionStore.mail" />
+        </div>
+
+        <div v-if="showForm">
+            <AddActivityForm :form="form" @submit="addActivity" />
+        </div>
+
+          <!-- Activities List -->
+        <div v-if="activities.length">
+          <div class="flex justify-between">
+            <h2 class="text-white text-[30px] font-bold">Acitivitée pour vous</h2>
+            <button class="text-white opacity-50 duration-100 hover:opacity-100">Add Activity</button>
+          </div>
+          <div class="overflow-hidden">
+            <div class="flex gap-[2rem]" :style="{ transform: `translateX(-${ActVcurrentIndex * 101}%)` }">
+              <ActivityItem
+                v-for="activity in activities"
+                :key="activity.id"
+                :activity="activity"
+                :subscribeToActivity="subscribeToActivity"
+              />
+            </div>
+          </div>
+          <div class="flex gap-4 justify-center items-center">
+            <p @click="moveLeftActV" class="relative text-white fa-solid fa-arrow-left arrow"></p>
+            <span v-for="i in ActVmaxIndex" :id="i.toString()" @click="setNewIActV(i)" :class="{'opacity-50': i !== ActVcurrentIndex + 1 }" class="bg-white flex w-[0.8rem] h-[0.8rem] rounded-full"></span>
+            <p @click="moveRightActV" class="relative text-white fa-solid fa-arrow-right arrow"></p>
+          </div>
+        </div>
+        <div class="">
+          <div class="flex justify-between">
+            <h4 class="text-white text-[30px] font-bold max-[600px]:text-[20px]">Activités autour de chez vous</h4>
+            <button class="text-white opacity-50 duration-100 hover:opacity-100">Add Activity</button>
+          </div>
+          <MapPin :acvitivitesLoc="act" :acvitivitesUser="activities" :width="width" :height="height" />
         </div>
       </div>
     </div>
@@ -85,14 +67,17 @@ import AddActivityForm from '../components/AddActivityForm.vue';
 import ActivityItem from '../components/ActivityItem.vue';
 import UserAgenda from '../components/UserAgenda.vue';
 import { Activity } from '../types';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useSessionStore } from '../stores/sessions';
+import MapPin from '../components/MapPin.vue';
 import fond from '../assets/img/fond.svg';
 import newP from '../assets/img/newP_logo.svg';
+import HeadEr from '../components/HeadEr.vue';
 
 // Reactive state
 const sessionStore = useSessionStore();
 const router = useRouter();
+const route = useRoute();
 const showForm = ref(false);
 const activities = ref<Activity[]>([]);
 const form = ref<Activity>({
@@ -108,6 +93,64 @@ const form = ref<Activity>({
 });
 const categories = ['Cinéma', 'Bowling', 'Foot', 'Soirée bar', 'Paintball', 'Lazer Game'];
 const showAgenda = ref(false);
+const  width = ref('100%'),
+height = ref('500px');
+const ActVcurrentIndex = ref<number>(0);
+const ActVmaxIndex = ref<number>(0);
+const allActivities = ref<Array<any>>([]);
+
+    async function getAllActivities(): Promise<void> {
+  try {
+    const { data, error } = await supabase
+      .from('activity')
+      .select('*');
+
+    if (error) {
+      console.error('Erreur lors de la récupération des activités:', error.message);
+      return;
+    }
+
+    if (data) {
+      allActivities.value = data;
+      calcMaxIndexActV(); // Recalculer les indices après la récupération des données
+    }
+  } catch (err) {
+    console.error('Erreur inattendue:', err);
+  }
+}
+
+function calcMaxIndexActV(): void {
+  if (allActivities.value.length < 3) {
+    ActVmaxIndex.value = 1;
+  } else {
+    ActVmaxIndex.value = Math.ceil(allActivities.value.length / 3);
+    console.log("ActVmaxIndex", ActVmaxIndex.value);
+  }
+}
+
+
+function moveLeftActV(): void {
+  if (ActVcurrentIndex.value > 0) {
+    ActVcurrentIndex.value--;
+  }
+}
+
+
+function moveRightActV(): void {
+  if (ActVcurrentIndex.value < ActVmaxIndex.value - 1) {
+    ActVcurrentIndex.value++;
+  }
+}
+
+function setNewIActV(i: number): void {
+  if (i > 0 && i <= ActVmaxIndex.value) {
+    ActVcurrentIndex.value = i - 1;
+  }
+}
+
+onMounted(() => {
+  getAllActivities();
+});
 
 // Toggle the agenda visibility
 function toggleAgenda() {
@@ -136,7 +179,8 @@ function goToAccountPage() {
 async function fetchActivities() {
   const { data, error } = await supabase.from('activity').select('*');
   if (error) console.error(error);
-  else activities.value = data as Activity[];
+  else activities.value = (data as Activity[]).sort((a, b) => 
+        a.start_time.localeCompare(b.start_time));
 }
 
 // Add activity
@@ -226,6 +270,7 @@ async function subscribeToActivity(activityId: number) {
 
 // Monitor session state
 onMounted(async () => {
+  calcMaxIndexActV();
   const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
   if (sessionError) console.error('Error getting session:', sessionError);
 
@@ -248,9 +293,95 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped>
+
+<style>
 button {
   margin: 1em 0;
   padding: 0.5em;
 }
+.container{
+    margin-left: 17.2rem;
+    margin-right: 17.2rem;
+    width: auto;
+  
+  }
+
+  .btn{
+  border: 0.1rem solid white;
+  font-size: 14px;
+  width: auto;
+  padding-left: 1.5rem;  /* px-6 */
+  padding-right: 1.5rem; /* px-6 */
+  padding-top: 0.75rem;  /* py-3 */
+  padding-bottom: 0.75rem; /* py-3 */
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  color: white;
+  height: 1.5rem;
+  border-radius: 9999px; /* rounded-full */
+  opacity: 0.5;
+  transition-duration: 200ms;
+}
+.btn:hover{
+  opacity: 1;
+}
+
+@media (max-width: 860px){
+  .btn {
+    font-size: 10px;
+    padding-left: 1rem;  /* px-8 */
+    padding-right: 1rem; /* px-8 */
+    padding-top: 0.625rem;  /* py-3 */
+    padding-bottom: 0.625rem; /* py-3 */
+    height: 1rem;  /* Adjust height for smaller screens */
+  }
+}
+
+@media (max-width: 600px) {
+  .btn {
+    font-size: 8px;
+    padding-left: .8rem;  /* px-4 */
+    padding-right: .8rem; /* px-4 */
+    padding-top: 0.5rem;  /* py-2 */
+    padding-bottom: 0.5rem; /* py-2 */
+    height: 1.25rem;  /* Adjust height for smaller screens */
+  }
+}
+
+  @media (max-width:1500px){
+    .container{
+      margin-left: 11rem;
+      margin-right: 11rem;
+    }
+  }
+
+  @media (max-width:1250px){
+    .container{
+      margin-left: 8rem;
+      margin-right: 8rem;
+    }
+  }
+
+
+  @media (max-width: 1024px) {
+    .container{
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .container{
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container{
+      margin-left: 1rem;
+      margin-right: 1rem;
+    }
+  }
 </style>

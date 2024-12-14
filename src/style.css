@@ -45,10 +45,7 @@ h1 {
   padding: 2em;
 }
 
-#app {
-  padding: 2rem;
-  text-align: center;
-}
+
 
 @media (prefers-color-scheme: light) {
   :root {
