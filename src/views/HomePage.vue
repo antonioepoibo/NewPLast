@@ -10,20 +10,22 @@
       <div v-if="sessionStore.isLoggedIn" class="relative z-20 flex flex-col h-full gap-6">
           <HeadEr :username="sessionStore.mail" />
       </div>
-
+      
       <div v-if="sessionStore.isLoggedIn" class="container">
         <!-- Activities Section -->
         <div class="flex flex-col">
           <div class="flex justify-between">
             <h2 class="text-white text-[30px] font-bold">Vos prochaines activités</h2>
-            <button class="text-white opacity-50 duration-100 hover:opacity-100" @click="toggleActivityForm">Add Activity</button>
+            <button @click="toggleAgenda" class="btn btn-primary">Show Your Agenda</button>
           </div>
-          <UserAgenda :username="sessionStore.mail" />
+          <UserAgenda v-if="showAgenda" :username="sessionStore.mail" />
+
         </div>
 
         <div v-if="showForm">
             <AddActivityForm :form="form" @submit="addActivity" />
         </div>
+        
 
           <!-- Activities List -->
         <div v-if="activities.length">
@@ -263,8 +265,11 @@ async function subscribeToActivity(activityId: number) {
 
     // Trigger re-mount by toggling showAgenda
     showAgenda.value = false;  // Temporarily hide the agenda
+    console.log(showAgenda.value);
     await nextTick();  // Wait for DOM to update
     showAgenda.value = true;  // Show the agenda again to re-render
+    console.log(showAgenda.value);
+
   }
 }
 
