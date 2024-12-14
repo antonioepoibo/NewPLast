@@ -13,8 +13,13 @@
                 <p class="text-white">{{ activity.price }}€</p>
                 <p class="text-green-600">12/2</p>
                 <i class="text-white fa-solid fa-user-group"></i>
-
                 </div>
+                <button 
+                  @click="unsubscribe(activity.id)" 
+                  class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500"
+                >
+                  Unsubscribe
+                </button>
           </div>
     </div>
     <div v-else>
@@ -62,7 +67,6 @@ async function fetchUserAgenda(userId: string) {
     console.log('No subscriptions found for this user.');
     return;
   }
-  console.log("LIL");
 
   // Now fetch the details of each subscribed activity
   if (data && data.length > 0) {
@@ -85,6 +89,32 @@ async function fetchUserAgenda(userId: string) {
     console.log("No subscriptions found for this user.");
   }
 }
+
+// Unsubscribe from an activity
+async function unsubscribe(activityId: string) {
+  const userId = sessionStore.userId;
+
+  try {
+    const { error } = await supabase
+      .from('subscriptions')
+      .delete()
+      .eq('activity_id', activityId)
+      .eq('userId', userId);
+
+    if (error) {
+      console.error('Error unsubscribing:', error);
+      alert('Failed to unsubscribe. Please try again.');
+    } else {
+      alert('Successfully unsubscribed!');
+      // Refresh the page to reflect the updated state
+      window.location.reload();
+    }
+  } catch (err) {
+    console.error('Unexpected error:', err);
+  }
+}
+
+
 
 
 const actDate = activities.value

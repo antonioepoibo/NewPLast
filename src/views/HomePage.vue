@@ -94,7 +94,7 @@ const form = ref<Activity>({
   deadline: ''
 });
 const categories = ['Cinéma', 'Bowling', 'Foot', 'Soirée bar', 'Paintball', 'Lazer Game'];
-const showAgenda = ref(false);
+const showAgenda = ref(true);
 const  width = ref('100%'),
 height = ref('500px');
 const ActVcurrentIndex = ref<number>(0);
@@ -265,10 +265,8 @@ async function subscribeToActivity(activityId: number) {
 
     // Trigger re-mount by toggling showAgenda
     showAgenda.value = false;  // Temporarily hide the agenda
-    console.log(showAgenda.value);
     await nextTick();  // Wait for DOM to update
     showAgenda.value = true;  // Show the agenda again to re-render
-    console.log(showAgenda.value);
 
   }
 }
