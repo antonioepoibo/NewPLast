@@ -7,7 +7,8 @@ export const useSessionStore = defineStore('session', {
     isLoggedIn: false,
     isLoading: true,  // Initially loading the session
     mail: '',
-    userId: ''  // Initialize userId as a regular string
+    userId: '',  // Initialize userId as a regular string
+    isCompany:false,
   }),
   actions: {
     // Define a ref for userId in the action
@@ -20,6 +21,7 @@ export const useSessionStore = defineStore('session', {
       const userId = ref('');  // Define a local ref for userId within the action
       userId.value = newSession?.user?.id || '';  // Set the ref value
       this.userId = userId.value;  // Store the ref value in the state
+      this.isCompany = !!newSession?.user?.isCompany
 
       console.log(userId.value);  // Log the userId value
     },
@@ -30,6 +32,7 @@ export const useSessionStore = defineStore('session', {
       this.isLoggedIn = false;
       this.mail = '';
       this.userId = '';  // Reset userId
+      this.isCompany = false;
     },
     persist: true,
   }

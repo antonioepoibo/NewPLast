@@ -1,10 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 import { supabase } from '../supabase';
+import { useSessionStore } from '../stores/sessions';
 
 // State
 const loading = ref(false);
 const email = ref('');
+const sessionStore = useSessionStore();
 
 const handleLogin = async () => {
   try {
@@ -17,14 +19,17 @@ const handleLogin = async () => {
 
     if (loginError) throw loginError;
 
-    // Save email in profiles
 
-    const { error: dbError } = await supabase.from('profiles').upsert({
+    const { error: dbError } = await supabase.from('company').upsert({
       email: email.value,
       updated_at: new Date().toISOString(),
     });
 
     if (dbError) throw dbError
+
+    // Set isCompany to true in the session store
+    sessionStore.isCompany = true;
+
     // Notify parent about successful login
     alert('Check your email for the login link!');
   } catch (error) {
@@ -40,9 +45,9 @@ const handleLogin = async () => {
 <template>
   <form class="row flex-center flex" @submit.prevent="handleLogin">
     <div class="col-6 form-widget">
-      <h1 class="header">Login</h1>
+      <h1 class="header">Login for Company</h1>
       <p>Sign in via magic link with your email below:</p>
-      <input type="email" v-model="email" required placeholder="Your email" />
+      <input type="email" v-model="email" required placeholder="Your business email" />
       <button type="submit" :disabled="loading">{{ loading ? 'Loading...' : 'Send Magic Link' }}</button>
     </div>
   </form>

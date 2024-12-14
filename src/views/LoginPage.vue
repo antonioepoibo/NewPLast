@@ -1,41 +1,40 @@
+<script setup>
+import { ref } from 'vue';
+import LoginComponent from '../components/LoginComponent.vue';
+import LoginCompany from '../components/LoginCompany.vue';
 
-<!-- src/components/LoginComponent.vue -->
+// State to track whether it's a company login
+const isCompany = ref(false);
+
+const toggleLoginType = () => {
+  isCompany.value = !isCompany.value;
+};
+</script>
+
 <template>
-    <div>
-      <h2>Please Log In</h2>
-      <input v-model="username" placeholder="Enter your name" />
-      <button @click="handleLogin">Log In</button>
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref } from 'vue';
-  
-  const username = ref('');
-  
-  // Emit the login event to the parent component
-  const emit = defineEmits(['login']);
-  
-  function handleLogin() {
-    if (username.value.trim() === '') {
-      alert('Please enter a valid name');
-      return;
-    }
-  
-    // Emit the login event with the username
-    emit('login', username.value);
-  }
-  </script>
-  
-  <style scoped>
-  input {
-    margin: 0.5em 0;
-    padding: 0.5em;
-    color: white; /* Set text color to white */
-    background-color: #333;
-  }
-  button {
-    padding: 0.5em;
-    cursor: pointer;
-  }
-  </style>
+  <div class="login-page">
+    <h1>{{ isCompany ? 'Connexion Entreprise' : 'Connexion Utilisateur' }}</h1>
+    <!-- Render the appropriate login component -->
+    <component :is="isCompany ? LoginCompany : LoginComponent" />
+
+    <!-- Toggle button -->
+    <button @click="toggleLoginType">
+      {{ isCompany ? 'Vous êtes un utilisateur ?' : 'Vous êtes une entreprise ?' }}
+    </button>
+  </div>
+</template>
+
+<style scoped>
+.login-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1em;
+}
+button {
+  margin-top: 1em;
+  padding: 0.5em 1em;
+  font-size: 1em;
+  cursor: pointer;
+}
+</style>

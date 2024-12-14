@@ -5,10 +5,13 @@
     <router-link to="/" v-if="!isLoggedIn"><img :src="newP" class="w-[12rem] mt-6 m-auto" alt=""></router-link>
 
     <!-- Only display Login Form if the user is not logged in -->
-    <LoginComponent v-if="!isLoggedIn" @login="login" />
+    <LoginPage v-if="!isLoggedIn" @login="login" />
 
     <!-- Show content only when the user is logged in -->
     <div v-else>
+      <div v-if="sessionStore.isCompany" class="text-green-500">L'utilisateur est une entreprise</div>
+      <div v-else class="text-red-500">L'utilisateur n'est pas une entreprise</div>
+
       <div class="flex flex-col gap-6 items-center w-[100%] justify-center m-auto">
         <div class="relative z-20 flex flex-col h-full w-full overflow-hidden gap-6">
           <div class="flex justify-between w-full h-[auto] bg-[#021925] py-6 px-[10rem] max-[600px]:px-[6rem] max-[600px]:py-3">
@@ -94,7 +97,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { supabase } from '../supabase';
-import LoginComponent from '../components/LoginComponent.vue';
 import AddActivityForm from '../components/AddActivityForm.vue';
 import ActivityItem from '../components/ActivityItem.vue';
 import UserAgenda from '../components/UserAgenda.vue';  // Import UserAgenda
@@ -102,8 +104,11 @@ import { Activity } from '../types';
 import { useRouter } from 'vue-router';
 import fond from '../assets/img/fond.svg';
 import newP from '../assets/img/newP_logo.svg'
+import LoginPage from './LoginPage.vue';
+import { useSessionStore } from '../stores/sessions';
 
 // State management
+const sessionStore = useSessionStore();
 const showForm = ref(false);
 const isLoggedIn = ref(false);
 const username = ref('');
@@ -126,6 +131,7 @@ const image_url = 'https://gujeiecqangbzroveklt.supabase.co/storage/v1/object/pu
 function logout() {
   isLoggedIn.value = false;
   username.value = '';
+  sessionStore.isCompany = false;
   alert('You have logged out.');
 }
 
