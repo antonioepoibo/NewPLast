@@ -88,33 +88,72 @@
     }
 
     async function setPinWithLocation() {
-    if (!map.value) {
-        console.error("Carte non initialisée.");
-        return;
+        if (!map.value) {
+            console.error("Carte non initialisée.");
+            return;
+        }
+
+        console.log(lastname.value + ' ' + firstname.value);
+
+        const { data, error: fetchError } = await supabase
+            .from('activity')
+            .select('name, type, location, start_time, end_time, price, max_participants, latitude, longitude, owner')
+            .eq('owner', lastname.value + ' ' + firstname.value);
+
+        if (fetchError) {
+            console.error("Erreur lors de la récupération des données de l'activité :", fetchError);
+            return;
+        }
+
+        console.log(data)
+
+        if (data && data.length > 0) {
+            data.forEach(activity => {
+                if (activity.latitude && activity.longitude) {
+                    console.log(activity.latitude + ' ' + activity.longitude);
+                    L.marker([activity.latitude, activity.longitude], { draggable: false, icon: dot })
+                        .addTo(map.value)
+                        .bindPopup(`
+                        <div class="flex flex-col gap-2">
+                            <p class="text-[22px] font-bold">${activity.name}</p>
+                            <p class="text italic opacity-[70%]">Par ${activity.owner}</p>
+                            <p class="text-[15px] w-[90%] italic opacity-[70%]  max-[600px]:w-[75%]">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur</p>
+                            <div class="flex flex-col gap-2 items-start text-center">
+                            <div class="flex gap-4">
+                                <i class="text-[14px] w-[18.2px] fa-regular fa-circle-question"></i>
+                                <p class="text-[14px]">${activity.start_time}</p>
+                            </div>
+                            ${
+                                 activity.max_participants
+                                ? `<div class="flex gap-4">
+                                    <i class="text-[14px] fa-solid fa-users"></i>
+                                    <p class="text-[14px]">
+                                        0 participants sur ${activity.max_participants}
+                                    </p>
+                                    </div>`
+                                : ''
+                            }
+                            <div class="flex gap-4">
+                                <i class="text-[14px] w-[18.2px] fa-solid fa-location-arrow"></i>
+                                <p class="text-[14px]">${activity.location}</p>
+                            </div>
+                            </div>
+                            <div class="flex items-start">
+                            <div id="jointMapActivity" class="border border-green-600 rounded-tl-lg rounded-br-lg py-1 px-4">
+                                <p class="text-center m-auto flex">Rejoindre</p>  
+                            </div> 
+                            </div>      
+                        </div>
+                        `)
+                        .openPopup();
+                } else {
+                    console.error("Coordonnées manquantes pour l'activité :", activity);
+                }
+            });
+        } else {
+            console.error("Aucune donnée valide pour l'activité.");
+        }
     }
-
-    console.log(lastname.value + ' ' + firstname.value);
-
-    const { data, error: fetchError } = await supabase
-        .from('activity')
-        .select('*')
-        .eq('owner', lastname.value + ' ' + firstname.value);
-
-    if (fetchError) {
-        console.error("Erreur lors de la récupération des données de l'activité :", fetchError);
-        return;
-    }
-
-    if (data && data.length > 0 && data[0].latitude && data[0].longitude) {
-        console.log(data[0].latitude + ' ' + data[0].longitude);
-        L.marker([data[0].latitude, data[0].longitude], { draggable: false, icon: dot })
-            .addTo(map.value)
-            .bindPopup("Test")
-            .openPopup();
-    } else {
-        console.error("Aucune donnée valide pour l'activité ou coordonnées manquantes.");
-    }
-}
 
     
     async function setPinWithLocationNew(lat, lng, id) {
@@ -287,6 +326,9 @@ watch(
       margin: 0px 0 !important;
       margin: 0rem 0 !important;
   }
-  
+
+  .leaflet-popup-content p{
+    margin: 0px 0 !important;
+  }  
   </style>
   
