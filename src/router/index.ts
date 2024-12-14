@@ -6,7 +6,10 @@ import AboutPage from '../views/AboutPage.vue';
 import Account from '../views/Account.vue';
 import AddActivity from '../views/AddActivity.vue';
 import ProfilPage from '../views/ProfilPage.vue';
+import LoginCompany from '../components/LoginCompany.vue';
+import LoginComponent from '../components/LoginComponent.vue';
 import FindEr from '../views/FindEr.vue';
+
 
 const routes = [
   { path: '/', name: 'Home', component: HomePage },
@@ -17,6 +20,9 @@ const routes = [
   { path: '/activite/add', component: AddActivity },
   { path: '/profil', component: ProfilPage },
   { path: '/finder', component: FindEr },
+  { path: '/login', name : 'LoginPage', component: LoginComponent},
+  { path: '/loginCompany', name : 'LoginCompany', component: LoginCompany},
+
 ];
 
 const router = createRouter({
