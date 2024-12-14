@@ -31,7 +31,7 @@
         <div v-if="activities.length">
           <div class="flex justify-between">
             <h2 class="text-white text-[30px] font-bold">Acitivitée pour vous</h2>
-            <button class="text-white opacity-50 duration-100 hover:opacity-100">Add Activity</button>
+            <router-link to="/activite/add" class="text-white opacity-50 duration-100 hover:opacity-100">Add Activity</router-link>
           </div>
           <div class="overflow-hidden">
             <div class="flex gap-[2rem]" :style="{ transform: `translateX(-${ActVcurrentIndex * 101}%)` }">
@@ -52,7 +52,7 @@
         <div class="">
           <div class="flex justify-between">
             <h4 class="text-white text-[30px] font-bold max-[600px]:text-[20px]">Activités autour de chez vous</h4>
-            <button class="text-white opacity-50 duration-100 hover:opacity-100">Add Activity</button>
+            <<router-link to="/finder" class="text-white opacity-50 duration-100 hover:opacity-100">Finder</router-link> 
           </div>
           <MapPin :acvitivitesLoc="act" :acvitivitesUser="activities" :width="width" :height="height" />
         </div>

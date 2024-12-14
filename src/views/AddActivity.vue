@@ -24,6 +24,24 @@
                             <textarea v-model="activitydesc" class="p-1 bg-transparent border w-[32rem] border-white h-[10rem] resize-y max-[670px]:w-[20rem] text-white" placeholder="Description de l'activité"></textarea>
                         </div>
                     </div>
+                    <div class="w-[80%]">
+                        <div class="flex gap-2 flex-wrap flex-shrink-0">
+                            <p @click="addType" :class="{'opacity-50': !keyword.includes(type), 'opacity-100': keyword.includes(type), 'cursor-not-allowed': keyword.split(',').length >= 3 && !keyword.includes(type), 'cursor-pointer': keyword.split(',').length < 3 || keyword.includes(type)}" :id="type" class="TypeContainer border border-white text-sm w-auto px-6 py-3 flex items-center whitespace-nowrap text-white h-6 rounded-full opacity-50 transition duration-200 text-[10px] flex-shrink-0" v-for="type in simplifiedActivityTypes" :key="type">{{ type }}</p>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center px-8 my-4 gap-[6rem] max-[670px]:flex-col max-[670px]:gap-2 max-[670px]:items-start">
+                            <div class="flex flex-col gap-4">
+                                <label class="text-[18px] text-white">Début de l'activité</label>
+                                <input v-model="activityStartdate" class="bg-transparent text-slate-400 italic border-b border-white text-white" placeholder="12/12/2022 14:00" type="datetime-local">
+                                {{ activityStartdate }}
+                            </div>
+                            <div class="flex flex-col gap-4">
+                                <label class="text-[18px] text-white">Fin de l'activité</label>
+                                <input v-model="activityEnddate" class="bg-transparent text-slate-400 italic border-b border-white text-white" placeholder="12/12/2022 14:00" type="datetime-local">
+                            </div>
+                        </div>
+                    </div>
                     <div class="flex justify-between items-center px-8 my-4 gap-[6rem] max-[670px]:flex-col max-[670px]:gap-2 max-[670px]:items-start">
                         <div class="flex flex-col gap-4">
                             <label class="text-[18px] text-white" for="">Image de couverture</label>
@@ -115,6 +133,32 @@
     imageUrl = ref(''),
     latitude = ref(''),
     longitude = ref('');
+    const keyword = ref('');
+    const simplifiedActivityTypes = [
+        "Sport", "Performance", "Créativité", "Culture", "Découverte", "Observation", "Stratégie", "Bien-être", "Compétition", "Apprentissage", "Plein air", "Fête", "Collaboration", "Relaxation", "Improvisation", "Aventure", "Défi", "Nocturne", "Art", "Exploration", "Technologie", "Thème", "Immersion", "Tradition", "Langue", "Construction", "Science", "Spiritualité", "Cuisine", "Théâtre", "Douceur", "Danse", "Méditation", "Aquatique", "Développement", "Musique",
+        "Jeux", "Nature", "Ludique", "Extrême", "Expression", "Saisonnier", "Bricolage", "Écologie", "Survie", "Photographie", "Énigmes", "Partage", "Local", "Musical", "Détente"
+    ];
+    async function addType(){
+        const select = event.target.id;
+        let keywordsArray = keyword.value.split(',').map(item => item.trim()).filter(item => item !== '');
+        
+        if (keywordsArray.includes(select)) {
+            keywordsArray = keywordsArray.filter(item => item !== select);
+        } else {
+            if (keywordsArray.length < 3) { // Limit to 3 keywords
+                keywordsArray.push(select);
+            } else {
+                console.log('Maximum of 3 keywords allowed');
+                return; // Exit if there are already 3 keywords
+            }
+        }
+        
+        keyword.value = keywordsArray.join(', ');
+        console.log(keyword.value);
+    }
+
+
+
 
     async function TransformCord(){
         console.log(activityloc.value)
@@ -194,14 +238,15 @@
           .insert([
             {
               name: activityname.value,
-            //   desc: activitydesc.value,
+              desc: activitydesc.value,
               owner: last_name.value + ' ' + name.value,
               location: activityloc.value,
               start_time: activitydate.value,
               price: activityprice.value,
               max_participants: activitypart.value,
               latitude: latitude.value,
-              longitude: longitude.value
+              longitude: longitude.value,
+              type: keyword.value
             //   image_url: imageUrl.value,
             //   creator_id: utilisateurID.value,
             //   user_join: utilisateurID.value,
@@ -220,6 +265,7 @@
             activityprice.value = '';
             activitydate.value = '';
             imageUrl.value = '';
+            keyword.value = '';
         }
     }
 

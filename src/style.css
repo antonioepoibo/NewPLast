@@ -18,11 +18,8 @@
 
 a {
   font-weight: 500;
-  color: #000000;
+  color: white;
   text-decoration: none; /* Retirer la décoration par défaut */
-}
-a:hover {
-  color: #0e0f21; /* Couleur hover claire */
 }
 
 body {

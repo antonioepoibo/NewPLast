@@ -6,6 +6,7 @@ import AboutPage from '../views/AboutPage.vue';
 import Account from '../views/Account.vue';
 import AddActivity from '../views/AddActivity.vue';
 import ProfilPage from '../views/ProfilPage.vue';
+import FindEr from '../views/FindEr.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: HomePage },
@@ -15,7 +16,7 @@ const routes = [
   { path: '/account', name: 'Account', component: Account },
   { path: '/activite/add', component: AddActivity },
   { path: '/profil', component: ProfilPage },
-
+  { path: '/finder', component: FindEr },
 ];
 
 const router = createRouter({
