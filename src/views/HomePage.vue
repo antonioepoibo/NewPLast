@@ -8,7 +8,7 @@
       <LoginComponent v-if="!sessionStore.isLoggedIn" @login="login" />
 
       <div v-if="sessionStore.isLoggedIn" class="relative z-20 flex flex-col h-full gap-6">
-          <HeadEr :username="sessionStore.mail" />
+          <HeadEr :username="sessionStore.username" />
       </div>
       
       <div v-if="sessionStore.isLoggedIn" class="container">
@@ -18,7 +18,7 @@
             <h2 class="text-white text-[30px] font-bold">Vos prochaines activités</h2>
             <button @click="toggleAgenda" class="btn btn-primary">Show Your Agenda</button>
           </div>
-          <UserAgenda v-if="showAgenda" :username="sessionStore.mail" />
+          <UserAgenda v-if="showAgenda" :username="sessionStore.username" />
 
         </div>
 
@@ -277,13 +277,25 @@ onMounted(async () => {
   calcMaxIndexActV();
   const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
   if (sessionError) console.error('Error getting session:', sessionError);
-
+  
   if (sessionData?.session) {
     sessionStore.setSession(sessionData.session);
     fetchActivities();
   } else {
     sessionStore.clearSession();
   }
+  const { data: profileData, error: profileError } = await supabase
+      .from('profiles') // Replace with your actual table name
+      .select('username')
+      .eq('id', sessionStore.userId) // Assuming 'id' is the foreign key for users in the profile table
+      .single(); // Fetch a single row
+
+    if (profileError) {
+      console.error('Error fetching username:', profileError);
+    } else if (profileData) {
+      console.log('Fetched username:', profileData.username);
+      sessionStore.setUsername(profileData.username); // Optionally store the username in your session store
+    }
 
   supabase.auth.onAuthStateChange((event, newSession) => {
     if (event === 'SIGNED_IN' && newSession) {

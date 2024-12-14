@@ -7,6 +7,7 @@ export const useSessionStore = defineStore('session', {
     isLoggedIn: false,
     isLoading: true,  // Initially loading the session
     mail: '',
+    username: '',
     userId: ''  // Initialize userId as a regular string
   }),
   actions: {
@@ -24,11 +25,17 @@ export const useSessionStore = defineStore('session', {
       console.log(userId.value);  // Log the userId value
     },
 
+    setUsername(username: string) {
+      this.username = username; // Store the username
+      console.log('Username set in store:', this.username); // Debug log for username
+    },
+
     clearSession() {
       this.isLoading = false;  // Reset loading flag
       this.session = null;
       this.isLoggedIn = false;
       this.mail = '';
+      this.username = '';
       this.userId = '';  // Reset userId
     },
     persist: true,
