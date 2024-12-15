@@ -8,7 +8,7 @@
       <LoginComponent v-if="!sessionStore.isLoggedIn" @login="login" />
 
       <div v-if="sessionStore.isLoggedIn" class="relative z-20 flex flex-col h-full gap-6">
-          <HeadEr :username="sessionStore.username" />
+          <HeadEr :username="sessionStore.username" v-model:searchQuery="searchQuery" />
       </div>
       
       <div v-if="sessionStore.isLoggedIn" class="container">
@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, watch } from 'vue';
 import { supabase } from '../supabase';
 import LoginComponent from '../components/LoginComponent.vue';
 import AddActivityForm from '../components/AddActivityForm.vue';
@@ -100,6 +100,7 @@ height = ref('500px');
 const ActVcurrentIndex = ref<number>(0);
 const ActVmaxIndex = ref<number>(0);
 const allActivities = ref<Array<any>>([]);
+const searchQuery = ref(''); // Reactive state in the parent
 
     async function getAllActivities(): Promise<void> {
   try {
@@ -177,13 +178,32 @@ function goToAccountPage() {
   router.push({ name: 'Account' });
 }
 
-// Fetch activities
+// Function to fetch activities
 async function fetchActivities() {
   const { data, error } = await supabase.from('activity').select('*');
   if (error) console.error(error);
-  else activities.value = (data as Activity[]).sort((a, b) => 
-        a.start_time.localeCompare(b.start_time));
+  else{
+    activities.value = (data as Activity[]).sort((a, b) => 
+    a.start_time.localeCompare(b.start_time));
+    allActivities.value = activities.value;
+  } 
 }
+
+// Function to filter activities
+function filterActivities(allActivities) {
+  
+  return searchQuery.value 
+    ? allActivities.filter(activity =>
+        activity.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+      )
+    : allActivities;
+}
+
+// Watch for changes in searchQuery to update filtered activities
+watch(searchQuery, () => {
+  activities.value = filterActivities(allActivities.value);
+});
+
 
 // Add activity
 async function addActivity() {
@@ -194,7 +214,6 @@ async function addActivity() {
   })
   .select();
   const activityId = data[0]?.id
-  console.log("lol",activityId);
   if (error) {
     console.error('Error adding activity:', error);
   } else if (data) {
