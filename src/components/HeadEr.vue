@@ -21,7 +21,7 @@
            
           <div class="flex flex-col gap-6 items-center justify-center m-auto">
               <div class="flex flex-col justify-center items-center">
-                <h1 class="text-[30px] font-bold text-white max-[600px]:text-[20px]">Bienvenue {{ (props.username).split('@')[0] }} !</h1>
+                <h1 class="text-[30px] font-bold text-white max-[600px]:text-[20px]">Bienvenue {{ sessionStore.username }} !</h1>
                 <p class="italic text-white">Content de vous revoir !</p>
               </div>
 

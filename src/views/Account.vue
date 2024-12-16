@@ -82,7 +82,7 @@ async function updateProfile() {
     const user = sessionStore.userId;
 
     const updates = {
-      id: user.id,
+      id: user,
       username: username.value,
       full_name: full_name.value,
       firstname: firstname.value,
