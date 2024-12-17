@@ -101,6 +101,7 @@ const ActVcurrentIndex = ref<number>(0);
 const ActVmaxIndex = ref<number>(0);
 const allActivities = ref<Array<any>>([]);
 const searchQuery = ref(''); // Reactive state in the parent
+const interest = ref<Array<any>>([]);;
 
     async function getAllActivities(): Promise<void> {
   try {
@@ -183,8 +184,19 @@ async function fetchActivities() {
   const { data, error } = await supabase.from('activity').select('*');
   if (error) console.error(error);
   else{
-    activities.value = (data as Activity[]).sort((a, b) => 
-    a.start_time.localeCompare(b.start_time));
+    const sortedActivities = (data as Activity[]).sort((a, b) => {
+      const aInInterest = interest.value.includes(a.type) ? 0 : 1;
+      const bInInterest = interest.value.includes(b.type) ? 0 : 1;
+
+      if (aInInterest === bInInterest) {
+        // If both activities have the same priority, sort by start_time
+        return a.start_time.localeCompare(b.start_time);
+      }
+
+      return aInInterest - bInInterest; // Activities matching interest come first
+    });
+
+    activities.value = sortedActivities;
     allActivities.value = activities.value;
   } 
 }
@@ -305,13 +317,15 @@ onMounted(async () => {
   }
   const { data: profileData, error: profileError } = await supabase
       .from('profiles') // Replace with your actual table name
-      .select('username')
+      .select('username, interest')
       .eq('id', sessionStore.userId) // Assuming 'id' is the foreign key for users in the profile table
       .single(); // Fetch a single row
 
     if (profileError) {
       console.error('Error fetching username:', profileError);
     } else if (profileData) {
+      interest.value=profileData.interest.split(', ');
+      console.log(interest);
       console.log('Fetched username:', profileData.username);
       sessionStore.setUsername(profileData.username); // Optionally store the username in your session store
     }
