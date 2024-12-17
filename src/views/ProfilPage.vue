@@ -5,7 +5,7 @@
     <div class="flex container gap-[5rem]">
       <div class="flex flex-col gap-[5rem] relative z-20 my-10" :class="{'w-[auto]': pageStep === 'info', 'w-[26rem]': pageStep === 'param'}">
           <div class="flex items-center gap-6">
-              <img :src="image_url" class="rounded-full w-[120px] h-[120px] object-cover" alt="">
+              <img :src="image_url ? image_url : DefaultImg" class="rounded-full w-[120px] h-[120px] object-cover" alt="">
               <div>
                   <h1 class="text-white font-bold text-[24px]"> {{ last_name + ' ' + name  }}</h1>
                   <p class="text-white">0 xp</p>
@@ -48,10 +48,13 @@
                   <div>
                       <h1 class="text-white text-[22px]">Photo de profil</h1>
                       <div class="flex gap-[6rem] items-center my-[2.5rem]">
-
-                          <img :src="image_url" class="rounded-full w-[10rem] h-[10rem] object-cover" alt="">
+                        <div class="relative w-[200px] h-[200px] rounded-full flex items-center justify-center">
+                          <img :src="image_url" class="absolute opacity-50 rounded-full w-[10rem] h-[10rem] object-cover" alt="">
+                          <span class="absolute text-white text-[30px]">+</span>
+                          <input type="file" id="imageInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" @change="uploadImage" />
+                        </div>
                           <div class="flex gap-10">
-                          <p class="text-green-600 text-[24px] font-bold cursor-pointer">Modifier</p>
+                          <p @click="upPicture" class="text-green-600 text-[24px] font-bold cursor-pointer">Modifier</p>
                           <p class="text-red-600 text-[24px] font-bold cursor-pointer">Supprimer</p>
                           </div>
                       
@@ -139,6 +142,8 @@ import { ref, onMounted } from 'vue';
 import { supabase } from '../supabase';
 import fond from '../assets/img/fond.svg';
 import { useSessionStore } from '../stores/sessions';
+import DefaultImg from '../assets/img/default_img.png';
+
 
 
 const sessionStore = useSessionStore();
@@ -185,7 +190,7 @@ async function getUser() {
       const user = data[0];
       name.value = user.firstname;
       last_name.value = user.lastname;
-      image_url.value = user.image_url;
+      image_url.value = user.avatar_url;
       utilisateurID.value = user.id;
       profilType.value = user.profil_type;
       username.value = user.username;
@@ -208,6 +213,34 @@ function Info() {
   pageStep.value = 'info';
 }
 
+async function uploadImage() {
+  const input = document.getElementById('imageInput');
+  const file = input.files[0];
+
+  if (file) {
+    const filePath = `profil_picture/${file.name.replace(/\s/g, '_')}_${sessionStore.userId}`;
+
+    const { data, error } = await supabase.storage
+      .from('profile-pictures')
+      .upload(filePath, file);
+
+    if (error) {
+      console.error('Erreur lors de l\'upload de l\'image:', error.message);
+    } else {
+      const { data: publicURLData } = supabase.storage
+        .from('profile-pictures')
+        .getPublicUrl(filePath);
+      
+      image_url.value = publicURLData.publicUrl;
+      console.log('Image téléchargée avec succès:', publicURLData.publicUrl);
+    }
+  } else {
+    console.error('Aucun fichier sélectionné');
+  }
+}
+
+
+
 async function modify() {
   const username = document.querySelector('input[name="username"]').value;
   const email = document.querySelector('input[name="email"]').value;
@@ -229,7 +262,7 @@ async function modify() {
 
     const updates = {};
     const data = {
-      username, email, firstname, lastname, age, gender, desc, interest: interest.join(','), image_url: ''
+      username, email, firstname, lastname, age, gender, desc, interest: interest.join(','), avatar_url: image_url.value
     };
 
     // Comparer et  les champs modifiés

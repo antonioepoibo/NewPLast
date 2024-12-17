@@ -43,7 +43,8 @@
 import newP from '../assets/img/newP_logo.svg';
 import { defineProps, defineEmits, ref } from "vue";
 import { useSessionStore } from '../stores/sessions';
-
+import DefaultImg from '../assets/img/default_img.png';
+import {supabase} from '../supabase'
 const sessionStore = useSessionStore();
 const searchQuery = ref(''); // Reactive state for search query
 const categories = ['Cinéma', 'Bowling', 'Foot', 'Soirée bar', 'Paintball', 'Lazer Game'];
@@ -51,6 +52,20 @@ const props = defineProps({
     searchBar: String
 });
 const emit = defineEmits(); // Define emits
+const image_url = ref('');
+
+async function getImg(){
+  const { data, error } = await supabase
+   .from('profiles')
+   .select('avatar_url')
+   .eq('id', sessionStore.userId);
+   if (error) {
+    console.error(error);
+    return DefaultImg;
+  } else {
+    image_url.value = data[0].avatar_url;
+  }
+}
 
 // Emit the search query when the input changes
 function updateSearchQuery() {
@@ -62,4 +77,6 @@ function logout() {
   sessionStore.clearSession();
   alert('You have logged out.');
 }
+
+getImg();
 </script>

@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover" alt="Fond d'écran"/>
+  <div class="overflow-hidden">
+    <img v-if="sessionStore.isLoggedIn" :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover" alt="Fond d'écran"/>
 
     <div class="relative z-20 flex w-full flex-col h-full">
       
@@ -72,7 +72,7 @@ import { Activity } from '../types';
 import { useRouter, useRoute } from 'vue-router';
 import { useSessionStore } from '../stores/sessions';
 import MapPin from '../components/MapPin.vue';
-import fond from '../assets/img/fond.svg';
+import fond from '../assets/img/fond.png';
 import newP from '../assets/img/newP_logo.svg';
 import HeadEr from '../components/HeadEr.vue';
 
