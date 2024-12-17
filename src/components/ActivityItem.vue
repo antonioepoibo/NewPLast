@@ -3,7 +3,9 @@
     <div class="">
       <div class="w-[22rem] bg-[#3B5562] rounded-sm shadow-xl">
       <div class="flex justify-between items-center px-3 py-5">
-        <p class="text-[#3B5562] opacity-70 text-[12px] bg-white py-1 px-3 rounded-full font-bold">{{ activity.type }}</p>
+        <div class="flex gap-1 items-center flex-wrap">
+          <p v-for="acti in activity.type.split(',')" :key="acti" class="text-[#3B5562] opacity-70 text-[9px] bg-white py-1 px-3 rounded-full font-bold">{{ acti }}</p>
+        </div>
         <p class="text-white opacity-70 text-[8px] italic">{{ activityStartDate + ' ' + activityStartNum }} -> {{ activityEndDate + ' ' + activityEndNum }}</p>
       </div>
         <img src="../assets/img/default_activite.svg" alt="">
