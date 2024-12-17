@@ -34,7 +34,7 @@
                             <div class="flex flex-col gap-4">
                                 <label class="text-[18px] text-white">Début de l'activité</label>
                                 <input v-model="activityStartdate" class="bg-transparent text-slate-400 italic border-b border-white text-white" placeholder="12/12/2022 14:00" type="datetime-local">
-                                {{ activityStartdate }}
+                                {{ activityStartdate  }}
                             </div>
                             <div class="flex flex-col gap-4">
                                 <label class="text-[18px] text-white">Fin de l'activité</label>
@@ -130,6 +130,8 @@
     activitypart = ref(''),
     activityprice = ref(''),
     activitydate = ref(''),
+    activityStartdate = ref(''),
+    activityEnddate = ref(''),
     imageUrl = ref(''),
     latitude = ref(''),
     longitude = ref('');
@@ -231,31 +233,31 @@
     };
 
 
-    async function sendNewAct(){
-        activitydate.value = "2024-12-12"
+    async function sendNewAct() {
         const { data, error } = await supabase
-          .from('activity')
-          .insert([
-            {
-              name: activityname.value,
-              desc: activitydesc.value,
-              owner: last_name.value + ' ' + name.value,
-              location: activityloc.value,
-              start_time: activitydate.value,
-              price: activityprice.value,
-              max_participants: activitypart.value,
-              latitude: latitude.value,
-              longitude: longitude.value,
-              type: keyword.value
-            //   image_url: imageUrl.value,
-            //   creator_id: utilisateurID.value,
-            //   user_join: utilisateurID.value,
-            },
-          ]);
+            .from('activity')
+            .insert([
+                {
+                    name: activityname.value,
+                    desc: activitydesc.value,
+                    owner: last_name.value + ' ' + name.value,
+                    location: activityloc.value,
+                    start_time: activityStartdate.value.replace('T', ' ').replace('-', '/').replace('-', '/').replace(':', 'H'),
+                    end_time: activityEnddate.value.replace('T', ' ').replace('-', '/').replace('-', '/').replace(':', 'H'),
+                    price: activityprice.value ? parseFloat(activityprice.value) : null,
+                    max_participants: activitypart.value ? parseInt(activitypart.value) : null,
+                    latitude: latitude.value ? parseFloat(latitude.value) : null,
+                    longitude: longitude.value ? parseFloat(longitude.value) : null,
+                    type: keyword.value,
+                    // image_url: imageUrl.value ? imageUrl.value : null,
+                    // creator_id: utilisateurID.value,
+                    // user_join: utilisateurID.value,
+                },
+            ]);
 
         if (error) {
-          console.error('Erreur lors de l\'insertion de l\'activité :', error.message);
-          console.log(name.value + ' ' + last_name.value + ' ' + activityname.value + ' ' + activitydesc.value + ' ' + activityloc.value + ' ' + activitydate.value + ' ' + activityprice.value + ' ' + activitypart.value + ' ' + imageUrl.value + ' ' + utilisateurID.value);
+            console.error('Erreur lors de l\'insertion de l\'activité :', error.message);
+            console.log(activityname.value + ' ' + activitydesc.value + ' ' + last_name.value + ' ' + activityloc.value + ' ' + activityStartdate.value + ' ' + activityEnddate.value + ' ' + activityprice.value + ' ' + activitypart.value + ' ' + latitude.value + ' ' + longitude.value + ' ' + keyword.value);
         } else {
             console.log('Activité insérée avec succès :', data);
             activityname.value = '';
@@ -266,6 +268,8 @@
             activitydate.value = '';
             imageUrl.value = '';
             keyword.value = '';
+            activityStartdate.value = '';
+            activityEnddate.value = '';
         }
     }
 

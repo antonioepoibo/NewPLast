@@ -62,81 +62,63 @@
                       <div class="flex justify-between">
                           <div class="flex flex-col gap-4">
                               <p class="text-white text-[22px]">Pseudo *</p>
-                              <input type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="name" :placeholder="HugoKyo">
+                              <input name="username" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="username" :placeholder="HugoKyo">
                           </div>
                           <div class="flex flex-col gap-4">
                               <p class="text-white text-[22px]">Email *</p>
-                              <input type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="userEmail" placeholder="hugobohard55@gmail.com">
+                              <input name="email" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="userEmail" placeholder="hugobohard55@gmail.com">
                           </div>
                       </div>
 
                       <div class="flex justify-between">
                           <div class="flex flex-col gap-4">
                               <p class="text-white text-[22px]">Nom *</p>
-                              <input type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="name" :placeholder="Hugo">
+                              <input name="firstname" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="name" :placeholder="Hugo">
                           </div>
                           <div class="flex flex-col gap-4">
                               <p class="text-white text-[22px]">Prénom *</p>
-                              <input type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="last_name" :placeholder="Bohard">
+                              <input name="lastname" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="last_name" :placeholder="Bohard">
                           </div>
                       </div>
 
                       <div class="flex justify-between">
                           <div class="flex flex-col gap-4">
-                              <p class="text-white text-[22px]">Numéro de téléphone</p>
-                              <input type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" placeholder="06060606">
+                              <p class="text-white text-[22px]">Age</p>
+                              <input name="age" type="num" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" placeholder="23" :value="age">
                           </div>
                           <div class="flex flex-col gap-4">
-                              <p class="text-white text-[22px]">Type de profil *</p>
-                              <input type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="profilType ? profilType : 'Selectionner votre profil'" placeholder="Selectionner votre profil">
+                              <p class="text-white text-[22px]">Genre </p>
+                              <input name="gender" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="gender" placeholder="Homme">
                           </div>
                       </div>
                       <div class="flex justify-between">
                           <div class="flex flex-col gap-4 w-full">
                               <p class="text-white text-[22px]">Biographie</p>
-                              <textarea name="" id="" class="text-[18px] text-white bg-transparent border-white border italic w-[100%] h-[5rem] resize-none" :value="bio"></textarea>
+                              <textarea name="desc" id="" class="text-[18px] text-white bg-transparent border-white border italic w-[100%] h-[5rem] resize-none" :value="desc"></textarea>
                           </div>
                       </div>
                       <div class="flex justify-between">
                           <div class="flex flex-col gap-4 w-full">
                               <p class="text-white text-[22px]">Centres d’intêrets</p>
-                                  <div class="flex gap-5 flex-wrap justify-center">
-                                      <div class="flex gap-2 mr-8 text-center text-white">
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Amical(e)</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Créatif(ve)</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Passionné(e)</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Curieux(se)</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Dynamique</div>
-                                      </div>
-                                      <div class="flex gap-2 ml-8 text-center text-white">
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Optimiste</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Drôle</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Empathique</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Ambitieux(se)</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Aventurier(ère)</div>
-                                      </div>
-                                      <div class="flex gap-2 mr-8 text-center text-white">
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Sociable</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Réfléchi(e)</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Indépendant(e)</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Spontané(e)</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Bienveillant(e)</div>
-                                      </div>
-                                          <div class="flex gap-2 ml-8 text-center text-white">
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Sincère</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Énergique</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Inspirant(e)</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Ouvert(e)</div>
-                                          <div class="Describe opacity-50 duration-200 hover:opacity-100 text-[14px]">Authentique</div>
-                                      </div>    
-                                  </div>
+                              <div class="flex gap-2 flex-wrap justify-center">
+                                <p name="interest" 
+                                    v-for="int in availableInterests" 
+                                    :key="int"
+                                    class="Describe text-white"
+                                    @click="toggleInterest(int)"
+                                    :class="{'opacity-100': selectedInterests.includes(int), 'opacity-50': !selectedInterests.includes(int)}">
+                                    {{ int }}
+                                </p>
+                            </div>
+
                           </div>
                       </div>
                       <div class="flex items-center gap-10">
-                          <div @click="modifiy" class="flex items-center bg-green-500 text-[#002233] font-bold w-[auto] h-[2rem] py-5 px-8 rounded-md hover:opacity-80 duration-200 cursor-pointer">
-                              <p>Modifier</p>
-                          </div>
-                          <div @click="modifiy" class="flex items-center border-2 border-red-500 text-red-500 font-bold w-[auto] h-[2rem] py-5 px-8 rounded-md  hover:opacity-80 duration-200 cursor-pointer">
+                        <div @click="modify" class="flex items-center bg-green-500 text-[#002233] font-bold w-[auto] h-[2rem] py-5 px-8 rounded-md hover:opacity-80 duration-200 cursor-pointer">
+                            <p>Modifier</p>
+                        </div>
+
+                          <div @click="del" class="flex items-center border-2 border-red-500 text-red-500 font-bold w-[auto] h-[2rem] py-5 px-8 rounded-md  hover:opacity-80 duration-200 cursor-pointer">
                               <p>Supprimer</p>
                           </div>
                       </div>
@@ -161,15 +143,33 @@ import { useSessionStore } from '../stores/sessions';
 
 const sessionStore = useSessionStore();
 const pageStep = ref('info');
-const userEmail = ref(sessionStorage.getItem('user_email'));
+const userEmail = ref(sessionStore.mail);
 const name = ref('');
 const last_name = ref('');
 const image_url = ref('');
-const friends_id = ref([]);
-const last_login = ref('');
 const utilisateurID = ref('');
 const profilType = ref('');
-const bio = ref('');
+const username = ref('');
+const email = ref('');
+const desc = ref('');
+const age = ref('');
+const gender = ref('');
+const interest = ref([]);
+const selectedInterests = ref([]); // Liste des intérêts sélectionnés par l'utilisateur
+
+
+const availableInterests = [
+  'Sports', 'Musique', 'Voyages', 'Cinéma', 'Cuisine', 'Danse', 'Art', 'Nature', 'Photographie',
+  'Jeux vidéo', 'Fitness', 'Peinture', 'Écriture', 'Théâtre', 'Animaux', 'Astronomie', 'Films', 
+  'Séries TV', 'Jardinage', 'DIY (Do It Yourself)', 'Esport', 'Natation', 'Surf', 'Ski', 'Escalade', 
+  'Voyage en sac à dos', 'Architecture', 'Blogging', 'Vlogging', 'Langues étrangères', 'Moto', 'Poésie', 
+  'Café', 'Thé', 'Pêche', 'Chasse', 'Arts martiaux', 'Boxe', 'Astrologie', 'Planche à voile', 'Musculation',
+  'Roller', 'Street art', 'Vin', 'Mindfulness', 'Danse classique', 'Culture japonaise', 'Culture coréenne',
+  'Manga', 'Anime', 'Jeux de société', 'Jeux de rôle', 'Littérature jeunesse', 'Activités de plein air', 'Bowling', 
+  'Golf', 'Football', 'Basketball', 'Rugby', 'Handball', 'Volley-ball', 'Badminton', 'Chant', 'Piano', 
+  'Guitare', 'Batterie', 'Violon', 'Flûte', 'Opéra', 'Rap', 'Jazz', 'Blues', 'Rock', 'Pop', 'Cyclisme', 
+  'Football américain', 'Motocross', 'Plongée sous-marine', 'Snorkeling', 'Kitesurf'
+];
 
 
 // Récupérer les donnée de la bdd user
@@ -183,15 +183,19 @@ async function getUser() {
       console.error('Erreur lors de la récupération de l\'utilisateur :', error.message);
   } else if (data && data.length > 0) {
       const user = data[0];
-      name.value = user.name;
+      name.value = user.firstname;
       last_name.value = user.lastname;
       image_url.value = user.image_url;
-      friends_id.value = user.friends_id.split(',').map(id => id.trim());
-      last_login.value = user.last_login;
       utilisateurID.value = user.id;
       profilType.value = user.profil_type;
-      bio.value = user.bio;
-  } else {
+      username.value = user.username;
+      email.value = sessionStore.mail;
+      desc.value = user.desc;
+      age.value = user.age;
+      gender.value = user.gender;
+      interest.value = user.interest ? user.interest.split(',').map(item => 
+  item.trim().charAt(0).toUpperCase() + item.trim().slice(1).toLowerCase()) : [];
+    } else {
       console.log('Aucun utilisateur trouvé avec cet email');
   }
 }
@@ -203,6 +207,68 @@ function Param() {
 function Info() {
   pageStep.value = 'info';
 }
+
+async function modify() {
+  const username = document.querySelector('input[name="username"]').value;
+  const email = document.querySelector('input[name="email"]').value;
+  const firstname = document.querySelector('input[name="firstname"]').value;
+  const lastname = document.querySelector('input[name="lastname"]').value;
+  const age = document.querySelector('input[name="age"]').value;
+  const gender = document.querySelector('input[name="gender"]').value;
+  const desc = document.querySelector('textarea[name="desc"]').value;
+  const interest = selectedInterests.value; // Utilisez les centres d'intérêt sélectionnés directement
+
+  try {
+    const { data: userData, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('email', sessionStore.mail)
+      .single();
+
+    if (error) return console.error('Erreur lors de la récupération des données de l\'utilisateur:', error.message);
+
+    const updates = {};
+    const data = {
+      username, email, firstname, lastname, age, gender, desc, interest: interest.join(','), image_url: ''
+    };
+
+    // Comparer et  les champs modifiés
+    for (const key in data) {
+      if ((data[key]?.toString().trim().toLowerCase() || '') !== (userData[key]?.toString().trim().toLowerCase() || '')) {
+        updates[key] = data[key];
+      }
+    }
+
+    if (Object.keys(updates).length > 0) {
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('email', sessionStore.mail);
+
+      if (updateError) {
+        console.error('Erreur lors de la mise à jour de l\'utilisateur:', updateError.message);
+      } else {
+        await getUser();
+        console.log('Champs modifiés :', Object.keys(updates).join(', '));
+      }
+    } else {
+      console.log('Aucune modification à mettre à jour');
+    }
+  } catch (err) {
+    console.error('Erreur inconnue:', err.message);
+  }
+}
+
+const toggleInterest = (interestName) => {
+  const index = selectedInterests.value.indexOf(interestName);
+
+  if (index > -1) {
+    selectedInterests.value.splice(index, 1);
+  } else {
+    selectedInterests.value.push(interestName);
+  }
+};
+
 
 onMounted(async () => {
   const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
