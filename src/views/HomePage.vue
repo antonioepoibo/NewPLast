@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover" alt="Fond d'écran"/>
+  <div class="overflow-hidden">
+    <img v-if="sessionStore.isLoggedIn" :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover" alt="Fond d'écran"/>
 
     <div class="relative z-20 flex w-full flex-col h-full">
       
@@ -52,7 +52,7 @@
         <div class="">
           <div class="flex justify-between">
             <h4 class="text-white text-[30px] font-bold max-[600px]:text-[20px]">Activités autour de chez vous</h4>
-            <<router-link to="/finder" class="text-white opacity-50 duration-100 hover:opacity-100">Finder</router-link> 
+            <router-link to="/finder" class="text-white opacity-50 duration-100 hover:opacity-100">Finder</router-link> 
           </div>
           <MapPin :acvitivitesLoc="act" :acvitivitesUser="activities" :width="width" :height="height" />
         </div>
@@ -72,7 +72,7 @@ import { Activity } from '../types';
 import { useRouter, useRoute } from 'vue-router';
 import { useSessionStore } from '../stores/sessions';
 import MapPin from '../components/MapPin.vue';
-import fond from '../assets/img/fond.svg';
+import fond from '../assets/img/fond.png';
 import newP from '../assets/img/newP_logo.svg';
 import HeadEr from '../components/HeadEr.vue';
 
