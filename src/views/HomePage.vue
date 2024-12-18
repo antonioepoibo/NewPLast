@@ -5,7 +5,7 @@
     <div class="relative z-20 flex w-full flex-col h-full">
       
       <!-- Display Login Form if the user is not logged in -->
-      <LoginComponent v-if="!sessionStore.isLoggedIn" @login="login"/>
+      <LoginComponent v-if="!sessionStore.isLoggedIn"/>
 
       <div v-if="sessionStore.isLoggedIn" class="relative z-20 flex flex-col h-full gap-6">
           <HeadEr :username="sessionStore.username" v-model:searchQuery="searchQuery" />
@@ -49,7 +49,7 @@
             <h4 class="text-white text-[30px] font-bold max-[600px]:text-[20px]">Activités autour de chez vous</h4>
             <router-link to="/finder" class="text-white opacity-50 duration-100 hover:opacity-100">Finder</router-link> 
           </div>
-          <MapPin :acvitivitesLoc="act" :acvitivitesUser="activities" :width="width" :height="height" />
+          <MapPin :acvitivitesUser="activities" :width="width" :height="height" />
         </div>
       </div>
     </div>
