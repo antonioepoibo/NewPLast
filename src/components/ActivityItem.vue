@@ -8,20 +8,19 @@
         </div>
         <p class="text-white opacity-70 text-[8px] italic">{{ activityStartDate + ' ' + activityStartNum }} -> {{ activityEndDate + ' ' + activityEndNum }}</p>
       </div>
-        <img src="../assets/img/default_activite.svg" alt="">
+        <img :src="activity.image_url" alt="">
         <div class="flex justify-between items-center px-3 pt-4">
           <div class="flex gap-4 items-center">
-            <img src="../assets/img/default_activite.svg" class="rounded-full w-[60px] h-[60px] object-cover" alt="">
-            
+            <img src="https://tnrusogdplqbithagiji.supabase.co/storage/v1/object/public/profile-pictures/default_img.png" class="rounded-full w-[60px] h-[60px] object-cover" alt="">
             <div>
               <h2 class="text-white text-[18px] font-bold">{{ activity.owner.split('@')[0] }}</h2>
                 <p class="text-white opacity-50 text-[14px]">Par {{ activity.owner.split('@')[0] }}</p>
             </div>
           </div>
-          <div class="flex flex-col gap-2 justify-start">
+          <div class="flex flex-col gap-2 justify-start w-[6rem]">
             <div class="flex flex-col items-end">
               <p class="text-white opacity-80 text-[14px]">{{ activity.price }} $</p>
-              <p class="text-white opacity-50 text-[14px]">{{ activity.location }}</p>
+              <p class="text-white opacity-50 text-[10px]">{{ activity.location }}</p>
             </div>
           </div>
         </div>
@@ -42,6 +41,10 @@
   <script setup lang="ts">
   import { defineProps } from 'vue';
   import { Activity } from '../type';
+  import {supabase} from '../supabase.js'
+  import { ref } from 'vue'
+
+  const avatar_url = ref('');
 
   
   // Define the props for the ActivityItem component
@@ -61,6 +64,8 @@
 
   const activityEndDate = props.activity.end_time.replace('T', ' ').replace('-', '/').replace('-', '/').split(' ')[0];
   const activityEndNum = props.activity.end_time.replace('T', ' ').replace('-', '/').replace('-', '/').split(' ')[1].split(':').slice(0, 2).join(':').replace(':', 'h');
+  
+
   </script>
   
   <style scoped>

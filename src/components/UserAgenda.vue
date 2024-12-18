@@ -11,7 +11,7 @@
                 </div>
                 <div v class="flex gap-4 text-2xl items-center">
                 <p class="text-white">{{ activity.price }}€</p>
-                <p class="text-green-600">12/2</p>
+                <p class="text-green-600">1/{{ activity.max_participants }}</p>
                 <i class="text-white fa-solid fa-user-group"></i>
                 </div>
                 <!-- <button 
