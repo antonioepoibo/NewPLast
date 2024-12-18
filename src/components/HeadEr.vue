@@ -26,7 +26,13 @@
         <i class="fa-solid fa-align-left"></i>
       </div>
       <div v-if="searchBar !== false" class="flex gap-6 text-center max-[600px]:gap-2">
-        <span v-for="category in categories" class="btn">{{ category }}</span>
+        <span 
+        v-for="category in categories" 
+        :key="category" 
+        class="btn cursor-pointer hover:opacity-80" 
+        @click="setCategoryAsSearchQuery(category)">
+        {{ category }}
+      </span>
       </div>
     </div>
   </div>
@@ -49,6 +55,11 @@ const emit = defineEmits(); // Define emits
 // Emit the search query when the input changes
 function updateSearchQuery() {
   emit('update:searchQuery', searchQuery.value); // Emit the search query to parent
+}
+
+function setCategoryAsSearchQuery(category) {
+  searchQuery.value = category; // Update the search query with the selected category
+  emit('update:searchQuery', searchQuery.value); // Emit the updated search query to parent
 }
 
 // Logout function
