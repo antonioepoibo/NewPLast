@@ -29,11 +29,9 @@
           <p>0 /{{ activity.max_participants || 0 }}</p>
           <progress :max="activity.max_participants" :value="0" class="h-2 w-[6rem]"></progress>
         </div>
-        <p class="text-white text-[16px] opacity-80 mt-5 italic max-[1300px]:text-[13px] px-3 max-[920px]:text-[10px]">
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum nisi facere voluptatibus doloremque accusamus dolore aperiam dolores incidunt veniam nulla nostrum a qui mollitia voluptas, quis aliquid sequi tempore exercitationem?
-        </p>
-        <div class="py-5">
-          <button v-if="!activity.subscribed && !activity.isOwner" @click="subscribeToActivity(activity.id)" class="bg-white text-[#3B5562] py-2 text-[14px] px-6 font-bold rounded-full">Subscribe</button>
+        <p class="text-white text-[16px] opacity-80 mt-5 italic max-[1300px]:text-[13px] px-3 max-[920px]:text-[10px]">{{ activity.desc ? activity.desc : "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum nisi facere voluptatibus doloremque accusamus dolore aperiam dolores incidunt veniam nulla nostrum a qui mollitia voluptas, quis aliquid sequi tempore exercitationem?" }}</p>
+        <div class="py-5 flex justify-center">
+          <button v-if="!activity.subscribed && !activity.isOwner" @click="subscribeToActivity(activity.id)" class="bg-green-600 text-white py-2 text-[14px] px-6  font-bold rounded-full">Subscribe</button>
           <p v-else-if="activity.subscribed">You are subscribed to this activity!</p>
           <p v-else-if="activity.isOwner">You are the creator of this activity.</p>
         </div>

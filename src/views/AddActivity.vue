@@ -54,10 +54,6 @@
                             </div>
                         <div class="flex flex-col gap-2">
                             <div class="flex flex-col gap-4">
-                                <label class="text-[18px] text-white" for="">Date limite d'inscription</label>
-                                <input v-model="deadline" class="bg-transparent text-slate-400 italic border-b border-white text-white" placeholder="12/12/2022 14:00" type="datetime-local">
-                            </div>
-                            <div class="flex flex-col gap-4">
                                 <label class="text-[18px] text-white" for="">Nombre de participants</label>
                                 <input v-model="activitypart" class="bg-transparent text-slate-400 italic border-b border-white text-white" placeholder="10" type="number">
                             </div>
@@ -114,10 +110,6 @@
     import axios from 'axios';
     
     const sessionStore = useSessionStore();
-    const msg_content = ref('')
-    const msg_Title = ref('')
-    const msg_type = ref('')
-    const msg_show = ref(false)
     const name = ref(''),
     last_name = ref(''),
     image_url = ref(''),
@@ -236,11 +228,10 @@
         const now = new Date();
         const startDate = new Date(activityStartdate.value);
         const endDate = new Date(activityEnddate.value);
-        const deadlineDate = new Date(deadline.value);
 
         // Vérification que tous les champs soient remplis
         if (!activityname.value || !activityloc.value || !activitydesc.value || !activitypart.value || 
-            !activityprice.value || !deadline.value || !activityStartdate.value || !activityEnddate.value) {
+            !activityprice.value || !activityStartdate.value || !activityEnddate.value) {
             alert("Tous les champs doivent être remplis.");
             console.error("Un ou plusieurs champs sont vides.");
             return;
@@ -257,11 +248,7 @@
             alert("La date de fin ne peut pas être dans le passé.");
             return;
         }
-        if (deadlineDate < now) {
-            console.error("La date limite d'inscription ne peut pas être dans le passé");
-            alert("La date limite d'inscription ne peut pas être dans le passé.");
-            return;
-        }
+
         if (endDate <= startDate) {
             console.error("La date de fin doit être postérieure à la date de début.");
             alert("La date de fin doit être postérieure à la date de début.");
@@ -282,27 +269,27 @@
 
         // Préparation et envoi des données
         const { data, error } = await supabase
-            .from("activities")
+            .from("activity")
             .insert([
                 {
                     name: activityname.value,
-                    description: activitydesc.value,
+                    desc: activitydesc.value,
                     location: activityloc.value,
-                    start_date: activityStartdate.value,
-                    end_date: activityEnddate.value,
-                    deadline: deadline.value,
+                    start_time: activityStartdate.value,
+                    end_time: activityEnddate.value,
                     price: activityprice.value,
-                    participant_limit: activitypart.value,
+                    max_participants: activitypart.value,
                     image_url: imageUrl.value,
-                    creator_id: utilisateurID.value,
+                    owner: utilisateurID.value,
                     latitude: latitude.value,
                     longitude: longitude.value,
-                    tags: keyword.value,
+                    type: keyword.value,
                 },
             ]);
 
         if (error) {
             console.error("Erreur lors de l'ajout de l'activité :", error.message);
+            console.log(activityname.value + ' ' + activitydesc.value + ' ' + activityloc.value + ' ' + activityStartdate.value + ' ' + activityEnddate.value + ' ' +activityprice.value + ' ' +  activitypart.value + ' ' + imageUrl.value + ' ' + utilisateurID.value + ' ' + latitude.value + ' ' + longitude.value + ' ' + keyword.value);
             alert("Erreur lors de la création de l'activité. Veuillez réessayer.");
         } else {
             console.log("Activité ajoutée avec succès :", data);
@@ -313,7 +300,6 @@
             activitydesc.value = "";
             activitypart.value = "";
             activityprice.value = "";
-            deadline.value = "";
             activityStartdate.value = "";
             activityEnddate.value = "";
             imageUrl.value = "";

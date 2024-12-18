@@ -14,12 +14,13 @@
                 <p class="text-green-600">12/2</p>
                 <i class="text-white fa-solid fa-user-group"></i>
                 </div>
-                <button 
+                <!-- <button 
                   @click="unsubscribe(activity.id)" 
                   class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500"
                 >
                   Unsubscribe
-                </button>
+                </button> -->
+                <i click="unsubscribe(activity.id)"  class="text-red-600 text-[35px] duration-200 fa-solid fa-arrow-right-from-bracket hover:text-red-500 hover:cursor-pointer"></i>
           </div>
     </div>
     <div v-else>

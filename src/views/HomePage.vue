@@ -34,7 +34,7 @@
             <router-link to="/activite/add" class="text-white opacity-50 duration-100 hover:opacity-100">Add Activity</router-link>
           </div>
           <div class="overflow-hidden">
-            <div class="flex gap-[2rem]" :style="{ transform: `translateX(-${ActVcurrentIndex * 101}%)` }">
+            <div class="flex gap-[2rem] transition-transform duration-700 ease-in-out" :style="{ transform: `translateX(-${ActVcurrentIndex * 101}%)` }">
               <ActivityItem
                 v-for="activity in activities"
                 :key="activity.id"
