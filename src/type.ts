@@ -12,8 +12,9 @@ export interface Activity {
     discount: number;
     max_participants: number;
     deadline: string;
-    owner?: string;        // Owner of the activity
+    owner: string;        // Owner of the activity
     subscribed?: boolean;   // Indicates if the logged-in user is subscribed
     isOwner?: boolean;      // Indicates if the logged-in user is the owner
+    desc?: string;
   }
   

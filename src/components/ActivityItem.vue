@@ -41,7 +41,7 @@
   </template>
   <script setup lang="ts">
   import { defineProps } from 'vue';
-  import { Activity } from '../types';
+  import { Activity } from '../type';
 
   
   // Define the props for the ActivityItem component

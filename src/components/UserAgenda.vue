@@ -31,19 +31,14 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+//@ts-ignore
 import { supabase } from '../supabase';
-import { Activity } from '../types';
+import { Activity } from '../type';
 import { useSessionStore } from '../stores/sessions';
-
-
-
-
 
 // State to store the list of subscribed activities
 const activities = ref<Activity[]>([]);
  // State to track whether the agenda should be shown
-
-
 
 // Fetch the subscribed activities for the logged-in user
 async function fetchUserAgenda(userId: string) {
@@ -72,6 +67,7 @@ async function fetchUserAgenda(userId: string) {
   // Now fetch the details of each subscribed activity
   if (data && data.length > 0) {
     console.log("Found subscriptions, fetching activities...");
+    //@ts-ignore
     const activityIds = data.map(sub => sub.activity_id);  // Extract activity IDs from the subscriptions
     console.log("Activity IDs:", activityIds);  // Log the activity IDs
     

@@ -1,17 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../views/HomePage.vue';
-import ProfilePage from '../views/ProfilePage.vue';
 import MapPage from '../views/MapPage.vue';
+//@ts-ignore
 import AboutPage from '../views/AboutPage.vue';
+//@ts-ignore
 import Account from '../views/Account.vue';
+//@ts-ignore
 import AddActivity from '../views/AddActivity.vue';
+//@ts-ignore
 import ProfilPage from '../views/ProfilPage.vue';
+//@ts-ignore
 import LoginCompany from '../components/LoginCompany.vue';
+//@ts-ignore
 import LoginComponent from '../components/LoginComponent.vue';
+//@ts-ignore
 import FindEr from '../views/FindEr.vue';
 const routes = [
     { path: '/', name: 'Home', component: HomePage },
-    { path: '/profile', name: 'Profile', component: ProfilePage },
     { path: '/map', name: 'Map', component: MapPage },
     { path: '/about', name: 'About', component: AboutPage },
     { path: '/account', name: 'Account', component: Account },

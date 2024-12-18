@@ -9,6 +9,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+//@ts-ignore
 import { supabase } from '../supabase';
 import mapboxgl from 'mapbox-gl';
 
@@ -77,6 +78,7 @@ function initializeMap() {
             <p><strong>Registration Deadline:</strong> ${new Date(activity.deadline).toLocaleString()}</p>
           `)
         )
+        //@ts-ignore
         .addTo(map);
     }
   });

@@ -5,7 +5,7 @@
     <div class="relative z-20 flex w-full flex-col h-full">
       
       <!-- Display Login Form if the user is not logged in -->
-      <LoginComponent v-if="!sessionStore.isLoggedIn" @login="login" />
+      <LoginComponent v-if="!sessionStore.isLoggedIn" @login="login"/>
 
       <div v-if="sessionStore.isLoggedIn" class="relative z-20 flex flex-col h-full gap-6">
           <HeadEr :username="sessionStore.username" v-model:searchQuery="searchQuery" />
@@ -22,11 +22,6 @@
 
         </div>
 
-        <div v-if="showForm">
-            <AddActivityForm :form="form" @submit="addActivity" />
-        </div>
-        
-
           <!-- Activities List -->
         <div v-if="activities.length">
           <div class="flex justify-between">
@@ -34,7 +29,7 @@
             <router-link to="/activite/add" class="text-white opacity-50 duration-100 hover:opacity-100">Add Activity</router-link>
           </div>
           <div class="overflow-hidden">
-            <div class="flex gap-[2rem] transition-transform duration-700 ease-in-out" :style="{ transform: `translateX(-${ActVcurrentIndex * 101}%)` }">
+            <div class="flex gap-[2rem]" :style="{ transform: `translateX(-${ActVcurrentIndex * 101}%)` }">
               <ActivityItem
                 v-for="activity in activities"
                 :key="activity.id"
@@ -63,17 +58,20 @@
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick, watch } from 'vue';
+//@ts-ignore
 import { supabase } from '../supabase';
+//@ts-ignore
 import LoginComponent from '../components/LoginComponent.vue';
-import AddActivityForm from '../components/AddActivityForm.vue';
 import ActivityItem from '../components/ActivityItem.vue';
 import UserAgenda from '../components/UserAgenda.vue';
-import { Activity } from '../types';
+import { Activity } from '../type';
 import { useRouter, useRoute } from 'vue-router';
 import { useSessionStore } from '../stores/sessions';
+//@ts-ignore
 import MapPin from '../components/MapPin.vue';
 import fond from '../assets/img/fond.png';
 import newP from '../assets/img/newP_logo.svg';
+//@ts-ignore
 import HeadEr from '../components/HeadEr.vue';
 
 // Reactive state
@@ -82,6 +80,7 @@ const router = useRouter();
 const route = useRoute();
 const showForm = ref(false);
 const activities = ref<Activity[]>([]);
+//@ts-ignore
 const form = ref<Activity>({
   name: '',
   type: '',
@@ -202,9 +201,12 @@ async function fetchActivities() {
 }
 
 // Function to filter activities
+//@ts-ignore
 function filterActivities(allActivities) {
   
+
   return searchQuery.value 
+    //@ts-ignore
     ? allActivities.filter(activity =>
         activity.name.toLowerCase().includes(searchQuery.value.toLowerCase())
       )
@@ -240,6 +242,7 @@ async function addActivity() {
 
 // Reset the form
 function resetForm() {
+  //@ts-ignore
   form.value = {
     name: '',
     type: '',
@@ -330,6 +333,7 @@ onMounted(async () => {
       sessionStore.setUsername(profileData.username); // Optionally store the username in your session store
     }
 
+  //@ts-ignore
   supabase.auth.onAuthStateChange((event, newSession) => {
     if (event === 'SIGNED_IN' && newSession) {
       sessionStore.setSession(newSession);
