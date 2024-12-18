@@ -15,7 +15,25 @@
                         </div>
                         <div class="flex flex-col gap-4">
                             <label class="text-[18px] text-white" for="">Lieux</label>
-                            <input v-model="activityloc" @keyup.enter="TransformCord()" class="bg-transparent w-[15rem] text-slate-400 italic border-b border-white text-white" placeholder="12 rue de la fleure, Mondeville" type="text">
+                            <input 
+                                v-model="activityloc" 
+                                @input="fetchSuggestions" 
+                                @blur="clearSuggestions"
+                                @keyup.enter="TransformCord()"
+                                class="bg-transparent w-[15rem] text-slate-400 italic border-b border-white text-white" 
+                                placeholder="12 rue de la fleure, Mondeville" 
+                                type="text"
+                            />
+                            <ul v-if="suggestions.length > 0" class="bg-white text-black border mt-2 rounded shadow-md max-h-[200px] overflow-y-auto">
+                                <li 
+                                    v-for="suggestion in suggestions" 
+                                    :key="suggestion.id" 
+                                    @click="selectSuggestion(suggestion)" 
+                                    class="p-2 cursor-pointer hover:bg-gray-300"
+                                >
+                                    {{ suggestion.place_name }}
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <div class="flex justify-between items-center px-8 my-4 gap-[6rem] max-[670px]:flex-col max-[670px]:gap-2 max-[670px]:items-start">
@@ -100,7 +118,6 @@
     </div>
 </template>
 <script setup>
-
     import fond from '../assets/img/fond.svg';
     import HeadEr from '../components/HeadEr.vue';
     import defaultimg from '../assets/img/default_activite.svg';
@@ -109,6 +126,7 @@
     import { useSessionStore } from '../stores/sessions';
     import axios from 'axios';
     
+    const suggestions = ref([]);
     const sessionStore = useSessionStore();
     const name = ref(''),
     last_name = ref(''),
@@ -151,7 +169,35 @@
         console.log(keyword.value);
     }
 
+    // Fetch suggestions from Mapbox API
+    async function fetchSuggestions() {
+        if (activityloc.value.trim().length > 2) {
+            const response = await axios.get('https://api.mapbox.com/geocoding/v5/mapbox.places/' + encodeURIComponent(activityloc.value) + '.json', {
+                params: {
+                    access_token: 'pk.eyJ1IjoicG5ndXllbjEyIiwiYSI6ImNtM2ZwdTJ4dzBzM3YyanIzMHM2bHNiNHoifQ._n6g1Z7ti29lquFEJrPDog',
+                    autocomplete: true,
+                    limit: 5,
+                },
+            });
 
+            suggestions.value = response.data.features || [];
+        } else {
+            suggestions.value = [];
+        }
+    }
+
+    // Handle suggestion selection
+    function selectSuggestion(suggestion) {
+        activityloc.value = suggestion.place_name;
+        latitude.value = suggestion.center[1];
+        longitude.value = suggestion.center[0];
+        suggestions.value = [];
+    }
+
+    // Clear suggestions on blur
+    function clearSuggestions() {
+        setTimeout(() => (suggestions.value = []), 100);
+    }
 
 
     async function TransformCord(){

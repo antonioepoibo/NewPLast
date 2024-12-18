@@ -13,6 +13,7 @@
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
     "@fullcalendar/vue3": "^6.1.15",
+    "@mapbox/mapbox-gl-geocoder": "^5.0.3",
     "@supabase/supabase-js": "^2.46.1",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "axios": "^1.7.9",
