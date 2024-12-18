@@ -4,7 +4,7 @@
     <div class="relative z-20 flex w-full flex-col h-full">
         <HeadEr :username="sessionStore.mail" />
         <h1 class="container relative z-20 text-white text-[24px] font-bold mt-[4rem]">Crée une nouvelle activité</h1>
-      <p class="container relative z-20 mt-2 text-white text-[18px] italic opacity-80">Remplir se formulaire pour pouvoir crée une nouvelle activitié est visualisée la prévisualisation de votre activité</p>
+      <p class="container relative z-20 mt-2 text-white text-[18px] italic opacity-80">Remplir ce formulaire pour pouvoir créer une nouvelle activité et prévisualiser le contenu</p>
         <div class="relative z-20">
             <div class="container flex justify-between my-6 items-center max-[1400px]:flex-col-reverse max-[1400px]:gap-6">
                 <div class="w-auto h-auto border-2 border-white flex flex-col p-6">
@@ -54,8 +54,8 @@
                             </div>
                         <div class="flex flex-col gap-2">
                             <div class="flex flex-col gap-4">
-                                <label class="text-[18px] text-white" for="">Date et heure</label>
-                                <input v-model="activitydate" class="bg-transparent text-slate-400 italic border-b border-white text-white" placeholder="12/12/2022 14:00" type="datetime-local">
+                                <label class="text-[18px] text-white" for="">Date limite d'inscription</label>
+                                <input v-model="deadline" class="bg-transparent text-slate-400 italic border-b border-white text-white" placeholder="12/12/2022 14:00" type="datetime-local">
                             </div>
                             <div class="flex flex-col gap-4">
                                 <label class="text-[18px] text-white" for="">Nombre de participants</label>
@@ -129,7 +129,7 @@
     activitydesc = ref(''),
     activitypart = ref(''),
     activityprice = ref(''),
-    activitydate = ref(''),
+    deadline = ref(''),
     activityStartdate = ref(''),
     activityEnddate = ref(''),
     imageUrl = ref(''),
@@ -232,46 +232,97 @@
         }
     };
 
-
     async function sendNewAct() {
+        const now = new Date();
+        const startDate = new Date(activityStartdate.value);
+        const endDate = new Date(activityEnddate.value);
+        const deadlineDate = new Date(deadline.value);
+
+        // Vérification que tous les champs soient remplis
+        if (!activityname.value || !activityloc.value || !activitydesc.value || !activitypart.value || 
+            !activityprice.value || !deadline.value || !activityStartdate.value || !activityEnddate.value) {
+            alert("Tous les champs doivent être remplis.");
+            console.error("Un ou plusieurs champs sont vides.");
+            return;
+        }
+
+        // Vérification des dates
+        if (startDate < now) {
+            console.error("La date de début ne peut pas être dans le passé.");
+            alert("La date de début ne peut pas être dans le passé.");
+            return;
+        }
+        if (endDate < now) {
+            console.error("La date de fin ne peut pas être dans le passé.");
+            alert("La date de fin ne peut pas être dans le passé.");
+            return;
+        }
+        if (deadlineDate < now) {
+            console.error("La date limite d'inscription ne peut pas être dans le passé");
+            alert("La date limite d'inscription ne peut pas être dans le passé.");
+            return;
+        }
+        if (endDate <= startDate) {
+            console.error("La date de fin doit être postérieure à la date de début.");
+            alert("La date de fin doit être postérieure à la date de début.");
+            return;
+        }
+
+        // Vérification du nombre de participants et du prix
+        if (isNaN(activitypart.value) || activitypart.value <= 0) {
+            console.error("Le nombre de participants doit être un nombre positif.");
+            alert("Le nombre de participants doit être un nombre positif.");
+            return;
+        }
+        if (isNaN(activityprice.value) || activityprice.value < 0) {
+            console.error("Le prix ne peut pas être négatif.");
+            alert("Le prix ne peut pas être négatif.");
+            return;
+        }
+
+        // Préparation et envoi des données
         const { data, error } = await supabase
-            .from('activity')
+            .from("activities")
             .insert([
                 {
                     name: activityname.value,
-                    desc: activitydesc.value,
-                    owner: last_name.value + ' ' + name.value,
+                    description: activitydesc.value,
                     location: activityloc.value,
-                    start_time: activityStartdate.value.replace('T', ' ').replace('-', '/').replace('-', '/').replace(':', 'H'),
-                    end_time: activityEnddate.value.replace('T', ' ').replace('-', '/').replace('-', '/').replace(':', 'H'),
-                    price: activityprice.value ? parseFloat(activityprice.value) : null,
-                    max_participants: activitypart.value ? parseInt(activitypart.value) : null,
-                    latitude: latitude.value ? parseFloat(latitude.value) : null,
-                    longitude: longitude.value ? parseFloat(longitude.value) : null,
-                    type: keyword.value,
-                    // image_url: imageUrl.value ? imageUrl.value : null,
-                    // creator_id: utilisateurID.value,
-                    // user_join: utilisateurID.value,
+                    start_date: activityStartdate.value,
+                    end_date: activityEnddate.value,
+                    deadline: deadline.value,
+                    price: activityprice.value,
+                    participant_limit: activitypart.value,
+                    image_url: imageUrl.value,
+                    creator_id: utilisateurID.value,
+                    latitude: latitude.value,
+                    longitude: longitude.value,
+                    tags: keyword.value,
                 },
             ]);
 
         if (error) {
-            console.error('Erreur lors de l\'insertion de l\'activité :', error.message);
-            console.log(activityname.value + ' ' + activitydesc.value + ' ' + last_name.value + ' ' + activityloc.value + ' ' + activityStartdate.value + ' ' + activityEnddate.value + ' ' + activityprice.value + ' ' + activitypart.value + ' ' + latitude.value + ' ' + longitude.value + ' ' + keyword.value);
+            console.error("Erreur lors de l'ajout de l'activité :", error.message);
+            alert("Erreur lors de la création de l'activité. Veuillez réessayer.");
         } else {
-            console.log('Activité insérée avec succès :', data);
-            activityname.value = '';
-            activityloc.value = '';
-            activitydesc.value = '';
-            activitypart.value = '';
-            activityprice.value = '';
-            activitydate.value = '';
-            imageUrl.value = '';
-            keyword.value = '';
-            activityStartdate.value = '';
-            activityEnddate.value = '';
+            console.log("Activité ajoutée avec succès :", data);
+            alert("L'activité a été créée avec succès !");
+            // Réinitialiser les champs du formulaire
+            activityname.value = "";
+            activityloc.value = "";
+            activitydesc.value = "";
+            activitypart.value = "";
+            activityprice.value = "";
+            deadline.value = "";
+            activityStartdate.value = "";
+            activityEnddate.value = "";
+            imageUrl.value = "";
+            keyword.value = "";
+            latitude.value = "";
+            longitude.value = "";
         }
     }
+
 
     onMounted(async () => {
         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
