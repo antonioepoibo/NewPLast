@@ -1,6 +1,9 @@
 <template>
   <div class="chat-page">
-    <div class="chat-container">
+    <div v-if="!$route.query.owner || !$route.query.activityId">
+      <h1>Avec qui Tchater ?</h1>
+    </div>
+    <div v-if="$route.query.owner && $route.query.activityId" class="chat-container">
       <h1>Chat Page</h1>
       <div class="messages-container">
         <div v-for="message in messages" :key="message.id" class="message-item">

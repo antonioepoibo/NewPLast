@@ -1,7 +1,5 @@
 <template>
   <div class="relative h-auto">
-    <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-full object-cover" alt="Fond d'écran"/>
-    <HeadEr :username="sessionStore.mail" />
     <div class="relative z-20 flex w-full flex-col h-full">
     <div class="flex container gap-[5rem]">
       <div class="flex flex-col gap-[5rem] relative z-20 my-10" :class="{'w-[auto]': pageStep === 'info', 'w-[26rem]': pageStep === 'param'}">
@@ -151,12 +149,8 @@
 </template>
 
 <script setup>
-
-import HeadEr from '../components/HeadEr.vue';
-
 import { ref, onMounted } from 'vue';
 import { supabase } from '../supabase';
-import fond from '../assets/img/fond.svg';
 import { useSessionStore } from '../stores/sessions';
 import DefaultImg from '../assets/img/default_img.png';
 

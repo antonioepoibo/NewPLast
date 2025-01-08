@@ -1,9 +1,7 @@
 <template>
     <div class="relative h-auto">
-    <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-full object-cover" alt="Fond d'écran"/>
 
     <div class="relative z-20 flex w-full flex-col h-full">
-        <HeadEr :username="sessionStore.mail" />
         <h1 class="container relative z-20 text-white text-[24px] font-bold mt-[4rem]">Crée une nouvelle activité</h1>
       <p class="container relative z-20 mt-2 text-white text-[18px] italic opacity-80">Remplir ce formulaire pour pouvoir créer une nouvelle activité et prévisualiser le contenu</p>
         <div class="relative z-20">
@@ -120,8 +118,6 @@
 </div>
 </template>
 <script setup>
-    import fond from '../assets/img/fond.png';
-    import HeadEr from '../components/HeadEr.vue';
     import defaultimg from '../assets/img/default_activite.svg';
     import { ref, onMounted } from 'vue'
     import { supabase } from '../supabase';
@@ -133,15 +129,12 @@
     const name = ref(''),
     last_name = ref(''),
     image_url = ref(''),
-    friends_id = ref([]),
-    last_login = ref(''),
     utilisateurID = ref(''),
     activityname = ref(''),
     activityloc = ref(''),
     activitydesc = ref(''),
     activitypart = ref(''),
     activityprice = ref(''),
-    deadline = ref(''),
     activityStartdate = ref(''),
     activityEnddate = ref(''),
     imageUrl = ref(''),
