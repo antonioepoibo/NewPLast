@@ -33,57 +33,78 @@
           <button v-if="!activity.subscribed && !activity.isOwner" @click="subscribeToActivity(activity.id)" class="bg-green-600 text-white py-2 text-[14px] px-6  font-bold rounded-full max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1">Subscribe</button>
           <p v-else-if="activity.subscribed">You are subscribed to this activity!</p>
           <p v-else-if="activity.isOwner">You are the creator of this activity.</p>
+          <!-- Add the "Contact the Owner" Button -->
+          <button
+            v-if="activity.owner !== sessionStore.userId" 
+            @click="openChat(activity.id ?? 0)"
+            class="bg-blue-600 text-white py-2 text-[14px] px-6 font-bold rounded-full"
+          >
+            Contact the Owner
+          </button>
         </div>
       </div>
     </div>
+</template>
+<script setup lang="ts">
+import { defineProps } from 'vue';
+import { Activity } from '../type';
+import { useSessionStore } from '../stores/sessions';
+// @ts-ignore
+import {supabase} from '../supabase.js';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-  </template>
-  <script setup lang="ts">
-  import { defineProps } from 'vue';
-  import { Activity } from '../type';
-  //@ts-ignore
-  import supabase from '../supabase';
-  import { ref } from 'vue'
+const router = useRouter();
 
-  const avatar_url = ref('');
-  const defaultText = "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum nisi facere voluptatibus doloremque accusamus dolore aperiam dolores incidunt veniam nulla nostrum a qui mollitia voluptas, quis aliquid sequi tempore exercitationem?";
 
-  function truncateText(text: string, maxLength: number): string {
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+const avatar_url = ref('');
+const sessionStore = useSessionStore();
+const defaultText = "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsum nisi facere voluptatibus doloremque accusamus dolore aperiam dolores incidunt veniam nulla nostrum a qui mollitia voluptas, quis aliquid sequi tempore exercitationem?";
+
+function truncateText(text: string, maxLength: number): string {
+  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+}
+
+// Define the props for the ActivityItem component
+const props = defineProps({
+  activity: {
+    type: Object as () => Activity,
+    required: true
+  },
+  subscribeToActivity: {
+    type: Function,
+    required: true
   }
-  
-  // Define the props for the ActivityItem component
-  const props = defineProps({
-    activity: {
-      type: Object as () => Activity,
-      required: true
-    },
-    subscribeToActivity: {
-      type: Function,
-      required: true
-    }
+});
+
+function openChat(id: number) {
+  console.log(props.activity.owner)
+  router.push({
+    name: 'ChatPage',
+    query: { owner: props.activity.owner, activityId: id }, 
   });
+}
 
-  const activityStartDate = props.activity.start_time.replace('T', ' ').replace('-', '/').replace('-', '/').split(' ')[0];
-  const activityStartNum = props.activity.start_time.replace('T', ' ').replace('-', '/').replace('-', '/').split(' ')[1].split(':').slice(0, 2).join(':').replace(':', 'h');
+const activityStartDate = props.activity.start_time.replace('T', ' ').replace('-', '/').replace('-', '/').split(' ')[0];
+const activityStartNum = props.activity.start_time.replace('T', ' ').replace('-', '/').replace('-', '/').split(' ')[1].split(':').slice(0, 2).join(':').replace(':', 'h');
 
-  const activityEndDate = props.activity.end_time.replace('T', ' ').replace('-', '/').replace('-', '/').split(' ')[0];
-  const activityEndNum = props.activity.end_time.replace('T', ' ').replace('-', '/').replace('-', '/').split(' ')[1].split(':').slice(0, 2).join(':').replace(':', 'h');
-  
+const activityEndDate = props.activity.end_time.replace('T', ' ').replace('-', '/').replace('-', '/').split(' ')[0];
+const activityEndNum = props.activity.end_time.replace('T', ' ').replace('-', '/').replace('-', '/').split(' ')[1].split(':').slice(0, 2).join(':').replace(':', 'h');
 
-  </script>
-  
-  <style scoped>
-  .activity {
-    margin-top: 1em;
-    padding: 1em;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-    width: 20rem;
-  }
-  
-  button {
-    margin-top: 1em;
-  }
-  </style>
+
+</script>
+
+<style scoped>
+.activity {
+  margin-top: 1em;
+  padding: 1em;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  width: 20rem;
+}
+
+button {
+  margin-top: 1em;
+}
+</style>
   

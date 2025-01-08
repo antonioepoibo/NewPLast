@@ -100,9 +100,14 @@
                               <input name="age" type="num" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" placeholder="23" :value="age">
                           </div>
                           <div class="flex flex-col gap-4">
-                              <p class="text-white text-[22px]">Genre </p>
-                              <input name="gender" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="gender" placeholder="Homme">
-                          </div>
+                            <p class="text-white text-[22px]">Genre </p>
+                            <select name="gender" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" v-model="gender">
+                                <option value="Homme">Homme</option>
+                                <option value="Femme">Femme</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+
                       </div>
                       <div class="flex justify-between">
                           <div class="flex flex-col gap-4 w-full">
