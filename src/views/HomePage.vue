@@ -1,6 +1,6 @@
 <template>
-  <div class="overflow-hidden">
-    <img v-if="sessionStore.isLoggedIn" :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover" alt="Fond d'écran"/>
+  <div class="relative overflow-hidden h-auto">
+    <img v-if="sessionStore.isLoggedIn" :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-full object-cover" alt="Fond d'écran"/>
 
     <div class="relative z-20 flex w-full flex-col h-full">
       
@@ -10,12 +10,47 @@
       <div v-if="sessionStore.isLoggedIn" class="relative z-20 flex flex-col h-full gap-6">
           <HeadEr :username="sessionStore.username" v-model:searchQuery="searchQuery" />
       </div>
+
+      <span v-if="windowWidth <= 400 && sessionStore.isLoggedIn" class="fixed bottom-[-1px] bg-[#002233] w-full h-[5.6rem] z-40"></span>
+      <div v-if="windowWidth <= 400 && sessionStore.isLoggedIn" class="bg-[#05161f] w-full h-[4rem] fixed bottom-0 z-50 rounded-t-3xl">
+        <div class="flex justify-between items-center h-full px-4 mx-8">
+          <div class="flex gap-[3.5rem]">
+            <div class="flex flex-col items-center">
+              <router-link to="/" @click="itemsselec = 1"><i class="fa-solid fa-house hover:opacity-50 hover:translate-y-[-4px] duration-200 relative" :class="{'translate-y-[-4]': $route.name == 'Home'}"></i></router-link>
+              <div v-if="itemsselec === 1 || $route.name == 'Home'" class="absolute duration-200 bottom-3 w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+            </div>
+            <div class="flex flex-col items-center">
+              <router-link to="/finder" @click="itemsselec = 2"><i class="fa-solid fa-map hover:opacity-50 hover:translate-y-[-4px] duration-200 relative"></i></router-link>
+              <div v-if="itemsselec === 2 || $route.name == 'Map'" class="absolute duration-200 bottom-3 w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+            </div>
+          </div>
+          <div class="flex gap-[3.5rem]">
+          <div class="flex flex-col items-center">
+            <router-link to="/message" @click="itemsselec = 3"><i class="fa-solid fa-comments hover:opacity-50 hover:translate-y-[-4px] duration-200 relative"></i></router-link>
+            <div v-if="itemsselec === 3 || $route.name == 'Message'" class="absolute duration-200 bottom-3 w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+          </div>
+            <div class="flex flex-col items-center">
+              <router-link to="/profil" @click="itemsselec = 4">
+                <i class="fa-solid fa-user hover:opacity-50 duration-200 relative hover:translate-y-[-4px]"></i>
+              </router-link>
+              <div v-if="itemsselec === 4 || $route.name == 'Profil'" class="absolute duration-200 bottom-3 w-2 h-2 bg-green-500 rounded-full mt-2"></div>
+            </div>
+          </div>
+        </div>
+        <router-link to="/activite/add" class="absolute top-[-15px] left-1/2 transform -translate-x-1/2 bg-green-400 text-white border-4 border-transparent w-[3rem] h-[3rem] rounded-full text-center flex items-center justify-center text-[20px] shadow-lg ring-8 ring-[#002233] hover:ring-[10px] duration-200">
+          <i class="fa-solid fa-plus"></i>
+        </router-link>
+
+
+      </div>
+
+
       
-      <div v-if="sessionStore.isLoggedIn" class="container">
+      <div v-if="sessionStore.isLoggedIn" class="container flex flex-col gap-4 mt-6">
         <!-- Activities Section -->
         <div class="flex flex-col">
           <div class="flex justify-between">
-            <h2 class="text-white text-[30px] font-bold">Vos prochaines activités</h2>
+            <h2 class="text-white text-[30px] font-bold max-[500px]:text-[18px]">Vos prochaines activités</h2>
             <button @click="toggleAgenda" class="btn btn-primary">Show Your Agenda</button>
           </div>
           <UserAgenda v-if="showAgenda" :username="sessionStore.username" />
@@ -23,13 +58,21 @@
         </div>
 
           <!-- Activities List -->
-        <div v-if="activities.length">
-          <div class="flex justify-between">
-            <h2 class="text-white text-[30px] font-bold">Acitivitée pour vous</h2>
-            <router-link to="/activite/add" class="text-white opacity-50 duration-100 hover:opacity-100">Add Activity</router-link>
+        <div v-if="activities.length" class="flex flex-col gap-4">
+          <div class="flex justify-between items-center">
+            <h2 class="text-white text-[30px] font-bold max-[500px]:text-[18px]">Activités pour vous</h2>
+            <router-link to="/activite/add" class="text-white opacity-50 duration-100 max-[500px]:text-[10px] hover:opacity-100">Add Activity</router-link>
           </div>
           <div class="overflow-hidden">
-            <div class="flex gap-[2rem]" :style="{ transform: `translateX(-${ActVcurrentIndex * 101}%)` }">
+            <div v-if="windowWidth >= 400" class="flex gap-[2rem] transition-transform duration-700 ease-in-out" :style="{ transform: `translateX(-${ActVcurrentIndex * 101}%)` }">
+              <ActivityItem
+                v-for="activity in activities"
+                :key="activity.id"
+                :activity="activity"
+                :subscribeToActivity="subscribeToActivity"
+              />
+            </div>
+            <div v-if="windowWidth <= 400" class="flex gap-[2rem] transition-transform duration-700 ease-in-out" :style="{ transform: `translateX(-${ActVcurrentIndex * 107}%)` }">
               <ActivityItem
                 v-for="activity in activities"
                 :key="activity.id"
@@ -40,16 +83,20 @@
           </div>
           <div class="flex gap-4 justify-center items-center">
             <p @click="moveLeftActV" class="relative text-white fa-solid fa-arrow-left arrow"></p>
-            <span v-for="i in ActVmaxIndex" :id="i.toString()" @click="setNewIActV(i)" :class="{'opacity-50': i !== ActVcurrentIndex + 1 }" class="bg-white flex w-[0.8rem] h-[0.8rem] rounded-full"></span>
-            <p @click="moveRightActV" class="relative text-white fa-solid fa-arrow-right arrow"></p>
+            <span v-if="windowWidth >= 400" v-for="i in ActVmaxIndex" :id="i.toString()" @click="setNewIActV(i)" :class="{'opacity-50': i !== ActVcurrentIndex + 1 }" class="bg-white flex w-[0.8rem] h-[0.8rem] rounded-full"></span>
+            <p v-if="windowWidth >= 400" @click="moveRightActV" class="relative text-white fa-solid fa-arrow-right arrow"></p>
+            
+            <span v-if="windowWidth <= 400" v-for="i in activities.length" :id="i.toString()" @click="setNewActVI(i)" :class="{'opacity-50': i !== ActVcurrentIndex + 1 }" class="bg-white flex w-[0.8rem] h-[0.8rem] rounded-full"></span>
+            <p v-if="windowWidth <= 400" @click="moveRightActVI" class="relative text-white fa-solid fa-arrow-right arrow"></p>
+
           </div>
         </div>
         <div class="">
-          <div class="flex justify-between">
-            <h4 class="text-white text-[30px] font-bold max-[600px]:text-[20px]">Activités autour de chez vous</h4>
-            <router-link to="/finder" class="text-white opacity-50 duration-100 hover:opacity-100">Finder</router-link> 
+          <div class="flex justify-between items-center">
+            <h4 class="text-white text-[30px] font-bold max-[600px]:text-[20px] max-[400px]:text-[18px]">Activités autour de chez vous</h4>
+            <router-link to="/finder" class="text-white opacity-50 duration-100 hover:opacity-100 max-[400px]:text-[12px]">Finder</router-link> 
           </div>
-          <MapPin :acvitivitesUser="activities" :width="width" :height="height" />
+          <MapPin :acvitivitesUser="activities" :width="width" :height="height" :class="{'mb-[8rem]': windowWidth <= 400}" />
         </div>
       </div>
     </div>
@@ -57,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch } from 'vue';
+import { ref, onMounted, nextTick, watch, onUnmounted } from 'vue';
 //@ts-ignore
 import { supabase } from '../supabase';
 //@ts-ignore
@@ -100,7 +147,13 @@ const ActVcurrentIndex = ref<number>(0);
 const ActVmaxIndex = ref<number>(0);
 const allActivities = ref<Array<any>>([]);
 const searchQuery = ref(''); // Reactive state in the parent
-const interest = ref<Array<any>>([]);;
+const interest = ref<Array<any>>([]);
+const windowWidth = ref(window.innerWidth);
+const itemsselec = ref(0);
+
+function updateWindowWidth() {
+  windowWidth.value = window.innerWidth;
+}
 
     async function getAllActivities(): Promise<void> {
   try {
@@ -145,16 +198,32 @@ function moveRightActV(): void {
   }
 }
 
+function moveRightActVI(): void {
+  if (ActVcurrentIndex.value < allActivities.value.length - 1) {
+    ActVcurrentIndex.value++;
+  }
+}
+
 function setNewIActV(i: number): void {
   if (i > 0 && i <= ActVmaxIndex.value) {
     ActVcurrentIndex.value = i - 1;
   }
 }
 
+function setNewActVI(i: number): void {
+  if (i > 0 && i <= allActivities.value.length) {
+    ActVcurrentIndex.value = i - 1;
+  }
+}
+
 onMounted(() => {
   getAllActivities();
-});
+  window.addEventListener('resize', updateWindowWidth);
 
+});
+onUnmounted(() => {
+  window.removeEventListener('resize', updateWindowWidth);
+});
 // Toggle the agenda visibility
 function toggleAgenda() {
   showAgenda.value = !showAgenda.value;

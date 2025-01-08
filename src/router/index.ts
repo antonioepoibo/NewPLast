@@ -19,12 +19,12 @@ import FindEr from '../views/FindEr.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: HomePage },
-  { path: '/map', name: 'Map', component: MapPage },
+  { path: '/map', component: MapPage },
   { path: '/about', name: 'About', component: AboutPage },
   { path: '/account', name: 'Account', component: Account },
   { path: '/activite/add', component: AddActivity },
-  { path: '/profil', component: ProfilPage },
-  { path: '/finder', component: FindEr },
+  { path: '/profil', name : 'Profil', component: ProfilPage },
+  { path: '/finder', name: 'Map', component: FindEr },
   { path: '/login', name : 'LoginPage', component: LoginComponent},
   { path: '/loginCompany', name : 'LoginCompany', component: LoginCompany},
 

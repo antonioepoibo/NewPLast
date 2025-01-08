@@ -16,5 +16,6 @@ export interface Activity {
     subscribed?: boolean;   // Indicates if the logged-in user is subscribed
     isOwner?: boolean;      // Indicates if the logged-in user is the owner
     desc?: string;
+    image_url?: string;
   }
   

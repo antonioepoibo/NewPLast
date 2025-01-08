@@ -1,5 +1,6 @@
 <template>
-    <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover" alt="Fond d'écran"/>
+    <div class="relative h-auto">
+    <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-full object-cover" alt="Fond d'écran"/>
 
     <div class="relative z-20 flex w-full flex-col h-full">
         <HeadEr :username="sessionStore.mail" />
@@ -116,9 +117,10 @@
             </div>
         </div>
     </div>
+</div>
 </template>
 <script setup>
-    import fond from '../assets/img/fond.svg';
+    import fond from '../assets/img/fond.png';
     import HeadEr from '../components/HeadEr.vue';
     import defaultimg from '../assets/img/default_activite.svg';
     import { ref, onMounted } from 'vue'
@@ -326,7 +328,7 @@
                     price: activityprice.value,
                     max_participants: activitypart.value,
                     image_url: imageUrl.value,
-                    owner: utilisateurID.value,
+                    owner: name.value + " " + last_name.value,
                     latitude: latitude.value,
                     longitude: longitude.value,
                     type: keyword.value,

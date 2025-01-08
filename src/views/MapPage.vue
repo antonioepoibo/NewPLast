@@ -1,10 +1,9 @@
 <template>
     <h1>Activity Map</h1>
     <div class="flex flex-col h-screen">
-    <div id="map-container" class="w-full flex-grow">
-      <!-- La carte s'affichera ici -->
+      <MapPin :acvitivitesUser="activities" :width="width" :height="height" />
+
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -12,6 +11,11 @@ import { ref, onMounted } from 'vue';
 //@ts-ignore
 import { supabase } from '../supabase';
 import mapboxgl from 'mapbox-gl';
+//@ts-ignore
+import MapPin from '../components/MapPin.vue';
+
+const width = ref('100%')
+const height = ref('100%');
 
 // Type definition for Activity
 interface Activity {

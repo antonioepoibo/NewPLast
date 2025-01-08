@@ -1,5 +1,6 @@
 <template>
-    <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-auto object-cover" alt="Fond d'écran"/>
+  <div class="relative h-auto">
+    <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-full object-cover" alt="Fond d'écran"/>
     <HeadEr :username="sessionStore.mail" />
     <div class="relative z-20 flex w-full flex-col h-full">
     <div class="flex container gap-[5rem]">
@@ -33,6 +34,15 @@
 
                   <div>
                       <h1 class="text-white font-bold text-[24px]">Mes statistique</h1>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      <br>
+                      
 
                   </div>
               </div>
@@ -131,6 +141,7 @@
           </div>
       </div>
     </div>
+</div>
 </div>
 </template>
 

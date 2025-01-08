@@ -1,18 +1,18 @@
 <template>
   <div>
    
-    <div v-if="activities.length > 0" class="flex flex-wrap gap-[2rem] justify-between my-6 mx-4">
-      <div v-for="activity in activities" :key="activity.id" class="flex gap-4 items-center">
+    <div v-if="activities.length > 0" class="flex flex-wrap gap-[2rem] justify-between my-6 mx-4 max-[500px]:justify-center max-[500px]:gap-[1.5rem] max-[400px]:mx-0">
+          <div v-for="activity in activities" :key="activity.id" class="flex gap-4 items-center w-[507px] max-[500px]:gap-2 max-[500px]:w-[340px] max-[400px]:w-[337px] justify-between hover:bg-[#002e44] hover:py-2 duration-200 ">
           
-                <span class="flex flex-col items-start border-[.15rem] border-white text-white px-6 py-1 text-[24px] font-bold rounded-lg">{{activity.start_time.replace('T', ' ').split(' ')[0].split('-')[2] }} <br>{{activity.start_time.replace('T', ' ').split(' ')[0].split('-')[1] }}</span>
+                <span class="flex flex-col items-start border-[.15rem] border-white text-white px-6 py-1 text-[24px] font-bold rounded-lg max-[500px]:text-[12px] max-[500px]:px-4">{{activity.start_time.replace('T', ' ').split(' ')[0].split('-')[2] }} <br>{{activity.start_time.replace('T', ' ').split(' ')[0].split('-')[1] }}</span>
                 <div class="flex flex-col text-white">
-                  <h1 class="text-[20px] font-bold w-[14rem]">{{ activity.name }}</h1>
-                  <p class="text-[14px] opacity-50">{{ activity.type }}</p>
+                  <h1 class="text-[20px] font-bold w-[12rem] max-[500px]:text-[14px] max-[500px]:w-[8rem]">{{ activity.name }}</h1>
+                  <p class="text-[14px] opacity-50 max-[500px]:text-[10px]">{{ activity.type }}</p>
                 </div>
                 <div v class="flex gap-4 text-2xl items-center">
-                <p class="text-white">{{ activity.price }}€</p>
-                <p class="text-green-600">1/{{ activity.max_participants }}</p>
-                <i class="text-white fa-solid fa-user-group"></i>
+                <p class="text-white max-[500px]:text-[16px]">{{ activity.price }}€</p>
+                <p class="text-green-600 max-[500px]:text-[16px]">1/{{ activity.max_participants }}</p>
+                <i class="text-white fa-solid fa-user-group max-[500px]:text-[16px]"></i>
                 </div>
                 <!-- <button 
                   @click="unsubscribe(activity.id)" 
@@ -20,7 +20,7 @@
                 >
                   Unsubscribe
                 </button> -->
-                <i click="unsubscribe(activity.id)"  class="text-red-600 text-[35px] duration-200 fa-solid fa-arrow-right-from-bracket hover:text-red-500 hover:cursor-pointer"></i>
+                <i click="unsubscribe(activity.id)"  class="text-red-600 text-[35px] duration-200 fa-solid fa-arrow-right-from-bracket hover:text-red-500 hover:cursor-pointer max-[500px]:text-[24px]"></i>
           </div>
     </div>
     <div v-else>
