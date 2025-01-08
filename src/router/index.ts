@@ -15,6 +15,8 @@ import LoginCompany from '../components/LoginCompany.vue';
 import LoginComponent from '../components/LoginComponent.vue';
 //@ts-ignore
 import FindEr from '../views/FindEr.vue';
+//@ts-ignore
+import ChatPage from '../views/ChatPage.vue';
 
 
 const routes = [
@@ -25,9 +27,9 @@ const routes = [
   { path: '/activite/add', component: AddActivity },
   { path: '/profil', component: ProfilPage },
   { path: '/finder', component: FindEr },
-  { path: '/login', name : 'LoginPage', component: LoginComponent},
-  { path: '/loginCompany', name : 'LoginCompany', component: LoginCompany},
-
+  { path: '/login', name: 'LoginPage', component: LoginComponent },
+  { path: '/loginCompany', name: 'LoginCompany', component: LoginCompany },
+  { path: '/chat', name: 'ChatPage', component: ChatPage },
 ];
 
 const router = createRouter({
