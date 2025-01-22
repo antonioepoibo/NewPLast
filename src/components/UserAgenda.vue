@@ -20,7 +20,7 @@
                 >
                   Unsubscribe
                 </button> -->
-                <i click="unsubscribe(activity.id)"  class="text-red-600 text-[35px] duration-200 fa-solid fa-arrow-right-from-bracket hover:text-red-500 hover:cursor-pointer max-[500px]:text-[24px]"></i>
+                <i @click="unsubscribe(activity.id)"  class="text-red-600 text-[35px] duration-200 fa-solid fa-arrow-right-from-bracket hover:text-red-500 hover:cursor-pointer max-[500px]:text-[24px]"></i>
           </div>
     </div>
     <div v-else>

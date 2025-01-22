@@ -19,7 +19,7 @@
         </div>
         <div class="flex flex-col gap-2 justify-start w-[6rem]">
           <div class="flex flex-col items-end">
-            <p class="text-white opacity-80 text-[14px] max-[500px]:text-[12px]">{{ activity.price }} $</p>
+            <p class="text-white opacity-80 text-[14px] max-[500px]:text-[12px]">{{ activity.price }} €</p>
             <p class="text-white opacity-50 text-[10px] max-[500px]:text-[6px] max-[500px]:text-right">{{ activity.location }}</p>
           </div>
         </div>
