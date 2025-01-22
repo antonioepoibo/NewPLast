@@ -30,7 +30,12 @@
       </div>
       <p class="text-white text-[16px] opacity-80 mt-5 h-[10rem] italic max-[1300px]:text-[13px] px-3 max-[920px]:text-[10px]"> {{ truncateText(activity.desc || defaultText, 100) }}</p>
       <div class="py-5 flex justify-center">
-        <button v-if="!activity.subscribed && !activity.isOwner" @click="subscribeToActivity(activity.id)" class="bg-green-600 text-white py-2 text-[14px] px-6  font-bold rounded-full max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1">S'abonner</button>
+        <button v-if="!activity.subscribed && !activity.isOwner" 
+          @click="subscribeToActivity(activity.id)" 
+          class="bg-green-600 text-white py-2 text-[14px] px-6  font-bold rounded-full max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1"
+          >
+          S'abonner
+        </button>
         <p v-else-if="activity.subscribed">Vous êtes abonné à l'activité!</p>
         <p v-else-if="activity.isOwner">Vous êtes le créateur de l'activité</p>
 
