@@ -30,9 +30,9 @@
       </div>
       <p class="text-white text-[16px] opacity-80 mt-5 h-[10rem] italic max-[1300px]:text-[13px] px-3 max-[920px]:text-[10px]"> {{ truncateText(activity.desc || defaultText, 100) }}</p>
       <div class="py-5 flex justify-center">
-        <button v-if="!activity.subscribed && !activity.isOwner" @click="subscribeToActivity(activity.id)" class="bg-green-600 text-white py-2 text-[14px] px-6  font-bold rounded-full max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1">Subscribe</button>
-        <p v-else-if="activity.subscribed">You are subscribed to this activity!</p>
-        <p v-else-if="activity.isOwner">You are the creator of this activity.</p>
+        <button v-if="!activity.subscribed && !activity.isOwner" @click="subscribeToActivity(activity.id)" class="bg-green-600 text-white py-2 text-[14px] px-6  font-bold rounded-full max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1">S'abonner</button>
+        <p v-else-if="activity.subscribed">Vous êtes abonné à l'activité!</p>
+        <p v-else-if="activity.isOwner">Vous êtes le créateur de l'activité</p>
 
         <!-- Add the "Contact the Owner" Button -->
         <button
@@ -40,7 +40,7 @@
           @click="openChat(activity.id ?? 0)"
           class="bg-blue-600 text-white py-2 text-[14px] px-6 font-bold rounded-full"
         >
-          Contact the Owner
+          Contacter l'utilisateur
         </button>
 
         <!-- Bouton pour signaler -->
@@ -48,7 +48,7 @@
           @click="openReportModal"
           class="bg-red-600 text-white py-2 text-[14px] px-6 font-bold rounded-full mt-2 max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1"
         >
-          Report Activity
+          Signaler
         </button>
       </div>
 
@@ -57,25 +57,25 @@
         v-if="isReportModalOpen"
         class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
         <div class="bg-white p-6 rounded-lg w-[90%] max-w-[500px]">
-          <h2 class="text-lg font-bold mb-4">Report Activity or Creator</h2>
+          <h2 class="text-lg font-bold mb-4">Signaler l'activité ou le créateur</h2>
           <textarea
             v-model="reportMessage"
-            class="w-full p-3 border rounded mb-4"
+            class="w-full p-3 border rounded mb-4 text-white"
             rows="5"
-            placeholder="Write your message here..."
+            placeholder="Entrez votre message..."
           ></textarea>
           <div class="flex justify-end gap-2">
             <button
               @click="isReportModalOpen = false"
               class="bg-gray-300 text-black py-2 px-4 rounded"
             >
-              Cancel
+              Annuler
             </button>
             <button
               @click="submitReport"
               class="bg-red-600 text-white py-2 px-4 rounded"
             >
-              Send Report
+              Envoyer le signalement
             </button>
           </div>
       </div>
@@ -180,6 +180,7 @@ margin-top: 1em;
 /* Styles pour la modale */
 .fixed {
   position: fixed;
+  z-index: 1000;
 }
 
 .inset-0 {
