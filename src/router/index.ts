@@ -18,7 +18,7 @@ import FindEr from '../views/FindEr.vue';
 //@ts-ignore
 import ChatPage from '../views/ChatPage.vue';
 //@ts-ignore
-import ReportsPage from '../views/ReportsPage.vue';
+// import ReportsPage from '../views/ReportsPage.vue';
 
 
 const routes = [
@@ -32,7 +32,7 @@ const routes = [
   { path: '/login', name : 'LoginPage', component: LoginComponent},
   { path: '/loginCompany', name : 'LoginCompany', component: LoginCompany},
   { path: '/chat', name: 'ChatPage', component: ChatPage },
-  { path: '/reports', name: 'ReportsPage', component: ReportsPage },
+  // { path: '/reports', name: 'ReportsPage', component: ReportsPage },
 ]
 
 
