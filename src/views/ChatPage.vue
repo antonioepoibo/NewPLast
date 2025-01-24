@@ -3,6 +3,7 @@
     <div v-if="!$route.query.owner || !$route.query.activityId" class="h-[78.8vh]">
       <h1 class="text-white">Avec qui Tchater ?</h1>
     </div>
+    
     <div v-if="$route.query.owner && $route.query.activityId" class="container chat-container">
       <div v-for="act in activity" class="bg-[#021925] border border-1 border-b-0 flex w-full" :key="act.id">
         <img :src="act.image_url" class="w-[30rem] object-cover p-6" alt="">
@@ -54,10 +55,17 @@
       <form @submit.prevent="sendMessage" class="bg-[#021925] w-full px-4 border border-1">
         <input v-model="newMessage" placeholder="Ecrit ton message ici..." class="message-input"/>
         <div class="flex gap-4">
-          <button type="submit" class="send-button">Envoyer</button>
-          <button type="button" class="repport-button">Signaler</button>
+          <button @click="sendMessage" type="submit" class="send-button">Envoyer</button>
+          <button type="button" class="repport-button" @click="openReportModal">Signaler</button>
         </div>
       </form>
+
+      <reportModal
+      :isReportModalOpen="isReportModalOpen"
+      @close="isReportModalOpen = false"
+      :activity="$route.query.activityId"
+      :owner="$route.query.owner"
+    />
     </div>
   </div>
 </template>
@@ -67,6 +75,7 @@ import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 import { supabase } from '../supabase.js'; // Make sure to set up and import Supabase client
 import { useSessionStore } from '../stores/sessions';
 import { useRoute } from 'vue-router';
+import reportModal from '../components/reportModal.vue';
 
 const sessionStore = useSessionStore();
 const newMessage = ref('');
@@ -169,6 +178,11 @@ async function sendMessage() {
   }
 }
 
+const isReportModalOpen = ref(false); // État de la fenêtre modale
+
+function openReportModal() {
+  isReportModalOpen.value = true;
+}
 // Fetch messages on component mount and subscribe to real-time updates
 onMounted(() => {
   fetchMessages();

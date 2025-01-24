@@ -1,35 +1,38 @@
 <!-- src/components/ActivityItem.vue -->
 <template>
-    <div class="">
-      <div @click="openChat(activity.id ?? 0)" class="w-[22rem] h-[36rem] cursor-pointer bg-[#3B5562] rounded-sm shadow-xl flex flex-col justify-between max-[500px]:w-[18rem] max-[500px]:h-[26rem] max-[400px]:w-[21rem]">
-      <div class="flex justify-between items-center px-3 py-5 max-[500px]:flex-col gap-2">
-        <div class="flex gap-1 items-center flex-nowrap mr-2">
-          <p v-for="acti in activity.type.split(',')" :key="acti" class="text-[#3B5562] opacity-70 text-[9px] max-[500px]:text-[7px] flex bg-white py-1 px-3 rounded-full font-bold">{{ acti }}</p>
-        </div>
-      <p class="text-white opacity-70 text-[8px] italic max-[500px]:text-[7px]">{{ activityStartDate + ' ' + activityStartNum }} -> {{ activityEndDate + ' ' + activityEndNum }}</p>
-    </div>
-      <img :src="activity.image_url" class="h-[15rem] w-[100%] object-cover max-[500px]:h-[10rem]" alt="">
-      <div class="flex justify-between items-center px-3 pt-4">
-        <div class="flex gap-4 items-center">
-          <img src="https://tnrusogdplqbithagiji.supabase.co/storage/v1/object/public/profile-pictures/default_img.png" class="rounded-full w-[60px] h-[60px] object-cover max-[500px]:hidden" alt="">
-          <div>
-            <h2 class="text-white text-[18px] font-bold max-[500px]:text-[14px]">{{ activity.name }}</h2>
-              <p class="text-white opacity-50 text-[14px] max-[500px]:text-[10px]">Par {{ activity.owner.split('@')[0] }}</p>
+    <div class="h-[37rem]">
+      <div class="relative w-[22rem] h-[36rem] mt-[1rem] cursor-pointer bg-[#3B5562] rounded-sm shadow-xl flex flex-col justify-between max-[500px]:w-[18rem] max-[500px]:h-[26rem] max-[400px]:w-[21rem]">
+      <i @click="openReportModal" class="fa-solid fa-circle-exclamation text-red-600 border-red-800 border-2 rounded-full text-[30px] absolute top-[-1rem] right-[-.7rem] z-60 rotate-12"></i>
+      <div @click="openChat(activity.id ?? 0)">
+          <div class="flex justify-between items-center px-3 py-5 max-[500px]:flex-col gap-2">
+          <div class="flex gap-1 items-center flex-nowrap mr-2">
+            <p v-for="acti in activity.type.split(',')" :key="acti" class="text-[#3B5562] opacity-70 text-[9px] max-[500px]:text-[7px] flex bg-white py-1 px-3 rounded-full font-bold">{{ acti }}</p>
+          </div>
+        <p class="text-white opacity-70 text-[8px] italic max-[500px]:text-[7px]">{{ activityStartDate + ' ' + activityStartNum }} -> {{ activityEndDate + ' ' + activityEndNum }}</p>
+      </div>
+        <img :src="activity.image_url" class="h-[15rem] w-[100%] object-cover max-[500px]:h-[10rem]" alt="">
+        <div class="flex justify-between items-center px-3 pt-4">
+          <div class="flex gap-4 items-center">
+            <img src="https://tnrusogdplqbithagiji.supabase.co/storage/v1/object/public/profile-pictures/default_img.png" class="rounded-full w-[60px] h-[60px] object-cover max-[500px]:hidden" alt="">
+            <div>
+              <h2 class="text-white text-[18px] font-bold max-[500px]:text-[14px]">{{ activity.name }}</h2>
+                <p class="text-white opacity-50 text-[14px] max-[500px]:text-[10px]">Par {{ activity.owner.split('@')[0] }}</p>
+            </div>
+          </div>
+          <div class="flex flex-col gap-2 justify-start w-[6rem]">
+            <div class="flex flex-col items-end">
+              <p class="text-white opacity-80 text-[14px] max-[500px]:text-[12px]">{{ activity.price }} €</p>
+              <p class="text-white opacity-50 text-[10px] max-[500px]:text-[6px] max-[500px]:text-right">{{ activity.location }}</p>
+            </div>
           </div>
         </div>
-        <div class="flex flex-col gap-2 justify-start w-[6rem]">
-          <div class="flex flex-col items-end">
-            <p class="text-white opacity-80 text-[14px] max-[500px]:text-[12px]">{{ activity.price }} €</p>
-            <p class="text-white opacity-50 text-[10px] max-[500px]:text-[6px] max-[500px]:text-right">{{ activity.location }}</p>
-          </div>
+        <div class="flex items-center text-[10px] text-white gap-2 flex-row-reverse px-3">
+          <p>0 /{{ activity.max_participants || 0 }}</p>
+          <progress :max="activity.max_participants" :value="0" class="h-2 w-[6rem]"></progress>
         </div>
+        <p class="text-white text-[16px] opacity-80 mt-5 h-[3rem] italic max-[1300px]:text-[13px] px-3 max-[920px]:text-[10px]"> {{ truncateText(activity.desc || defaultText, 100) }}</p>
       </div>
-      <div class="flex items-center text-[10px] text-white gap-2 flex-row-reverse px-3">
-        <p>0 /{{ activity.max_participants || 0 }}</p>
-        <progress :max="activity.max_participants" :value="0" class="h-2 w-[6rem]"></progress>
-      </div>
-      <p class="text-white text-[16px] opacity-80 mt-5 h-[10rem] italic max-[1300px]:text-[13px] px-3 max-[920px]:text-[10px]"> {{ truncateText(activity.desc || defaultText, 100) }}</p>
-      <div class="py-5 flex justify-center">
+      <div class="py-5 flex justify-center relative z-40">
         <button v-if="!activity.subscribed && !activity.isOwner" 
           @click="subscribeToActivity(activity.id)" 
           class="bg-green-600 text-white py-2 text-[14px] px-6  font-bold rounded-full max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1"
@@ -39,28 +42,19 @@
         <p v-else-if="activity.subscribed">Vous êtes abonné à l'activité!</p>
         <p v-else-if="activity.isOwner">Vous êtes le créateur de l'activité</p>
 
-        <!-- Add the "Contact the Owner" Button -->
-        <button
-          v-if="activity.owner !== sessionStore.userId" 
-          @click="openChat(activity.id ?? 0)"
-          class="bg-blue-600 text-white py-2 text-[14px] px-6 font-bold rounded-full"
-        >
-          Contacter l'utilisateur
-        </button>
-
-        <!-- Bouton pour signaler -->
+        <!-- Bouton pour signaler
         <button
           @click="openReportModal"
           class="bg-red-600 text-white py-2 text-[14px] px-6 font-bold rounded-full mt-2 max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1"
         >
           Signaler
-        </button>
+        </button> -->
       </div>
 
       <!-- Modale pour le signalement -->
       <div
         v-if="isReportModalOpen"
-        class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-60">
         <div class="bg-white p-6 rounded-lg w-[90%] max-w-[500px]">
           <h2 class="text-lg font-bold mb-4">Signaler l'activité ou le créateur</h2>
           <textarea
