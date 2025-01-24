@@ -1,7 +1,7 @@
 <!-- src/components/ActivityItem.vue -->
 <template>
     <div class="">
-      <div class="w-[22rem] h-[36rem] bg-[#3B5562] rounded-sm shadow-xl flex flex-col justify-between max-[500px]:w-[18rem] max-[500px]:h-[26rem] max-[400px]:w-[21rem]">
+      <div @click="openChat(activity.id ?? 0)" class="w-[22rem] h-[36rem] cursor-pointer bg-[#3B5562] rounded-sm shadow-xl flex flex-col justify-between max-[500px]:w-[18rem] max-[500px]:h-[26rem] max-[400px]:w-[21rem]">
       <div class="flex justify-between items-center px-3 py-5 max-[500px]:flex-col gap-2">
         <div class="flex gap-1 items-center flex-nowrap mr-2">
           <p v-for="acti in activity.type.split(',')" :key="acti" class="text-[#3B5562] opacity-70 text-[9px] max-[500px]:text-[7px] flex bg-white py-1 px-3 rounded-full font-bold">{{ acti }}</p>

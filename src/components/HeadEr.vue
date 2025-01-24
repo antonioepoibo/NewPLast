@@ -6,7 +6,7 @@
               <router-link to="/"><img :src="newP" class="w-[8rem] hover:opacity-50 duration-200 hover:underline max-[600px]:w-[6rem] max-[400px]:w-[4rem]" alt=""></router-link>
               <router-link to="/" class="max-[1100px]:hidden "><p :class="{ underline: $route.path === '/' }" class="text-white hover:opacity-50 duration-200 hover:underline">Home</p></router-link>
               <router-link to="/finder" class="max-[1100px]:hidden"><p :class="{ underline: $route.path === '/Finder' }" class="text-white hover:opacity-50 duration-200 hover:underline">Finder</p></router-link>
-              <router-link to="/message" class="max-[1100px]:hidden"><p :class="{ underline: $route.path === '/chat' }" class="text-white hover:opacity-50 duration-200 hover:underline">Message</p></router-link>
+              <router-link to="/chat" class="max-[1100px]:hidden"><p :class="{ underline: $route.path === '/chat' }" class="text-white hover:opacity-50 duration-200 hover:underline">Message</p></router-link>
             </div>
             <div class="flex gap-10 items-center text-white text-[18px] flex-shrink-0">
               <router-link to="/activite/add/" class="text-white hover:opacity-50 max-[1100px]:hidden"><i class="fa-solid fa-plus text-[24px]"></i></router-link>
