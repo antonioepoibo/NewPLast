@@ -19,6 +19,7 @@ import FindEr from '../views/FindEr.vue';
 import ChatPage from '../views/ChatPage.vue';
 //@ts-ignore
 // import ReportsPage from '../views/ReportsPage.vue';
+import NotFound from '../views/404.vue';
 
 const routes = [
     { path: '/', name: 'Home', component: HomePage },
@@ -32,6 +33,7 @@ const routes = [
     { path: '/loginCompany', name: 'LoginCompany', component: LoginCompany },
     { path: '/chat', name: 'ChatPage', component: ChatPage },
     // { path: '/reports', name: 'ReportsPage', component: ReportsPage },
+    { path: '/:catchAll(.*)', name: 'NoFound', component: NotFound },
 
 ];
 const router = createRouter({
