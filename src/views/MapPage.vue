@@ -2,7 +2,6 @@
     <h1>Activity Map</h1>
     <div class="flex flex-col h-screen">
       <MapPin :acvitivitesUser="activities" :width="width" :height="height" />
-
     </div>
 </template>
 

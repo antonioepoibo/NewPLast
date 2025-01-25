@@ -4,13 +4,21 @@
           <SearchBar :username="sessionStore.username" v-model:searchQuery="searchQuery" />
       </div>
       <div v-if="sessionStore.isLoggedIn" class="container flex flex-col gap-4 mt-6">
+
+        <div class="flex flex-col">
+          <div class="flex justify-between">
+            <h2 class="text-white text-[30px] font-bold max-[500px]:text-[18px]">Vos amis</h2>
+            <router-link to="/friends" class="text-white opacity-50 duration-100 max-[500px]:text-[10px] hover:opacity-100">Ajouter un amis</router-link>
+          </div>
+          <UserFriends />
+        </div>
         <!-- Activities Section -->
         <div class="flex flex-col">
           <div class="flex justify-between">
             <h2 class="text-white text-[30px] font-bold max-[500px]:text-[18px]">Vos prochaines activités</h2>
-            <button @click="toggleAgenda" class="btn btn-primary">Show Your Agenda</button>
+            <button @click="toggleAgenda" class="btn btn-primary duration-200">Show Your Agenda</button>
           </div>
-          <UserAgenda v-if="showAgenda" :username="sessionStore.username" />
+          <UserAgenda v-if="showAgenda" class="duration-200" :username="sessionStore.username" />
 
         </div>
 
@@ -71,6 +79,8 @@ import { useSessionStore } from '../stores/sessions';
 import MapPin from '../components/MapPin.vue';
 //@ts-ignore
 import SearchBar from '../components/SearchBar.vue';
+//@ts-ignore
+import UserFriends from '../components/FriendsList.vue';
 
 
 // Reactive state
@@ -113,6 +123,7 @@ function updateWindowWidth() {
     if (error) {
       console.error('Erreur lors de la récupération des activités:', error.message);
       return;
+      
     }
 
     if (data) {

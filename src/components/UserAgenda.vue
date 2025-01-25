@@ -115,8 +115,8 @@ async function unsubscribe(activityId: string) {
       alert('Failed to unsubscribe. Please try again.');
     } else {
       alert('Successfully unsubscribed!');
-      // Refresh the page to reflect the updated state
-      window.location.reload();
+      fetchUserAgenda(userId);
+
     }
   } catch (err) {
     console.error('Unexpected error:', err);

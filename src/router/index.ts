@@ -21,7 +21,8 @@ import ChatPage from '../views/ChatPage.vue';
 //@ts-ignore
 // import ReportsPage from '../views/ReportsPage.vue';
 import NotFound from '../views/404.vue';
-
+//@ts-ignore
+import FriendsPage from '../views/FriendsPage.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: HomePage },
@@ -37,7 +38,7 @@ const routes = [
   // { path: '/reports', name: 'ReportsPage', component: ReportsPage },
   // 404 page
   { path: '/:catchAll(.*)', name: 'NoFound', component: NotFound },
-
+  { path: '/friends', name: 'FriendsPage', component: FriendsPage },
 ];
 
 const router = createRouter({
