@@ -12,14 +12,16 @@
             </div>
             <div v-if="filteredUsers.length > 0 && isSearching" class="flex flex-col gap-6">
                 <div v-for="allUser in filteredUsers" :key="allUser.id" class="m-auto border-2 border-white rounded-lg w-[40%] px-10 opacity-50 duration-100 hover:opacity-100 max-[1500px]:w-[60%] max-[1000px]:w-[70%] max-[750px]:w-[94%]">
-                        <div class="flex gap-6 m-auto items-center py-4 max-[500px]:flex-col">
-                            <img class="rounded-full w-[90px] h-[90px] object-cover" :src="allUser.avatar_url" alt="">
-                            <div class="flex flex-col gap-4">
-                                <div class="flex justify-between">
-                                    <p class="text-white">{{ allUser.firstname }} {{ allUser.lastname }}</p>
-                                    <p class="text-white">il y a {{ convertTimeDiff(allUser.last_login) }}</p>
+                        <div class="flex items-center gap-6">
+                            <div @click="$router.push(`/friendsprofile?profildata=${allUser.id}`)" class="flex gap-6 m-auto items-center py-4 max-[500px]:flex-col">
+                                <img class="rounded-full w-[90px] h-[90px] object-cover" :src="allUser.avatar_url" alt="">
+                                <div class="flex flex-col gap-4">
+                                    <div class="flex justify-between">
+                                        <p class="text-white">{{ allUser.firstname }} {{ allUser.lastname }}</p>
+                                        <p class="text-white">il y a {{ convertTimeDiff(allUser.last_login) }}</p>
+                                    </div>
+                                    <p class="text-white opacity-50 italic">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed mollitia ex odio itaque consequatur esse, deleniti provident harum vero quam voluptate obcaecati magni facilis ipsam architecto adipisci minus dolorem delectus.</p>
                                 </div>
-                                <p class="text-white opacity-50 italic">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed mollitia ex odio itaque consequatur esse, deleniti provident harum vero quam voluptate obcaecati magni facilis ipsam architecto adipisci minus dolorem delectus.</p>
                             </div>
                             <i @click="addFriend(allUser.id)" class="text-green-600 fa-solid fa-user-plus text-[40px]"></i>
                         </div>
@@ -33,7 +35,8 @@
             </div>
             <div class="flex flex-col gap-6 min-h-[60vh]">
                 <div v-for="friend in filteredFriends" :key="friend.id" class="m-auto border-2 border-white rounded-lg w-[40%] px-10 opacity-50 duration-100 hover:opacity-100 max-[1500px]:w-[60%] max-[1000px]:w-[70%] max-[750px]:w-[94%]">
-                    <div class="flex gap-6 m-auto items-center py-4 max-[500px]:flex-col">
+                    <div class="flex gap-6 m-auto items-center">
+                    <div @click="$router.push(`/friendsprofile?profildata=${friend.id}`)" class="flex gap-6 m-auto items-center py-4 max-[500px]:flex-col">
                         <img class="rounded-full w-[90px] h-[90px] object-cover" :src="friend.avatar_url" alt="">
                         <div class="flex flex-col gap-4">
                             <div class="flex justify-between">
@@ -44,6 +47,7 @@
                                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sed mollitia ex odio itaque consequatur esse, deleniti provident harum vero quam voluptate obcaecati magni facilis ipsam architecto adipisci minus dolorem delectus.
                             </p>
                         </div>
+                    </div>
                         <i @click="delFriend(friend.id)" class="text-red-600 fa-solid fa-arrow-right-from-bracket text-[40px]"></i>
                     </div>
                 </div>

@@ -17,7 +17,7 @@
               </div>
             </div>
             <!-- photo des amis-->
-            <div v-for="friend in friends" :key="friend.id" class="widthOneDiv coucou flex flex-col gap-6 items-center my-4 text-center flex-shrink-0 max-[600px]:gap-2">
+            <div @click="$router.push(`/friendsprofile?profildata=${friend.id}`)"  v-for="friend in friends" :key="friend.id" class="widthOneDiv coucou flex flex-col gap-6 items-center my-4 text-center flex-shrink-0 max-[600px]:gap-2">
               <!-- Si il sont en ligne -->
               <div v-if="new Date(friend.last_login).getTime() > new Date().getTime() - 60000" class="relative flex flex-col items-center text-white text-center w-[7rem] max-[600px]:w-[4.4rem]">
                 <i class="fa-solid fa-xmark absolute top-[-10px] right-0 cursor-pointer	" @click="delFriends(friend.id)"></i>
@@ -77,6 +77,7 @@ import { ref, onMounted } from 'vue';
 import { supabase } from '../supabase';
 import { useSessionStore } from '../stores/sessions';
 
+
 const sessionStore = useSessionStore();
 const friends = ref([]);
 
@@ -92,10 +93,12 @@ async function getFriends() {
             .select('*')
             .in('id', data.map(friend => friend.newfriendsID));
         friends.value = amis;
+        
     }
 }
 
 const image_url = ref('');
+
 
 async function getImg() {
     const { data, error } = await supabase

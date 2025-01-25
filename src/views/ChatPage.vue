@@ -31,7 +31,7 @@
             </div>
             <div class="flex gap-2 items-center">
               <div class="flex gap-2">
-                <i :title="avatar.full_name" v-for="avatar in avatarSubscription" class="fa-solid fa-person text-slate-500 hover:text-white duration-200 text-[28px]"></i>
+                <i @click="$router.push(`/friendsprofile?profildata=${avatar.id}`)" :title="avatar.full_name" v-for="avatar in avatarSubscription" class="fa-solid fa-person text-slate-500 hover:text-white duration-200 text-[28px]"></i>
               </div>
               <p class="text-white text-[28px]">|</p>
               <div :title="'limite de ' + act.max_participants + ' personne(s)' " class="relative flex gap-2 group">
@@ -42,7 +42,7 @@
             <iframe :src="mapUrl(act.localisation)" width="600" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg"> </iframe>
           </div>
           <div class="relative flex items-center h-[55px] w-[200px] overflow-visible">
-            <img :title="avatar.full_name" v-for="(avatar, index) in avatarSubscription" :key="avatar.id" :src="avatar.avatar_url" :style="{ left: `${index * 40}px` }" class="absolute w-[55px] h-[55px] rounded-full border-[#021925] border-4" alt="" />
+            <img @click="$router.push(`/friendsprofile?profildata=${avatar.id}`)" :title="avatar.full_name" v-for="(avatar, index) in avatarSubscription" :key="avatar.id" :src="avatar.avatar_url" :style="{ left: `${index * 40}px` }" class="absolute w-[55px] h-[55px] rounded-full border-[#021925] border-4" alt="" />
           </div>
         </div>
       </div>
@@ -143,7 +143,7 @@ async function GetUserWithID(){
     const userIds = data.map(user => user.userId);
     const { data: avatars, error: avatarError } = await supabase
       .from('profiles')
-      .select('avatar_url, full_name')
+      .select('avatar_url, full_name, id')
       .in('id', userIds);
 
     if (avatarError) {
