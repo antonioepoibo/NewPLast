@@ -2,9 +2,9 @@
   <div>
    
     <div v-if="activities.length > 0" class="flex flex-wrap gap-[2rem] justify-between my-6 mx-4 max-[500px]:justify-center max-[500px]:gap-[1.5rem] max-[400px]:mx-0">
-          <div v-for="activity in activities" :key="activity.id" class="flex gap-4 items-center w-[507px] max-[500px]:gap-2 max-[500px]:w-[340px] max-[400px]:w-[337px] justify-between hover:bg-[#002e44] hover:py-2 duration-200 ">
-          
-                <span class="flex flex-col items-start border-[.15rem] border-white text-white px-6 py-1 text-[24px] font-bold rounded-lg max-[500px]:text-[12px] max-[500px]:px-4">{{activity.start_time.replace('T', ' ').split(' ')[0].split('-')[2] }} <br>{{activity.start_time.replace('T', ' ').split(' ')[0].split('-')[1] }}</span>
+          <div v-for="activity in activities" :key="activity.id" class="cursor-pointer flex gap-4 items-center w-[507px] max-[500px]:gap-2 max-[500px]:w-[340px] max-[400px]:w-[337px] justify-between hover:bg-[#002e44] hover:py-2 duration-200 ">
+            <div @click="openChat(activity.id?.toString() || '', activity.owner)" class="flex gap-4 items-center">
+              <span class="flex flex-col items-start border-[.15rem] border-white text-white px-6 py-1 text-[24px] font-bold rounded-lg max-[500px]:text-[12px] max-[500px]:px-4">{{activity.start_time.replace('T', ' ').split(' ')[0].split('-')[2] }} <br>{{activity.start_time.replace('T', ' ').split(' ')[0].split('-')[1] }}</span>
                 <div class="flex flex-col text-white">
                   <h1 class="text-[20px] font-bold w-[12rem] max-[500px]:text-[14px] max-[500px]:w-[8rem]">{{ activity.name }}</h1>
                   <p class="text-[14px] opacity-50 max-[500px]:text-[10px]">{{ activity.type }}</p>
@@ -20,7 +20,8 @@
                 >
                   Unsubscribe
                 </button> -->
-                <i @click="unsubscribe(activity.id)"  class="text-red-600 text-[35px] duration-200 fa-solid fa-arrow-right-from-bracket hover:text-red-500 hover:cursor-pointer max-[500px]:text-[24px]"></i>
+            </div>
+                <i @click="unsubscribe(activity.id?.toString() || '')"  class="text-red-600 text-[35px] duration-200 fa-solid fa-arrow-right-from-bracket hover:text-red-500 hover:cursor-pointer max-[500px]:text-[24px]"></i>
           </div>
     </div>
     <div v-else>
@@ -35,6 +36,17 @@ import { ref, onMounted } from 'vue';
 import { supabase } from '../supabase';
 import { Activity } from '../type';
 import { useSessionStore } from '../stores/sessions';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+function openChat(id: string, owner: string) {
+
+  router.push({
+    name: 'ChatPage',
+    query: { owner: owner, activityId: id }, 
+  });
+}
 
 // State to store the list of subscribed activities
 const activities = ref<Activity[]>([]);

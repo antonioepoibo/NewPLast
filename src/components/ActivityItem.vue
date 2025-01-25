@@ -2,7 +2,9 @@
 <template>
     <div class="h-[37rem]">
       <div class="relative w-[22rem] h-[36rem] mt-[1rem] cursor-pointer bg-[#3B5562] rounded-sm shadow-xl flex flex-col justify-between max-[500px]:w-[18rem] max-[500px]:h-[26rem] max-[400px]:w-[21rem]">
-      <i @click="openReportModal" class="fa-solid fa-circle-exclamation text-red-600 border-red-800 border-2 rounded-full text-[30px] absolute top-[-1rem] right-[-.7rem] z-60 rotate-12"></i>
+      <div class="bg-red-600 border-red-800 border-2 rounded-full absolute top-[-1rem] right-[-.7rem] z-60 rotate-12">
+        <i @click="openReportModal" class="fa-solid fa-person-circle-exclamation text-white text-[20px] m-2"></i>
+      </div>
       <div @click="openChat(activity.id ?? 0)">
           <div class="flex justify-between items-center px-3 py-5 max-[500px]:flex-col gap-2">
           <div class="flex gap-1 items-center flex-nowrap mr-2">
@@ -22,23 +24,18 @@
           <div class="flex flex-col gap-2 justify-start w-[6rem]">
             <div class="flex flex-col items-end">
               <p class="text-white opacity-80 text-[14px] max-[500px]:text-[12px]">{{ activity.price }} €</p>
-              <p class="text-white opacity-50 text-[10px] max-[500px]:text-[6px] max-[500px]:text-right">{{ activity.location }}</p>
+              <div class="flex gap-1 text-white items-center text-[14px] opacity-80">
+                <i class="fa-solid fa-people-group"></i> 
+                <p>/{{ activity.max_participants || 0 }}</p>
+              </div>
+              <!-- <p class="text-white opacity-50 text-[10px] max-[500px]:text-[6px] max-[500px]:text-right">{{ activity.location }}</p> -->
             </div>
           </div>
-        </div>
-        <div class="flex items-center text-[10px] text-white gap-2 flex-row-reverse px-3">
-          <p>0 /{{ activity.max_participants || 0 }}</p>
-          <progress :max="activity.max_participants" :value="0" class="h-2 w-[6rem]"></progress>
         </div>
         <p class="text-white text-[16px] opacity-80 mt-5 h-[3rem] italic max-[1300px]:text-[13px] px-3 max-[920px]:text-[10px]"> {{ truncateText(activity.desc || defaultText, 100) }}</p>
       </div>
       <div class="py-5 flex justify-center relative z-40">
-        <button v-if="!activity.subscribed && !activity.isOwner" 
-          @click="subscribeToActivity(activity.id)" 
-          class="bg-green-600 text-white py-2 text-[14px] px-6  font-bold rounded-full max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1"
-          >
-          S'abonner
-        </button>
+        <button v-if="!activity.subscribed && !activity.isOwner" @click="subscribeToActivity(activity.id)" class="border-2 border-green-600 text-green-400 bg-green-700/50 py-2 text-[14px] px-6  font-bold rounded-tl-lg rounded-br-lg max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1 duration-200 hover:bg-green-400/50 hover:mb-6">S'abonner</button>
         <p v-else-if="activity.subscribed">Vous êtes abonné à l'activité!</p>
         <p v-else-if="activity.isOwner">Vous êtes le créateur de l'activité</p>
 

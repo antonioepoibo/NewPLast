@@ -40,10 +40,9 @@
           </div>
           <div class="flex gap-4 justify-center items-center">
             <p @click="moveLeftActV" class="relative text-white fa-solid fa-arrow-left arrow"></p>
-            <span v-if="windowWidth >= 400" v-for="i in ActVmaxIndex" :id="i.toString()" @click="setNewIActV(i)" :class="{'opacity-50': i !== ActVcurrentIndex + 1 }" class="bg-white flex w-[0.8rem] h-[0.8rem] rounded-full"></span>
+            <span v-if="windowWidth >= 400" v-for="i in Math.ceil(activities.length / 3)" :id="i.toString()" @click="setNewIActV(i)" :class="{'opacity-50': i !== ActVcurrentIndex + 1 }" class="bg-white flex w-[0.8rem] h-[0.8rem] rounded-full"></span>
             <p v-if="windowWidth >= 400" @click="moveRightActV" class="relative text-white fa-solid fa-arrow-right arrow"></p>
-            
-            <span v-if="windowWidth <= 400" v-for="i in activities.length" :id="i.toString()" @click="setNewActVI(i)" :class="{'opacity-50': i !== ActVcurrentIndex + 1 }" class="bg-white flex w-[0.8rem] h-[0.8rem] rounded-full"></span>
+            <span v-if="windowWidth <= 400" v-for="i in Math.ceil(activities.length / 3)" :id="i.toString()" @click="setNewActVI(i)" :class="{'opacity-50': i !== ActVcurrentIndex + 1 }" class="bg-white flex w-[0.8rem] h-[0.8rem] rounded-full"></span>
             <p v-if="windowWidth <= 400" @click="moveRightActVI" class="relative text-white fa-solid fa-arrow-right arrow"></p>
 
           </div>
@@ -60,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch, onUnmounted } from 'vue';
+import { ref, onMounted, nextTick, watch, onUnmounted, computed } from 'vue';
 //@ts-ignore
 import { supabase } from '../supabase';
 import ActivityItem from '../components/ActivityItem.vue';
@@ -100,7 +99,7 @@ const allActivities = ref<Array<any>>([]);
 const searchQuery = ref(''); // Reactive state in the parent
 const interest = ref<Array<any>>([]);
 const windowWidth = ref(window.innerWidth);
-
+const subAct = ref([]); 
 function updateWindowWidth() {
   windowWidth.value = window.innerWidth;
 }
@@ -196,10 +195,26 @@ function logout() {
 function goToAccountPage() {
   router.push({ name: 'Account' });
 }
+async function getActivitySubscriptions(){
+  const {data} = await supabase
+    .from('subscriptions')
+    .select('activity_id')
+    .eq('userId', sessionStore.userId);
+    console.log(data);
+    subAct.value = data.map((sub: any) => sub.activity_id);
+}
 
 // Function to fetch activities
 async function fetchActivities() {
-  const { data, error } = await supabase.from('activity').select('*');
+  const excludedIds = subAct.value.join(',');
+  console.log("excludedIds", excludedIds);
+
+  console.log(subAct.value);
+  const { data, error } = await supabase
+    .from('activity')
+    .select('*')
+    .filter('id', 'not.in', `(${excludedIds})`); // Attention au format des parenthèses
+
   if (error) console.error(error);
   else{
     const sortedActivities = (data as Activity[]).sort((a, b) => {
@@ -218,6 +233,8 @@ async function fetchActivities() {
     allActivities.value = activities.value;
   } 
 }
+
+
 
 // Function to filter activities
 //@ts-ignore
@@ -320,6 +337,7 @@ async function subscribeToActivity(activityId: number) {
     showAgenda.value = false;  // Temporarily hide the agenda
     await nextTick();  // Wait for DOM to update
     showAgenda.value = true;  // Show the agenda again to re-render
+    getActivitySubscriptions();
 
   }
 }
@@ -333,6 +351,7 @@ onMounted(async () => {
   
   if (sessionData?.session) {
     sessionStore.setSession(sessionData.session);
+    await getActivitySubscriptions();
     fetchActivities();
   } else {
     sessionStore.clearSession();
@@ -357,12 +376,14 @@ onMounted(async () => {
     if (event === 'SIGNED_IN' && newSession) {
       sessionStore.setSession(newSession);
       console.log(sessionStore.userId);
+      getActivitySubscriptions();
       fetchActivities();
     } else if (event === 'SIGNED_OUT') {
       sessionStore.clearSession();
     }
   });
 });
+
 </script>
 
 
