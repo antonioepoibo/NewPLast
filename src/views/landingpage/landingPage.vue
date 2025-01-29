@@ -188,7 +188,13 @@
 
     <div class="CincoSec margin flex flex-col pt-[5.7rem]">
         <p class="text-[36px] work-sans-bold text-bleuFonce m-auto">Parce qu'ils nous font confiance</p>
-        <img :src="confiance" class="w-[60%] m-auto mt-5" alt="">
+        <div class="w-[804px] flex justify-center gap-[5rem] m-auto flex-wrap mt-8">
+            <img src="/src/assets/img/logo/unicaen.svg" class="saturate-0 duration-200 hover:saturate-100 " alt="">
+            <img src="/src/assets/img/logo/mds.svg" class="saturate-0 duration-200 hover:saturate-100" alt="">
+            <img src="/src/assets/img/logo/ensi.svg" class="saturate-0 duration-200 hover:saturate-100" alt="">
+            <img src="/src/assets/img/logo/orangeinov.svg" class="saturate-0 duration-200 hover:saturate-100" alt="">
+            <img src="/src/assets/img/logo/orange.svg" class="saturate-0 duration-200 hover:saturate-100" alt="">
+        </div>
     </div>
 
 </template>

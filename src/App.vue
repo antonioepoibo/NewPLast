@@ -49,7 +49,7 @@
   <div class="mx-[130px] my-[3rem] flex justify-between items-center">
     <router-link to="/landing"><img :src="NewPLogo" alt=""></router-link>
     <div class="flex items-center gap-10">
-      <router-link to="/landing" :class="{'decoration-2 underline': $route.name == 'LandingPage'}" class="text-[#002233] text-[20px] work-sans-semibold">Home</router-link>
+      <router-link to="/landing" :class="{'decoration-2 underline': $route.name == 'LandingPage'}" class="text-[#002233] text-[20px] work-sans-semibold">Accueil</router-link>
       <router-link to="/service" class="text-[#002233] text-[20px] work-sans-semibold" :class="{'decoration-2 underline': $route.name == 'ServicePage'}">Service</router-link>
       <router-link to="/tarif" class="text-[#002233] text-[20px] work-sans-semibold" :class="{'decoration-2 underline': $route.name == 'Tarif'}">Tarifs</router-link>
       <router-link to="/contact" class="text-[#002233] text-[20px] work-sans-semibold" :class="{'decoration-2 underline': $route.name == 'ContactPage'}">Contact</router-link>
@@ -79,7 +79,7 @@
   <div class="margin py-10 flex justify-between items-center">
     <router-link to="/landing"><img :src="NewPLogo" alt=""></router-link>
     <div class="flex flex-col items-end gap-10">
-      <router-link to="/landing" class="text-[#002233] text-[20px] work-sans-semibold" :class="{'decoration-2 underline': $route.name == 'LandingPage'}">Home</router-link>
+      <router-link to="/landing" class="text-[#002233] text-[20px] work-sans-semibold" :class="{'decoration-2 underline': $route.name == 'LandingPage'}">Accueil</router-link>
       <router-link to="/Service" class="text-[#002233] text-[20px] work-sans-semibold" :class="{'decoration-2 underline': $route.name == 'ServicePage'}">Service</router-link>
       <router-link to="/tarif" class="text-[#002233] text-[20px] work-sans-semibold" :class="{'decoration-2 underline': $route.name == 'Tarif'}">Tarifs</router-link>
       <router-link to="/teams" class="text-[#002233] text-[20px] work-sans-semibold" :class="{'decoration-2 underline': $route.name == 'TeamsPage'}">Qui somme nous ?</router-link>
