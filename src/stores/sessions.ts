@@ -32,9 +32,11 @@ export const useSessionStore = defineStore('session', {
     },
 
     // @ts-ignore
-    setCompanyStatus(status) {
-        this.isCompany = status;
-    },
+    setCompanyStatus(isCompany) {
+      this.isCompany = isCompany;
+      localStorage.setItem('isCompany', JSON.stringify(isCompany));  // Sauvegarde dans localStorage
+      console.log("isCompany mis à jour:", this.isCompany);
+  },  
 
     clearSession() {
       this.isLoading = false;  // Reset loading flag

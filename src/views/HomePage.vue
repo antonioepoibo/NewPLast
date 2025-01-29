@@ -5,7 +5,8 @@
           <SearchBar :username="sessionStore.username" v-model:searchQuery="searchQuery" />
       </div>
       <div v-if="sessionStore.isLoggedIn" class="container flex flex-col gap-4 mt-6">
-
+        <!-- Affichage de la valeur de isCompany -->
+        <div class="text-white text-lg font-bold">isCompany: {{ sessionStore.isCompany }}</div>
         <div class="flex flex-col">
           <div class="flex justify-between">
             <h2 class="text-white text-[30px] font-bold max-[500px]:text-[18px]">Vos amis</h2>
@@ -88,6 +89,7 @@ import { useMessageStore } from '../stores/messages'; // Importez le store des m
 
 // Reactive state
 const sessionStore = useSessionStore();
+const isCompany = ref(sessionStore.isCompany);
 const router = useRouter();
 const showForm = ref(false);
 const activities = ref<Activity[]>([]);
@@ -119,6 +121,10 @@ const msg_content = ref("");
 const msg_type = ref("");
 const messageStore = useMessageStore();
 
+watch(() => sessionStore.isCompany, (newVal) => {
+    isCompany.value = newVal;
+    console.log("HomePage → isCompany mis à jour via watch:", isCompany.value);
+});
 
 
 function updateWindowWidth() {
@@ -190,6 +196,15 @@ function setNewActVI(i: number): void {
 onMounted(() => {
   getAllActivities();
   window.addEventListener('resize', updateWindowWidth);
+  console.log("HomePage → isCompany au montage:", sessionStore.isCompany);
+
+    // Vérifier la valeur stockée
+    const storedIsCompany = localStorage.getItem('isCompany');
+    if (storedIsCompany) {
+        sessionStore.isCompany = JSON.parse(storedIsCompany);
+        isCompany.value = sessionStore.isCompany; // Assurer la réactivité
+        console.log("HomePage → isCompany après récupération:", isCompany.value);
+    }
 
 });
 onUnmounted(() => {

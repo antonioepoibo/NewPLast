@@ -20,7 +20,9 @@ export const useSessionStore = defineStore('session', {
             const userId = ref(''); // Define a local ref for userId within the action
             userId.value = newSession?.user?.id || ''; // Set the ref value
             this.userId = userId.value; // Store the ref value in the state
-            this.isCompany = !!newSession?.user?.isCompany;
+            if (this.isCompany === false) {
+                this.isCompany = JSON.parse(localStorage.getItem('isCompany')) || false;
+            }
             console.log(userId.value); // Log the userId value
         },
         setUsername(username) {
@@ -28,9 +30,12 @@ export const useSessionStore = defineStore('session', {
             console.log('Username set in store:', this.username); // Debug log for username
         },
 
-        setCompanyStatus(status) {
-            this.isCompany = status;
+        setCompanyStatus(isCompany) {
+            this.isCompany = isCompany;
+            localStorage.setItem('isCompany', JSON.stringify(isCompany));  // Sauvegarde dans localStorage
+            console.log("isCompany mis à jour:", this.isCompany);
         },
+        
         clearSession() {
             this.isLoading = false; // Reset loading flag
             this.session = null;
