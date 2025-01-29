@@ -32,7 +32,7 @@ const routes = [
     { path: '/login', name: 'LoginPage', component: LoginComponent },
     { path: '/loginCompany', name: 'LoginCompany', component: LoginCompany },
     { path: '/chat', name: 'ChatPage', component: ChatPage },
-    { path: '/reports', name: 'ReportsPage', component: ReportsPage },
+    // { path: '/reports', name: 'ReportsPage', component: ReportsPage },
     { path: '/:catchAll(.*)', name: 'NoFound', component: NotFound },
     { path: '/friends', name: 'FriendsPage', component: FriendsPage },
     { path: '/friendsProfile', name: 'FriendsProfile', component: FriendsProfil },
