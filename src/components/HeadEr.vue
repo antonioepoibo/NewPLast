@@ -11,6 +11,8 @@
             </div>
             <div class="flex gap-10 items-center text-white text-[18px] flex-shrink-0">
               <router-link to="/activite/add/" class="text-white hover:opacity-50 max-[1100px]:hidden"><i class="fa-solid fa-plus text-[24px]"></i></router-link>
+              <router-link to="/landing" class="text-white hover:opacity-50 max-[1100px]:hidden"><i class="fa-solid fa-plus text-[24px]"></i></router-link>
+
               <router-link to="/profil" class="max-[400px]:hidden"><img class="rounded-full w-[4rem] h-[4rem] object-cover" :src="image_url" alt=""></router-link>
               <button @click="logout"><i class="text-red-600 text-[24px] hover:text-red-400 duration-200 fa-solid fa-arrow-right-from-bracket"></i></button>
               <div id="spanCont" class="flex-col gap-2 hidden">
@@ -61,6 +63,8 @@ async function getImg(){
 // Logout function
 function logout() {
   sessionStore.clearSession();
+  localStorage.clear();
+
   alert('You have logged out.');
 }
 

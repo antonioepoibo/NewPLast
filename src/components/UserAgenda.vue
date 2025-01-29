@@ -11,7 +11,12 @@
                 </div>
                 <div v class="flex gap-4 text-2xl items-center">
                 <p class="text-white max-[500px]:text-[16px]">{{ activity.price }}€</p>
-                <p class="text-green-600 max-[500px]:text-[16px]">1/{{ activity.max_participants }}</p>
+                <p class="text-green-600 max-[500px]:text-[16px]">
+                  {{ 
+                    // @ts-ignore
+                    nbuser.find(user => user.activity_id === activity.id)?.count || 0 
+                  }}/{{ activity.max_participants }}
+                </p>
                 <i class="text-white fa-solid fa-user-group max-[500px]:text-[16px]"></i>
                 </div>
                 <!-- <button 
@@ -37,8 +42,11 @@ import { supabase } from '../supabase';
 import { Activity } from '../type';
 import { useSessionStore } from '../stores/sessions';
 import { useRouter } from 'vue-router';
+// import { emits } from 'vue';
 
 const router = useRouter();
+
+
 
 function openChat(id: string, owner: string) {
 
@@ -99,7 +107,10 @@ async function fetchUserAgenda(userId: string) {
   }
 }
 
-// Unsubscribe from an activity
+import { useMessageStore } from '../stores/messages'; // Importez le store des messages
+
+const messageStore = useMessageStore();
+
 async function unsubscribe(activityId: string) {
   const userId = sessionStore.userId;
 
@@ -114,9 +125,19 @@ async function unsubscribe(activityId: string) {
       console.error('Error unsubscribing:', error);
       alert('Failed to unsubscribe. Please try again.');
     } else {
-      alert('Successfully unsubscribed!');
-      fetchUserAgenda(userId);
+      // Actualiser la liste des activités
+      await fetchUserAgenda(userId);
 
+      // Récupérer le nom de l'activité
+      //@ts-ignore
+      const activityName = activities.value.find(a => a.id === activityId)?.name || 'cette activité';
+
+      // Afficher le message avec Pinia
+      messageStore.showMessage(
+        'Désinscription réussie',
+        `Vous vous êtes désinscrit de ${activityName}.`,
+        'info'
+      );
     }
   } catch (err) {
     console.error('Unexpected error:', err);
@@ -125,6 +146,51 @@ async function unsubscribe(activityId: string) {
 
 
 
+const nbuser = ref([]);
+async function getNb() {
+  const { data, error } = await supabase
+    .from('subscriptions')
+    .select('activity_id')
+    .eq('userId', sessionStore.userId);
+
+  if (error) {
+    console.error('Error fetching subscriptions:', error);
+    return;
+  }
+
+  if (data) {
+    //@ts-ignore
+    const activityIds = data.map(sub => sub.activity_id);  // Extract activity IDs from the subscriptions
+
+    const { data: dataa, error: error2 } = await supabase
+      .from('subscriptions')
+      .select('activity_id')
+      .in('activity_id', activityIds);
+
+    if (error2) {
+      console.error('Error fetching subscriptions:', error2);
+      return;
+    }
+
+    // Count the number of users for each activity
+    //@ts-ignore
+    const userCounts = activityIds.map(id => {
+      return {
+        activity_id: id,
+        //@ts-ignore
+        count: dataa.filter(sub => sub.activity_id === id).length
+      };
+    });
+
+    nbuser.value = userCounts;
+  }
+}
+
+function getUserCount(activityId: string): number {
+  //@ts-ignore
+  return nbuser.find(user => user.activity_id === activityId)?.count || 0;
+}
+
 
 const actDate = activities.value
 const sessionStore = useSessionStore();
@@ -132,6 +198,7 @@ const sessionStore = useSessionStore();
 onMounted(() => {
   // Fetch the agenda using the username prop passed from the parent component
   fetchUserAgenda(sessionStore.userId);
+  getNb();
 });
 </script>
 

@@ -42,6 +42,56 @@ h1 {
   padding: 2em;
 }
 
+.work-sans-regular {
+  font-family: "Work Sans", serif;
+  font-size: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.work-sans-semibold{
+  font-family: "Work Sans", serif;
+  font-size: auto;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.work-sans-bold {
+  font-family: "Work Sans", serif;
+  font-size: auto;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.work-sans-extrabold {
+  font-family: "Work Sans", serif;
+  font-size: auto;
+  font-weight: 800;
+  font-style: normal;
+}
+
+.text-bleuFonce{
+  color: #002233;
+}
+
+.border-vert{
+  border-color: #60b776;
+}
+
+.bg-vert60{
+  background-color: rgba(96, 183, 118, 0.6);
+}
+
+.bg-vert{
+  background-color: #60b776;
+}
+
+.text-vert{
+  color: #60b776;
+}
+
+
+
 
 
 @media (prefers-color-scheme: light) {

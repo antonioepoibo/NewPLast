@@ -2,12 +2,12 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { supabase } from '../supabase';
-import { useSessionStore } from '../stores/sessions';
 import fond from '../assets/img/fond.png';
 import apple from '../assets/img/appleico.svg';
 import meta from '../assets/img/metaico.svg';
 import google from '../assets/img/googleico.svg';
 import newP from '../assets/img/newP_logo.svg';
+import { useSessionStore } from '../stores/sessions';
 
 
 // State
@@ -27,7 +27,12 @@ const handleLogin = async () => {
 
     if (error) throw error;
 
-    sessionStore.isCompany = true;
+    // Vérifiez ou ajoutez l'email dans la table profiles
+    await ensureProfile(email.value);
+
+    // Définir isCompany à true après connexion
+    sessionStore.setCompanyStatus(true);
+    console.log("Après connexion → isCompany:", sessionStore.isCompany);
 
     alert('Check your email for the login link!');
   } catch (error) {
@@ -39,9 +44,45 @@ const handleLogin = async () => {
   }
 };
 
-// Redirection vers la page utilisateur
-const goToUserLogin = () => {
-  router.push('/login');
+// Fonction pour vérifier ou ajouter l'email dans la table profiles
+const ensureProfile = async (email) => {
+  try {
+    // Vérifiez si l'email existe déjà dans la table profiles
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('email', email)
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      // Si une erreur autre que "Pas de correspondance trouvée"
+      throw error;
+    }
+
+    if (!data) {
+      // Si aucune ligne avec cet email, insérez une nouvelle ligne
+      const { error: insertError } = await supabase.from('profiles').insert([
+        {
+          email: email,
+          updated_at: new Date().toISOString(), // Ajoutez un timestamp actuel
+        },
+      ]);
+
+      if (insertError) throw insertError;
+
+      console.log('Email ajouté à la table profiles');
+    } else {
+      console.log('Email déjà présent dans la table profiles');
+    }
+  } catch (err) {
+    console.error('Erreur lors de la vérification ou de l\'ajout du profil :', err);
+    throw err;
+  }
+};
+
+// Redirection vers la page entreprise
+const goToCompanyLogin = () => {
+  router.push('/signIn');
 };
 </script>
 
@@ -51,11 +92,11 @@ const goToUserLogin = () => {
     <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-[100vh] object-cover overflow-hidden" alt="Fond d'écran">
 
     <!-- Contenu de la page -->
-    <div class="relative z-20 flex flex-col items-center justify-center m-auto h-full w-full gap-6">
+    <div class="relative z-20 flex flex-col items-center justify-center m-auto h-full w-[40%] max-[400px]:w-full gap-6">
       <img :src="newP" class="w-[15rem]" alt="">
       <div class="flex flex-col items-center mb-10 gap-2">
-        <h1 class="text-[30px] font-bold text-white uppercase max-[600px]:text-[25px]">Se connecter</h1>
-        <p class="text-white">Espace entreprise</p>
+        <h1 class="text-[30px] font-bold text-white uppercase max-[600px]:text-[25px] max-[400px]:text-[20px]">Se connecter</h1>
+        <p class="text-white">Espace commercant</p>
       </div>
       <div class="flex flex-col items-center gap-6 w-[58%]">
         <div class="flex flex-col gap-2 w-[25rem] max-[400px]:w-[20rem]">
@@ -78,7 +119,7 @@ const goToUserLogin = () => {
       </div>
       <p v-if="message" class="text-red-500">{{ message }}</p>
       <router-link to="/signup" class="mt-4 text-white text-center">Pas encore de compte ? <span class="hover:underline font-bold">Inscrivez-vous !</span></router-link>
-      <button type="button" @click="goToUserLogin">Vous êtes un utilisateur classique ?</button>
+      <button type="button" @click="goToCompanyLogin">Vous êtes une personne seule ?</button>
 
       <div class="flex gap-4 items-center">
         <div @click="googleSig" class="bg-white rounded-lg p-1 opacity-40 duration-200 hover:opacity-100 cursor-pointer">
@@ -100,7 +141,7 @@ const goToUserLogin = () => {
 input {
   margin: 0.5em 0;
   padding: 0.5em;
-  color: aliceblue;
+  color: black
 }
 button {
   margin: 1em 0;

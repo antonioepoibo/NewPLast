@@ -1,17 +1,20 @@
 <template>
   <div class="relative h-auto">
     <div class="relative z-20 flex w-full flex-col h-full">
-    <div class="flex container gap-[5rem]">
-      <div class="flex flex-col gap-[5rem] relative z-20 my-10" :class="{'w-[auto]': pageStep === 'info', 'w-[26rem]': pageStep === 'param'}">
-          <div class="flex items-center gap-6">
+    <div class="flex container gap-[5rem] max-[500px]:flex-col max-[500px]:gap-[1rem]">
+      <div class="flex flex-col gap-[5rem] relative z-20 my-10 max-[500px]:gap-[2rem]" :class="{'w-[auto]': pageStep === 'info', 'w-[auto]': pageStep === 'param'}">
+          <div class="flex items-center gap-6 max-[500px]:flex-col max-[500px]:text-center">
               <img :src="image_url ? image_url : DefaultImg" class="rounded-full w-[120px] h-[120px] object-cover" alt="">
               <div>
-                  <h1 class="text-white font-bold text-[24px]"> {{ last_name + ' ' + name  }}</h1>
-                  <p class="text-white">0 xp</p>
+                  <h1 class="text-white font-bold text-[24px] max-[500px]:text-[18px]"> {{ last_name + ' ' + name  }}</h1>
+                  <div class="flex gap-1 justify-center mt-2 items-center">
+                    <i v-for="rate in rate" :key="rate.id" class="fa-solid fa-star text-green-500 text-[14px]"></i>
+                    <p class="text-[14px] text-white ml-2">{{ rate }}/5</p>
+                  </div>
               </div>
           </div>
 
-          <div class="flex flex-col gap-8">
+          <div class="flex flex-col gap-8 max-[500px]:flex-row max-[500px]:m-auto">
               <div @click="Info" class="flex gap-2 items-center cursor-pointer">
                   <div class="rounded-full bg-transparent border-2 border-white relative w-[20px] h-[20px]"></div>
                   <p :class="{'underline': pageStep === 'info', 'hover:underline': pageStep === 'param'}" class="text-white text-[18px]">Mes activité</p>
@@ -23,15 +26,15 @@
           </div>
       </div>
       <div>
-          <div v-if="pageStep === 'info'" class="flex flex-col gap-[5rem] my-[5rem] relative z-20">
-              <div class="mt-[5rem] flex flex-col gap-6">
+          <div v-if="pageStep === 'info'" class="flex flex-col gap-[5rem] my-[5rem] relative z-20 max-[500px]:my-[1rem] max-[500px]:gap-[1rem]">
+              <div class="mt-[5rem] flex flex-col gap-6 max-[500px]:mt-[0rem]">
                   <div class="flex flex-col gap-4">
-                      <h1 class="text-white font-bold text-[24px]">Mes statistique</h1>
-                      <p class="text-white opacity-70 text-[18px] italic">Sur cette page, vous trouverez toutes les informations relatives à votre compte.</p>
+                      <h1 class="text-white font-bold text-[24px] max-[500px]:text-[17px]">Mes statistique</h1>
+                      <p class="text-white opacity-70 text-[18px] italic max-[500px]:text-[12px]">Sur cette page, vous trouverez toutes les informations relatives à votre compte.</p>
                   </div>
 
                   <div>
-                      <h1 class="text-white font-bold text-[24px]">Mes statistique</h1>
+                      <h1 class="text-white font-bold text-[24px] max-[500px]:text-[17px]">Mes statistique</h1>
                       <br>
                       <br>
                       <br>
@@ -46,60 +49,60 @@
               </div>
           </div>
 
-          <div v-if="pageStep === 'param'" class="flex flex-col gap-[5rem] my-[5rem] relative z-20">
-              <div class="mt-[5rem] flex flex-col gap-6">
+          <div v-if="pageStep === 'param'" class="flex flex-col gap-[5rem] my-[5rem] relative z-20 max-[500px]:my-[1rem] max-[500px]:gap-[1rem]">
+              <div class="mt-[5rem] flex flex-col gap-6 max-[500px]:mt-[0rem]">
                   <div class="flex flex-col gap-4">
-                      <h1 class="text-white font-bold text-[26px]">Editer mes information</h1>
-                      <p class="text-white opacity-70 text-[18px] italic">Sur cette page, vous trouverez toutes les informations relatives à votre profil et vous pourrez les modifier a votre guise a tout moment </p>
+                      <h1 class="text-white font-bold text-[26px] max-[500px]:text-[17px]">Editer mes information</h1>
+                      <p class="text-white opacity-70 text-[18px] italic max-[500px]:text-[12px]">Sur cette page, vous trouverez toutes les informations relatives à votre profil et vous pourrez les modifier a votre guise a tout moment </p>
                   </div>
 
                   <div>
-                      <h1 class="text-white text-[22px]">Photo de profil</h1>
-                      <div class="flex gap-[6rem] items-center my-[2.5rem]">
-                        <div class="relative w-[200px] h-[200px] rounded-full flex items-center justify-center">
-                          <img :src="image_url" class="absolute opacity-50 rounded-full w-[10rem] h-[10rem] object-cover" alt="">
+                      <h1 class="text-white text-[22px] font-bold max-[500px]:text-[17px]">Photo de profil</h1>
+                      <div class="flex gap-[6rem] items-center my-[2.5rem] max-[500px]:flex-col max-[500px]:gap-[1rem]">
+                        <div class="relative w-[200px] h-[200px] rounded-full flex items-center justify-center max-[500px]:w-[6rem] max-[500px]:h-[6rem]">
+                          <img :src="image_url" class="absolute opacity-50 rounded-full w-[10rem] h-[10rem] object-cover max-[500px]:w-[6rem] max-[500px]:h-[6rem]" alt="">
                           <span class="absolute text-white text-[30px]">+</span>
                           <input type="file" id="imageInput" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" @change="uploadImage" />
                         </div>
                           <div class="flex gap-10">
-                          <p @click="upPicture" class="text-green-600 text-[24px] font-bold cursor-pointer">Modifier</p>
-                          <p class="text-red-600 text-[24px] font-bold cursor-pointer">Supprimer</p>
+                          <p @click="upPicture" class="text-green-600 text-[24px] font-bold cursor-pointer max-[500px]:text-[17px]">Modifier</p>
+                          <p class="text-red-600 text-[24px] font-bold cursor-pointer max-[500px]:text-[17px]">Supprimer</p>
                           </div>
                       
                       </div>
 
                   </div>
-                  <div class="mr-[8rem] flex flex-col gap-6 w-[38rem]">
-                      <div class="flex justify-between">
+                  <div class="mr-[8rem] flex flex-col gap-6 w-[38rem] max-[500px]:w-full">
+                      <div class="flex justify-between max-[500px]:flex-col max-[500px]:gap-[1rem]">
                           <div class="flex flex-col gap-4">
-                              <p class="text-white text-[22px]">Pseudo *</p>
-                              <input name="username" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="username" :placeholder="HugoKyo">
+                              <p class="text-white text-[22px] max-[500px]:text-[16px]">Pseudo *</p>
+                              <input name="username" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem] max-[500px]:w-full max-[500px]:text-[14px] max-[500px]:text-white/50" :value="username" :placeholder="HugoKyo">
                           </div>
                           <div class="flex flex-col gap-4">
-                              <p class="text-white text-[22px]">Email *</p>
-                              <input name="email" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="userEmail" placeholder="hugobohard55@gmail.com">
-                          </div>
-                      </div>
-
-                      <div class="flex justify-between">
-                          <div class="flex flex-col gap-4">
-                              <p class="text-white text-[22px]">Nom *</p>
-                              <input name="firstname" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="name" :placeholder="Hugo">
-                          </div>
-                          <div class="flex flex-col gap-4">
-                              <p class="text-white text-[22px]">Prénom *</p>
-                              <input name="lastname" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" :value="last_name" :placeholder="Bohard">
+                              <p class="text-white text-[22px] max-[500px]:text-[16px]">Email *</p>
+                              <input name="email" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem] max-[500px]:w-full max-[500px]:text-[14px] max-[500px]:text-white/50" :value="userEmail" placeholder="hugobohard55@gmail.com">
                           </div>
                       </div>
 
-                      <div class="flex justify-between">
+                      <div class="flex justify-between max-[500px]:flex-col max-[500px]:gap-[1rem]">
                           <div class="flex flex-col gap-4">
-                              <p class="text-white text-[22px]">Age</p>
-                              <input name="age" type="num" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" placeholder="23" :value="age">
+                              <p class="text-white text-[22px] max-[500px]:text-[16px]">Nom *</p>
+                              <input name="firstname" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem] max-[500px]:w-full max-[500px]:text-[14px] max-[500px]:text-white/50" :value="name" :placeholder="Hugo">
                           </div>
                           <div class="flex flex-col gap-4">
-                            <p class="text-white text-[22px]">Genre </p>
-                            <select name="gender" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem]" v-model="gender">
+                              <p class="text-white text-[22px] max-[500px]:text-[16px]">Prénom *</p>
+                              <input name="lastname" type="text" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem] max-[500px]:w-full max-[500px]:text-[14px] max-[500px]:text-white/50" :value="last_name" :placeholder="Bohard">
+                          </div>
+                      </div>
+
+                      <div class="flex justify-between max-[500px]:flex-col max-[500px]:gap-[1rem]">
+                          <div class="flex flex-col gap-4">
+                              <p class="text-white text-[22px] max-[500px]:text-[16px]">Age</p>
+                              <input name="age" type="num" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem] max-[500px]:w-full max-[500px]:text-[14px] max-[500px]:text-white/50" placeholder="23" :value="age">
+                          </div>
+                          <div class="flex flex-col gap-4">
+                            <p class="text-white text-[22px] max-[500px]:text-[16px]">Genre </p>
+                            <select name="gender" class="text-[18px] text-white bg-transparent border-white border-b italic w-[15rem] max-[500px]:w-full max-[500px]:text-[14px] max-[500px]:text-white/50" v-model="gender">
                                 <option value="Homme">Homme</option>
                                 <option value="Femme">Femme</option>
                                 <option value="Autre">Autre</option>
@@ -109,8 +112,8 @@
                       </div>
                       <div class="flex justify-between">
                           <div class="flex flex-col gap-4 w-full">
-                              <p class="text-white text-[22px]">Biographie</p>
-                              <textarea name="desc" id="" class="text-[18px] text-white bg-transparent border-white border italic w-[100%] h-[5rem] resize-none" :value="desc"></textarea>
+                              <p class="text-white text-[22px] max-[500px]:text-[16px]">Biographie</p>
+                              <textarea name="desc" id="" class="text-[18px] text-white bg-transparent border-white border italic w-[100%] h-[5rem] resize-none max-[500px]:text-[14px] max-[500px]:text-white/50 max-[500px]:p-1" :value="desc"></textarea>
                           </div>
                       </div>
                       <div class="flex justify-between">
@@ -120,7 +123,7 @@
                                 <p name="interest" 
                                     v-for="int in availableInterests" 
                                     :key="int"
-                                    class="Describe text-white"
+                                    class="Describe text-white max-[500px]:text-[10px]"
                                     @click="toggleInterest(int)"
                                     :class="{'opacity-100': selectedInterests.includes(int), 'opacity-50': !selectedInterests.includes(int)}">
                                     {{ int }}
@@ -129,7 +132,7 @@
 
                           </div>
                       </div>
-                      <div class="flex items-center gap-10">
+                      <div class="flex items-center gap-10 mb-6 m-auto">
                         <div @click="modify" class="flex items-center bg-green-500 text-[#002233] font-bold w-[auto] h-[2rem] py-5 px-8 rounded-md hover:opacity-80 duration-200 cursor-pointer">
                             <p>Modifier</p>
                         </div>
@@ -159,6 +162,7 @@ import DefaultImg from '../assets/img/default_img.png';
 const sessionStore = useSessionStore();
 const pageStep = ref('info');
 const userEmail = ref(sessionStore.mail);
+const rate = ref('');
 const name = ref('');
 const last_name = ref('');
 const image_url = ref('');
@@ -208,6 +212,7 @@ async function getUser() {
       desc.value = user.desc;
       age.value = user.age;
       gender.value = user.gender;
+      rate.value = user.rate;
       interest.value = user.interest ? user.interest.split(',').map(item => 
   item.trim().charAt(0).toUpperCase() + item.trim().slice(1).toLowerCase()) : [];
     } else {
@@ -257,7 +262,7 @@ async function modify() {
   const firstname = document.querySelector('input[name="firstname"]').value;
   const lastname = document.querySelector('input[name="lastname"]').value;
   const age = document.querySelector('input[name="age"]').value;
-  const gender = document.querySelector('input[name="gender"]').value;
+  const gender = document.querySelector('input[name="gender"]');
   const desc = document.querySelector('textarea[name="desc"]').value;
   const interest = selectedInterests.value; // Utilisez les centres d'intérêt sélectionnés directement
 
@@ -347,5 +352,12 @@ border-radius: 100px;
 padding: 0 1rem;
 cursor: pointer;
 }
+
+@media (max-width: 500px) {
+   .Describe{
+    height: 1.2rem;
+    padding: 0 .5rem;
+    }
+  }
 
 </style>

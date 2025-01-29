@@ -38,14 +38,6 @@
         <button v-if="!activity.subscribed && !activity.isOwner" @click="subscribeToActivity(activity.id)" class="border-2 border-green-600 text-green-400 bg-green-700/50 py-2 text-[14px] px-6  font-bold rounded-tl-lg rounded-br-lg max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1 duration-200 hover:bg-green-400/50 hover:mb-6">S'abonner</button>
         <p v-else-if="activity.subscribed">Vous êtes abonné à l'activité!</p>
         <p v-else-if="activity.isOwner">Vous êtes le créateur de l'activité</p>
-
-        <!-- Bouton pour signaler
-        <button
-          @click="openReportModal"
-          class="bg-red-600 text-white py-2 text-[14px] px-6 font-bold rounded-full mt-2 max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1"
-        >
-          Signaler
-        </button> -->
       </div>
 
       <!-- Modale pour le signalement -->

@@ -183,22 +183,56 @@ const isReportModalOpen = ref(false); // État de la fenêtre modale
 function openReportModal() {
   isReportModalOpen.value = true;
 }
-// Fetch messages on component mount and subscribe to real-time updates
-onMounted(() => {
-  fetchMessages();
-  GetActivityById();
-  // Subscribe to real-time updates
-  messageSubscription = supabase
-    .channel('messages')
-    .on(
-      'postgres_changes',
-      { event: 'INSERT', schema: 'public', table: 'messages' },
-      (payload) => {
-        messages.value.push(payload.new);
-      }
-    )
-    .subscribe();
-});
+// // Fetch messages on component mount and subscribe to real-time updates
+// onMounted(() => {
+
+//   // Subscribe to real-time updates
+//   messageSubscription = supabase
+//     .channel('messages')
+//     .on(
+//       'postgres_changes',
+//       { event: 'INSERT', schema: 'public', table: 'messages' },
+//       (payload) => {
+//         messages.value.push(payload.new);
+//       }
+//     )
+//     .subscribe();
+// });
+
+onMounted(async () => {
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) console.error('Error getting session:', sessionError);
+        
+        if (sessionData?.session) {
+            sessionStore.setSession(sessionData.session);
+            fetchMessages();
+            GetActivityById();
+        } else {
+            sessionStore.clearSession();
+        }
+        
+        //@ts-ignore
+        supabase.auth.onAuthStateChange((event, newSession) => {
+            if (event === 'SIGNED_IN' && newSession) {
+            sessionStore.setSession(newSession);
+            console.log(sessionStore.userId);
+
+            } else if (event === 'SIGNED_OUT') {
+            sessionStore.clearSession();
+            }
+        });
+        // Subscribe to real-time updates
+        messageSubscription = supabase
+          .channel('messages')
+          .on(
+            'postgres_changes',
+            { event: 'INSERT', schema: 'public', table: 'messages' },
+            (payload) => {
+              messages.value.push(payload.new);
+            }
+          )
+          .subscribe();
+    });
 
 onBeforeUnmount(() => {
   if (messageSubscription) {

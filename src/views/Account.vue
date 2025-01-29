@@ -96,6 +96,7 @@ async function updateProfile() {
     const { error } = await supabase.from('profiles').upsert(updates)
 
     if (error) throw error
+    
   } catch (error) {
     alert(error.message)
   } finally {

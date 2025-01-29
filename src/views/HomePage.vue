@@ -1,5 +1,6 @@
 <template>
     <div>
+      <PopUp  :isVisible="msg_show" :type="msg_type" :title="msg_Title" :content="msg_content" @update:isVisible="msg_show = false" />
       <div v-if="sessionStore.isLoggedIn" class="relative z-20 flex flex-col h-full gap-6">
           <SearchBar :username="sessionStore.username" v-model:searchQuery="searchQuery" />
       </div>
@@ -81,7 +82,9 @@ import MapPin from '../components/MapPin.vue';
 import SearchBar from '../components/SearchBar.vue';
 //@ts-ignore
 import UserFriends from '../components/FriendsList.vue';
-
+//@ts-ignore
+import PopUp from '../components/PopUp.vue';
+import { useMessageStore } from '../stores/messages'; // Importez le store des messages
 
 // Reactive state
 const sessionStore = useSessionStore();
@@ -110,6 +113,14 @@ const searchQuery = ref(''); // Reactive state in the parent
 const interest = ref<Array<any>>([]);
 const windowWidth = ref(window.innerWidth);
 const subAct = ref([]); 
+const msg_show = ref(false);
+const msg_Title = ref("");
+const msg_content = ref("");
+const msg_type = ref("");
+const messageStore = useMessageStore();
+
+
+
 function updateWindowWidth() {
   windowWidth.value = window.innerWidth;
 }
@@ -206,6 +217,8 @@ function logout() {
 function goToAccountPage() {
   router.push({ name: 'Account' });
 }
+
+
 async function getActivitySubscriptions(){
   const {data} = await supabase
     .from('subscriptions')
@@ -338,7 +351,13 @@ async function subscribeToActivity(activityId: number) {
   if (error) {
     console.error('Error subscribing to activity:', error);
   } else {
-    alert('Successfully subscribed!');
+
+    messageStore.showMessage(
+      'Activité',
+      `Vous êtes maintenant inscrit à cette activité ${activities.value.find(a => a.id === activityId)?.name}`,
+      'info'
+    );
+
     const activity = activities.value.find(a => a.id === activityId);
     if (activity) {
       activity.subscribed = true;

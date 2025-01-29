@@ -2,24 +2,24 @@
     <div class="relative h-auto">
 
     <div class="relative z-20 flex w-full flex-col h-full">
-        <h1 class="container relative z-20 text-white text-[24px] font-bold mt-[4rem]">Crée une nouvelle activité</h1>
-      <p class="container relative z-20 mt-2 text-white text-[18px] italic opacity-80">Remplir ce formulaire pour pouvoir créer une nouvelle activité et prévisualiser le contenu</p>
+        <h1 class="container relative z-20 text-white text-[24px] font-bold mt-[4rem] max-[500px]:text-[17px]">Crée une nouvelle activité</h1>
+      <p class="container relative z-20 mt-2 text-white text-[18px] italic opacity-80 max-[500px]:text-[12px]">Remplir ce formulaire pour pouvoir créer une nouvelle activité et prévisualiser le contenu</p>
         <div class="relative z-20">
             <div class="container flex justify-between my-6 items-center max-[1400px]:flex-col-reverse max-[1400px]:gap-6">
-                <div class="w-auto h-auto border-2 border-white flex flex-col p-6">
-                    <div class="flex justify-between items-center px-8 my-4 gap-[6rem] max-[670px]:flex-col max-[670px]:gap-2 max-[670px]:items-start">
-                        <div class="flex flex-col gap-4">
-                            <label class="text-[18px] text-white" for="">Titre de l’activité</label>
-                            <input v-model="activityname" class="bg-transparent border-b border-white text-white" placeholder="Bowling" type="text">
+                <div class="w-auto h-auto border-2 border-white flex flex-col p-6 max-[500px]:w-[98%]">
+                    <div class="flex justify-between items-center px-8 my-4 gap-[6rem] max-[670px]:flex-col max-[670px]:gap-2 max-[670px]:items-start max-[500px]:px-0 max-[500px]:gap-6">
+                        <div class="flex flex-col gap-4 max-[500px]:w-full max-[500px]:gap-2">
+                            <label class="text-[18px] text-white max-[500px]:text-[16px]" for="">Titre de l’activité</label>
+                            <input v-model="activityname" class="bg-transparent border-b border-white text-white max-[500px]:text-[14px] max-[500px]:w-full" placeholder="Bowling" type="text">
                         </div>
-                        <div class="flex flex-col gap-4">
+                        <div class="flex flex-col gap-4 max-[500px]:w-full max-[500px]:gap-2">
                             <label class="text-[18px] text-white" for="">Lieux</label>
                             <input 
                                 v-model="activityloc" 
                                 @input="fetchSuggestions" 
                                 @blur="clearSuggestions"
                                 @keyup.enter="TransformCord()"
-                                class="bg-transparent w-[15rem] text-slate-400 italic border-b border-white text-white" 
+                                class="bg-transparent w-[15rem]italic border-b border-white text-white max-[500px]:w-full " 
                                 placeholder="12 rue de la fleure, Mondeville" 
                                 type="text"
                             />
@@ -35,15 +35,15 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="flex justify-between items-center px-8 my-4 gap-[6rem] max-[670px]:flex-col max-[670px]:gap-2 max-[670px]:items-start">
-                        <div class="flex flex-col gap-4">
-                            <label class="text-[18px] text-white" for="">Description de l'activité</label>
-                            <textarea v-model="activitydesc" class="p-1 bg-transparent border w-[32rem] border-white h-[10rem] resize-y max-[670px]:w-[20rem] text-white" placeholder="Description de l'activité"></textarea>
+                    <div class="flex justify-between items-center px-8 my-4 gap-[6rem] max-[670px]:flex-col max-[670px]:gap-2 max-[670px]:items-start max-[500px]:px-1">
+                        <div class="flex flex-col gap-4 max-[500px]:w-full">
+                            <label class="text-[18px] text-white max-[500px]:text-[16px] max-[500px]:w-full" for="">Description de l'activité</label>
+                            <textarea v-model="activitydesc" class="p-1 bg-transparent border w-[32rem] border-white h-[10rem] resize-y max-[670px]:w-[20rem] text-white max-[500px]:w-full" placeholder="Description de l'activité"></textarea>
                         </div>
                     </div>
-                    <div class="w-[80%]">
-                        <div class="flex gap-2 flex-wrap flex-shrink-0">
-                            <p @click="addType" :class="{'opacity-50': !keyword.includes(type), 'opacity-100': keyword.includes(type), 'cursor-not-allowed': keyword.split(',').length >= 3 && !keyword.includes(type), 'cursor-pointer': keyword.split(',').length < 3 || keyword.includes(type)}" :id="type" class="TypeContainer border border-white text-sm w-auto px-6 py-3 flex items-center whitespace-nowrap text-white h-6 rounded-full opacity-50 transition duration-200 text-[10px] flex-shrink-0" v-for="type in simplifiedActivityTypes" :key="type">{{ type }}</p>
+                    <div class="w-[80%] max-[500px]:w-full">
+                        <div class="flex gap-2 flex-wrap flex-shrink-0 max-[500px]:justify-center">
+                            <p @click="addType" :class="{'opacity-50': !keyword.includes(type), 'opacity-100': keyword.includes(type), 'cursor-not-allowed': keyword.split(',').length >= 3 && !keyword.includes(type), 'cursor-pointer': keyword.split(',').length < 3 || keyword.includes(type)}" :id="type" class="TypeContainer border border-white text-sm w-auto px-6 py-3 flex items-center whitespace-nowrap text-white h-6 rounded-full opacity-50 transition duration-200 text-[10px] flex-shrink-0 max-[500px]:text-[9px] max-[500px]:py-1 max-[500px]:px-2" v-for="type in simplifiedActivityTypes" :key="type">{{ type }}</p>
                         </div>
                     </div>
                     <div>
@@ -86,20 +86,20 @@
                 </div>
                 <div>
                     <div class="w-[24rem]">
-                        <div class="w-[24rem] bg-[#3B5562] py-10 rounded-sm shadow-xl relative ">
+                        <div class="w-[24rem] bg-[#3B5562] py-10 rounded-sm shadow-xl relative max-[500px]:w-[86%] max-[500px]:m-auto">
                             <img :src="imageUrl ? imageUrl : defaultimg " alt="">
                             <div class="flex justify-between items-center px-3 pt-4">
                             <div class="flex gap-4 items-center">
                                 <img :src="image_url" class="rounded-full w-[60px] h-[60px] object-cover" alt="">
                                 <div>
-                                <h2 class="text-white text-[18px] font-bold">{{activityname ? activityname : "null"}}</h2>
-                                <p class="text-white opacity-50 text-[14px]">Par {{last_name + ' ' + name}}</p>
+                                <h2 class="text-white text-[18px] font-bold max-[500px]:text-[14px]">{{activityname ? activityname : "null"}}</h2>
+                                <p class="text-white opacity-50 text-[14px] max-[500px]:text-[10px]">Par {{last_name + ' ' + name}}</p>
                                 </div>
                             </div>
                             <div class="flex flex-col gap-2 justify-start">
                                 <div class="flex flex-col items-end">
-                                <p class="text-white opacity-80 text-[14px]">0/{{ activitypart ? activitypart : 0}}</p>
-                                <p class="text-white opacity-50 text-[14px]">{{ activityloc ? activityloc : "null" }}</p>
+                                <p class="text-white opacity-80 text-[14px] max-[500px]:text-[10px]">0/{{ activitypart ? activitypart : 0}}</p>
+                                <p class="text-white opacity-50 text-[14px] max-[500px]:text-[10px]">{{ activityloc ? activityloc : "null" }}</p>
                                 </div>
                             </div>
                             </div>
@@ -107,7 +107,7 @@
                                 <p>0/{{ activitypart ? activitypart : 0 }}</p>
                                 <progress :max="activitypart ? activitypart : 0" :value="0" class="h-2 w-[6rem]"></progress>
                             </div>
-                            <p class="text-white text-[16px] opacity-80 mt-5 italic px-3">{{activitydesc ? activitydesc : "null"}}</p>
+                            <p class="text-white text-[16px] opacity-80 mt-5 italic px-3 max-[500px]:text-[12px]">{{activitydesc ? activitydesc : "null"}}</p>
                         </div>
                     </div>
                 </div>

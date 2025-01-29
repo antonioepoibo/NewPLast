@@ -27,6 +27,10 @@ export const useSessionStore = defineStore('session', {
             this.username = username; // Store the username
             console.log('Username set in store:', this.username); // Debug log for username
         },
+
+        setCompanyStatus(status) {
+            this.isCompany = status;
+        },
         clearSession() {
             this.isLoading = false; // Reset loading flag
             this.session = null;

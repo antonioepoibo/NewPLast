@@ -7,11 +7,13 @@ import apple from '../assets/img/appleico.svg';
 import meta from '../assets/img/metaico.svg';
 import google from '../assets/img/googleico.svg';
 import newP from '../assets/img/newP_logo.svg';
+import { useSessionStore } from '../stores/sessions';
 
-
+const sessionStore = useSessionStore();
 // State
 const loading = ref(false);
 const email = ref('');
+const password = ref('');
 const router = useRouter();
 
 const handleLogin = async () => {
@@ -19,16 +21,25 @@ const handleLogin = async () => {
     loading.value = true;
 
     // Login using magic link
-    const { error } = await supabase.auth.signInWithOtp({
+    const { error } = await supabase.auth.signInWithPassword({
       email: email.value,
+      password: password.value,
     });
 
     if (error) throw error;
+    
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+  if (sessionError) console.error('Error getting session:', sessionError);
+  
+  if (sessionData?.session) {
+    sessionStore.setSession(sessionData.session);
+    
+    router.push('/accueil');
+    sessionStore.isLoggedIn = true;
 
-    // Vérifiez ou ajoutez l'email dans la table profiles
-    await ensureProfile(email.value);
-
-    alert('Check your email for the login link!');
+  } else {
+    sessionStore.clearSession();
+  }
   } catch (error) {
     if (error instanceof Error) {
       alert(error.message);
@@ -36,48 +47,8 @@ const handleLogin = async () => {
   } finally {
     loading.value = false;
   }
-};
+}
 
-// Fonction pour vérifier ou ajouter l'email dans la table profiles
-const ensureProfile = async (email) => {
-  try {
-    // Vérifiez si l'email existe déjà dans la table profiles
-    const { data, error } = await supabase
-      .from('profiles')
-      .select('email')
-      .eq('email', email)
-      .single();
-
-    if (error && error.code !== 'PGRST116') {
-      // Si une erreur autre que "Pas de correspondance trouvée"
-      throw error;
-    }
-
-    if (!data) {
-      // Si aucune ligne avec cet email, insérez une nouvelle ligne
-      const { error: insertError } = await supabase.from('profiles').insert([
-        {
-          email: email,
-          updated_at: new Date().toISOString(), // Ajoutez un timestamp actuel
-        },
-      ]);
-
-      if (insertError) throw insertError;
-
-      console.log('Email ajouté à la table profiles');
-    } else {
-      console.log('Email déjà présent dans la table profiles');
-    }
-  } catch (err) {
-    console.error('Erreur lors de la vérification ou de l\'ajout du profil :', err);
-    throw err;
-  }
-};
-
-// Redirection vers la page entreprise
-const goToCompanyLogin = () => {
-  router.push('/loginCompany');
-};
 </script>
 
 <template>
@@ -97,7 +68,7 @@ const goToCompanyLogin = () => {
           <label for="email" class="text-[14px] ml-6 text-white opacity-[72%]">Adresse e-mail</label>
           <input v-model="email" type="email" required class="border bg-white text-black rounded-full h-[3rem] pl-6" />
         </div>
-        <div class="relative flex flex-col gap-2 w-[25rem] opacity-50 max-[400px]:w-[20rem]">
+        <div class="relative flex flex-col gap-2 w-[25rem] max-[400px]:w-[20rem]">
           <label for="password" class="text-[14px] ml-6 text-white opacity-[72%]">Mot de passe</label>
           <input v-model="password" :type="isPasswordVisible" required class="border bg-white rounded-full h-[3rem] pl-6" />
           <i @click="see" class="absolute fa-solid fa-eye-slash right-5 top-[55%] cursor-pointer hover:opacity-60 duration-200"></i>

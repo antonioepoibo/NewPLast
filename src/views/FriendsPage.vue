@@ -226,10 +226,10 @@ const searchUser = () => {
 
 // Filtrer les utilisateurs qui ne sont pas déjà amis et qui ne sont pas la personne connectée
 const filteredUsers = computed(() => {
-    if (!AllUserWithSearch.value || !friends.value || !utilisateurID.value) {
-        console.warn("Données manquantes pour le filtrage des utilisateurs.");
-        return [];
-    }
+    // if (!AllUserWithSearch.value || !friends.value || !utilisateurID.value) {
+    //     console.warn("Données manquantes pour le filtrage des utilisateurs.");
+    //     return [];
+    // }
 
     // Obtenir les IDs des amis actuels
     const friendIds = friends.value.map(friend => friend.id);
@@ -259,12 +259,6 @@ const filteredFriends = computed(() => {
     console.log('filteredFriends:', result); // Vérification
     return result;
 });
-
-
-
-
-
-
 
 // Convertir la date de dernier login en temps écoulé
 const convertTimeDiff = (lastLoginDate) => {
