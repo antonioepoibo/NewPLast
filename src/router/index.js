@@ -10,7 +10,7 @@ import LoginComponent from '../components/LoginComponent.vue';
 import FindEr from '../views/FindEr.vue';
 import ChatPage from '../views/ChatPage.vue';
 //@ts-ignore
-import ReportsPage from '../views/ReportsPage.vue';
+// import ReportsPage from '../views/ReportsPage.vue';
 //@ts-ignore
 import NotFound from '../views/404.vue';
 import FriendsPage from '../views/FriendsPage.vue';
