@@ -19,7 +19,7 @@ import FindEr from '../views/FindEr.vue';
 import ChatPage from '../views/ChatPage.vue';
 
 //@ts-ignore
-// import ReportsPage from '../views/ReportsPage.vue';
+import ReportsPage from '../views/ReportsPage.vue';
 import NotFound from '../views/404.vue';
 //@ts-ignore
 import FriendsPage from '../views/FriendsPage.vue';
@@ -44,7 +44,7 @@ const routes = [
   { path: '/login', name : 'LoginPage', component: LoginComponent},
   { path: '/loginCompany', name : 'LoginCompany', component: LoginCompany},
   { path: '/chat', name: 'ChatPage', component: ChatPage },
-  // { path: '/reports', name: 'ReportsPage', component: ReportsPage },
+  { path: '/reports', name: 'ReportsPage', component: ReportsPage },
   // 404 page
   { path: '/:catchAll(.*)', name: 'NoFound', component: NotFound },
   { path: '/friends', name: 'FriendsPage', component: FriendsPage },

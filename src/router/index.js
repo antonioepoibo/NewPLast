@@ -9,7 +9,9 @@ import LoginCompany from '../components/LoginCompany.vue';
 import LoginComponent from '../components/LoginComponent.vue';
 import FindEr from '../views/FindEr.vue';
 import ChatPage from '../views/ChatPage.vue';
-// import ReportsPage from '../views/ReportsPage.vue';
+//@ts-ignore
+import ReportsPage from '../views/ReportsPage.vue';
+//@ts-ignore
 import NotFound from '../views/404.vue';
 import FriendsPage from '../views/FriendsPage.vue';
 import FriendsProfil from '../views/FriendsProfil.vue';
@@ -30,7 +32,7 @@ const routes = [
     { path: '/login', name: 'LoginPage', component: LoginComponent },
     { path: '/loginCompany', name: 'LoginCompany', component: LoginCompany },
     { path: '/chat', name: 'ChatPage', component: ChatPage },
-    // { path: '/reports', name: 'ReportsPage', component: ReportsPage },
+    { path: '/reports', name: 'ReportsPage', component: ReportsPage },
     { path: '/:catchAll(.*)', name: 'NoFound', component: NotFound },
     { path: '/friends', name: 'FriendsPage', component: FriendsPage },
     { path: '/friendsProfile', name: 'FriendsProfile', component: FriendsProfil },
