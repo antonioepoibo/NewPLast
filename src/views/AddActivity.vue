@@ -1,5 +1,6 @@
 <template>
     <div class="relative h-auto">
+    <div class="text-white text-lg font-bold">isCompany: {{ sessionStore.isCompany }}</div>
 
     <div class="relative z-20 flex w-full flex-col h-full">
         <h1 class="container relative z-20 text-white text-[24px] font-bold mt-[4rem] max-[500px]:text-[17px]">Crée une nouvelle activité</h1>
@@ -43,7 +44,7 @@
                     </div>
                     <div class="w-[80%] max-[500px]:w-full">
                         <div class="flex gap-2 flex-wrap flex-shrink-0 max-[500px]:justify-center">
-                            <p @click="addType" :class="{'opacity-50': !keyword.includes(type), 'opacity-100': keyword.includes(type), 'cursor-not-allowed': keyword.split(',').length >= 3 && !keyword.includes(type), 'cursor-pointer': keyword.split(',').length < 3 || keyword.includes(type)}" :id="type" class="TypeContainer border border-white text-sm w-auto px-6 py-3 flex items-center whitespace-nowrap text-white h-6 rounded-full transition duration-200 text-[10px] flex-shrink-0 max-[500px]:text-[9px] max-[500px]:py-1 max-[500px]:px-2" v-for="type in simplifiedActivityTypes" :key="type">{{ type }}</p>
+                            <p @click="addType" :class="{'opacity-50': !keyword.includes(type), 'opacity-100': keyword.includes(type), 'cursor-not-allowed': keyword.split(',').length >= 3 && !keyword.includes(type), 'cursor-pointer': keyword.split(',').length < 3 || keyword.includes(type)}" :id="type" class="TypeContainer border border-white text-sm w-auto px-6 py-3 flex items-center whitespace-nowrap text-white h-6 rounded-full opacity-50 transition duration-200 text-[10px] flex-shrink-0 max-[500px]:text-[9px] max-[500px]:py-1 max-[500px]:px-2" v-for="type in simplifiedActivityTypes" :key="type">{{ type }}</p>
                         </div>
                     </div>
                     <div>
@@ -77,6 +78,11 @@
                             <div class="flex flex-col gap-4">
                                 <label class="text-[18px] text-white" for="">Prix</label>
                                 <input v-model="activityprice" class="bg-transparent text-slate-400 italic border-b border-white text-white" placeholder="20 €" type="number">
+                                <div v-if="sessionStore.isCompany" class="flex flex-col gap-4">
+                                    <label class="text-[18px] text-white" for="">Réduction (%)</label>
+                                    <input v-model="activityDiscount" class="bg-transparent text-slate-400 italic border-b border-white text-white" 
+                                    placeholder="10 %" type="number" min="0" max="100">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,29 +92,61 @@
                 </div>
                 <div>
                     <div class="w-[24rem]">
+                        <div v-if="sessionStore.isCompany && activityDiscount" class="text-white text-[16px] font-bold mt-2">
+                            Réduction : -{{ activityDiscount }} %
+                        </div>
+
                         <div class="w-[24rem] bg-[#3B5562] py-10 rounded-sm shadow-xl relative max-[500px]:w-[86%] max-[500px]:m-auto">
-                            <img :src="imageUrl ? imageUrl : defaultimg " alt="">
+                            <img :src="imageUrl ? imageUrl : defaultimg " alt="Aperçu de l'activité">
+                            
                             <div class="flex justify-between items-center px-3 pt-4">
-                            <div class="flex gap-4 items-center">
-                                <img :src="image_url" class="rounded-full w-[60px] h-[60px] object-cover" alt="">
-                                <div>
-                                <h2 class="text-white text-[18px] font-bold max-[500px]:text-[14px]">{{activityname ? activityname : "null"}}</h2>
-                                <p class="text-white opacity-50 text-[14px] max-[500px]:text-[10px]">Par {{last_name + ' ' + name}}</p>
+                                <div class="flex gap-4 items-center">
+                                    <img :src="image_url" class="rounded-full w-[60px] h-[60px] object-cover" alt="Photo du créateur">
+                                    <div>
+                                        <h2 class="text-white text-[18px] font-bold max-[500px]:text-[14px]">
+                                            {{ activityname ? activityname : "null" }}
+                                        </h2>
+                                        <p class="text-white opacity-50 text-[14px] max-[500px]:text-[10px]">
+                                            Par {{ last_name + ' ' + name }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-col gap-2 justify-start">
+                                    <div class="flex flex-col items-end">
+                                        <p class="text-white opacity-80 text-[14px] max-[500px]:text-[10px]">
+                                            0/{{ activitypart ? activitypart : 0 }}
+                                        </p>
+                                        <p class="text-white opacity-50 text-[14px] max-[500px]:text-[10px]">
+                                            {{ activityloc ? activityloc : "null" }}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="flex flex-col gap-2 justify-start">
-                                <div class="flex flex-col items-end">
-                                <p class="text-white opacity-80 text-[14px] max-[500px]:text-[10px]">0/{{ activitypart ? activitypart : 0}}</p>
-                                <p class="text-white opacity-50 text-[14px] max-[500px]:text-[10px]">{{ activityloc ? activityloc : "null" }}</p>
-                                </div>
-                            </div>
-                            </div>
+
                             <div class="flex items-center text-[10px] text-white gap-2 flex-row-reverse px-3">
                                 <p>0/{{ activitypart ? activitypart : 0 }}</p>
                                 <progress :max="activitypart ? activitypart : 0" :value="0" class="h-2 w-[6rem]"></progress>
                             </div>
-                            <p class="text-white text-[16px] opacity-80 mt-5 italic px-3 max-[500px]:text-[12px]">{{activitydesc ? activitydesc : "null"}}</p>
+
+                            <p class="text-white text-[16px] opacity-80 mt-5 italic px-3 max-[500px]:text-[12px]">
+                                {{ activitydesc ? activitydesc : "null" }}
+                            </p>
+
+                            <!-- 🛒 Ajout du prix et de la réduction pour les commerçants -->
+                            <p v-if="activityprice" class="text-white text-[16px] font-bold px-3 mt-2">
+                                 Prix: {{ activityprice }} €
+                            </p>
+
+                            <p v-if="sessionStore.isCompany && activityDiscount" class="text-green-400 text-[16px] font-bold px-3 mt-2">
+                                Réduction : -{{ activityDiscount }} %
+                            </p>
+
+                            <p v-if="sessionStore.isCompany && activityDiscount" class="text-white text-[16px] font-bold px-3 mt-2">
+                                Prix après réduction: {{ (activityprice - (activityprice * activityDiscount / 100)).toFixed(2) }} €
+                            </p>
                         </div>
+
                     </div>
                 </div>
 
@@ -119,13 +157,15 @@
 </template>
 <script setup>
     import defaultimg from '../assets/img/default_activite.svg';
-    import { ref, onMounted } from 'vue'
+    import { ref, onMounted, computed} from 'vue'
     import { supabase } from '../supabase';
     import { useSessionStore } from '../stores/sessions';
     import axios from 'axios';
     
     const suggestions = ref([]);
     const sessionStore = useSessionStore();
+    const isCompany = computed(() => sessionStore.isCompany);
+    const activityDiscount = ref('');
     const name = ref(''),
     last_name = ref(''),
     image_url = ref(''),
@@ -325,6 +365,7 @@
                     latitude: latitude.value,
                     longitude: longitude.value,
                     type: keyword.value,
+                    discount: sessionStore.isCompany ? activityDiscount.value : 0,
                 },
             ]);
 
@@ -361,6 +402,8 @@
         } else {
             sessionStore.clearSession();
         }
+        console.log("Ajout Activité → isCompany:", isCompany.value);
+
 
         supabase.auth.onAuthStateChange((event, newSession) => {
             if (event === 'SIGNED_IN' && newSession) {
