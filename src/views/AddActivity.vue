@@ -43,7 +43,7 @@
                     </div>
                     <div class="w-[80%] max-[500px]:w-full">
                         <div class="flex gap-2 flex-wrap flex-shrink-0 max-[500px]:justify-center">
-                            <p @click="addType" :class="{'opacity-50': !keyword.includes(type), 'opacity-100': keyword.includes(type), 'cursor-not-allowed': keyword.split(',').length >= 3 && !keyword.includes(type), 'cursor-pointer': keyword.split(',').length < 3 || keyword.includes(type)}" :id="type" class="TypeContainer border border-white text-sm w-auto px-6 py-3 flex items-center whitespace-nowrap text-white h-6 rounded-full opacity-50 transition duration-200 text-[10px] flex-shrink-0 max-[500px]:text-[9px] max-[500px]:py-1 max-[500px]:px-2" v-for="type in simplifiedActivityTypes" :key="type">{{ type }}</p>
+                            <p @click="addType" :class="{'opacity-50': !keyword.includes(type), 'opacity-100': keyword.includes(type), 'cursor-not-allowed': keyword.split(',').length >= 3 && !keyword.includes(type), 'cursor-pointer': keyword.split(',').length < 3 || keyword.includes(type)}" :id="type" class="TypeContainer border border-white text-sm w-auto px-6 py-3 flex items-center whitespace-nowrap text-white h-6 rounded-full transition duration-200 text-[10px] flex-shrink-0 max-[500px]:text-[9px] max-[500px]:py-1 max-[500px]:px-2" v-for="type in simplifiedActivityTypes" :key="type">{{ type }}</p>
                         </div>
                     </div>
                     <div>

@@ -3,16 +3,14 @@
       <div class="relative z-20 flex flex-col h-full gap-6">
           <div class="flex justify-between w-full h-[auto] bg-[#021925] py-6 px-[10rem] max-[600px]:px-[2rem] max-[600px]:py-3 max-[400px]:py-1">
             <div class="flex gap-10 items-center text-white text-[18px] flex-shrink-0">
-              <router-link to="/"><img :src="newP" class="w-[8rem] hover:opacity-50 duration-200 hover:underline max-[600px]:w-[6rem] max-[400px]:w-[4rem]" alt=""></router-link>
-              <router-link to="/" class="max-[1100px]:hidden "><p :class="{ underline: $route.path === '/' }" class="text-white hover:opacity-50 duration-200 hover:underline">Home</p></router-link>
+              <router-link to="/app"><img :src="newP" class="w-[8rem] hover:opacity-50 duration-200 hover:underline max-[600px]:w-[6rem] max-[400px]:w-[4rem]" alt=""></router-link>
+              <router-link to="/app" class="max-[1100px]:hidden "><p :class="{ underline: $route.path === '/app' }" class="text-white hover:opacity-50 duration-200 hover:underline">Home</p></router-link>
               <router-link to="/finder" class="max-[1100px]:hidden"><p :class="{ underline: $route.path === '/Finder' }" class="text-white hover:opacity-50 duration-200 hover:underline">Finder</p></router-link>
               <!-- <router-link to="/reports" class="max-[1100px]:hidden"><p :class="{ underline: $route.path === '/Reports' }" class="text-white hover:opacity-50 duration-200 hover:underline">Report Logs</p></router-link> -->
               <router-link to="/chat" class="max-[1100px]:hidden"><p :class="{ underline: $route.path === '/chat' }" class="text-white hover:opacity-50 duration-200 hover:underline">Message</p></router-link>
             </div>
             <div class="flex gap-10 items-center text-white text-[18px] flex-shrink-0">
               <router-link to="/activite/add/" class="text-white hover:opacity-50 max-[1100px]:hidden"><i class="fa-solid fa-plus text-[24px]"></i></router-link>
-              <router-link to="/landing" class="text-white hover:opacity-50 max-[1100px]:hidden"><i class="fa-solid fa-plus text-[24px]"></i></router-link>
-
               <router-link to="/profil" class="max-[400px]:hidden"><img class="rounded-full w-[4rem] h-[4rem] object-cover" :src="image_url" alt=""></router-link>
               <button @click="logout"><i class="text-red-600 text-[24px] hover:text-red-400 duration-200 fa-solid fa-arrow-right-from-bracket"></i></button>
               <div id="spanCont" class="flex-col gap-2 hidden">
@@ -39,6 +37,10 @@ import { defineProps, defineEmits, ref } from "vue";
 import { useSessionStore } from '../stores/sessions';
 import DefaultImg from '../assets/img/default_img.png';
 import {supabase} from '../supabase'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 const sessionStore = useSessionStore();
 const searchQuery = ref(''); // Reactive state for search query
 const props = defineProps({
@@ -66,6 +68,7 @@ function logout() {
   localStorage.clear();
 
   alert('You have logged out.');
+  router.push('/signIn');
 }
 
 getImg();

@@ -374,10 +374,12 @@ import google from '../assets/img/googleico.svg';
 import meta from '../assets/img/metaico.svg';
 import apple from '../assets/img/appleico.svg';
 import newP from '../assets/img/newP_logo.svg';
+import { useRouter } from 'vue-router';
 
 export default {
   data() {
     return {
+      router: useRouter(),
       currentStep: 0,
       name: '',
       Prénom: '',
@@ -529,6 +531,7 @@ export default {
             this.message = "Aucune donnée retournée. Veuillez réessayer.";
           } else {
             console.log('Inscription réussie:', data);
+            router.push('/signin')
             // Ajoutez ici toute logique supplémentaire après une inscription réussie
           }
         } catch (err) {

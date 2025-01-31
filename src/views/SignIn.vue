@@ -36,7 +36,7 @@ const handleLogin = async () => {
   
   if (sessionData?.session) {
     sessionStore.setSession(sessionData.session);
-    router.push('/');
+    router.push('/app');
   } else {
     sessionStore.clearSession();
   }

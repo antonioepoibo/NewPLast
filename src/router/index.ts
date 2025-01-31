@@ -19,7 +19,6 @@ import FindEr from '../views/FindEr.vue';
 import ChatPage from '../views/ChatPage.vue';
 
 //@ts-ignore
-import ReportsPage from '../views/ReportsPage.vue';
 import NotFound from '../views/404.vue';
 //@ts-ignore
 import FriendsPage from '../views/FriendsPage.vue';
@@ -34,7 +33,7 @@ import LandingPage from '../views/landingpage/landingPage.vue';
 
 const routes = [
   { path: '/signin', name: 'signin', component: SignIn },
-  { path: '/', name: 'Home', component: HomePage },
+  { path: '/app', name: 'Home', component: HomePage },
   { path: '/map', component: MapPage },
   { path: '/about', name: 'About', component: AboutPage },
   { path: '/account', name: 'Account', component: Account },
@@ -44,7 +43,6 @@ const routes = [
   { path: '/login', name : 'LoginPage', component: LoginComponent},
   { path: '/loginCompany', name : 'LoginCompany', component: LoginCompany},
   { path: '/chat', name: 'ChatPage', component: ChatPage },
-  { path: '/reports', name: 'ReportsPage', component: ReportsPage },
   // 404 page
   { path: '/:catchAll(.*)', name: 'NoFound', component: NotFound },
   { path: '/friends', name: 'FriendsPage', component: FriendsPage },
@@ -52,7 +50,7 @@ const routes = [
   { path: '/signup', name: 'SignUpPage', component: SignUp },
 
   // landing page route
-  { path: '/landing', name: 'LandingPage', component: LandingPage },
+  { path: '/', name: 'LandingPage', component: LandingPage },
   //@ts-ignore
   {path: '/tarif' , name: 'Tarif', component: () => import('../views/landingpage/TarifPage.vue')},
   //@ts-ignore
