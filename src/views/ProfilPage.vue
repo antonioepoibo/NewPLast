@@ -37,14 +37,45 @@
                       <h1 class="text-white font-bold text-[24px] max-[500px]:text-[17px]">Mes statistique</h1>
                       <br>
                       <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      
+                  </div>
 
+                  <div class="mt-6">
+                    <h1 class="text-white font-bold text-[24px] max-[500px]:text-[17px] text-center">Mes Tarifications</h1>
+                    <p class="text-white opacity-70 text-[18px] italic max-[500px]:text-[12px] text-center">
+                      Sélectionnez votre plan en fonction de votre besoin.
+                    </p>
+
+                    <div class="tarif-container">
+                      <!-- Offre Gratuite -->
+                      <div class="tarif-card" :class="{'selected': !sessionStore.isCompany}">
+                        <p class="badge">Pour un utilisateur</p>
+                        <h2 class="tarif-title">Gratuit</h2>
+                        <p class="tarif-price">0€</p>
+                        <p class="tarif-desc">Accès aux fonctionnalités de base.</p>
+                        <button v-if="!sessionStore.isCompany" class="tarif-btn selected-btn">Offre actuelle</button>
+                        <button v-if="sessionStore.isCompany" class="tarif-btn disabled-btn">Vous ne pouvez pas choisir cette offre</button>
+                      </div>
+
+                      <!-- Offre Gold -->
+                      <div class="tarif-card">
+                        <p class="badge">Premium</p>
+                        <h2 class="tarif-title">Gold</h2>
+                        <p class="tarif-price">4.99€/mois</p>
+                        <p class="tarif-desc">Accès premium avec boost visibilité.</p>
+                        <button v-if="!sessionStore.isCompany" class="tarif-btn">Choisir</button>
+                        <button v-if="sessionStore.isCompany" class="tarif-btn disabled-btn">Vous ne pouvez pas choisir cette offre</button>
+                      </div>
+
+                      <!-- Offre Entreprise -->
+                      <div class="tarif-card" :class="{'selected': sessionStore.isCompany}">
+                        <p class="badge">Pour les commerçants</p>
+                        <h2 class="tarif-title">Entreprise</h2>
+                        <p class="tarif-price">9.99€/mois</p>
+                        <p class="tarif-desc">Accès aux outils promotionnels et visibilité.</p>
+                        <button v-if="sessionStore.isCompany" class="tarif-btn selected-btn">Offre actuelle</button>
+                        <p v-if="!sessionStore.isCompany" class="tarif-warning">Vous ne pouvez pas choisir cette offre pour celle de l’entreprise</p>
+                      </div>
+                    </div>
                   </div>
               </div>
           </div>
@@ -353,11 +384,120 @@ padding: 0 1rem;
 cursor: pointer;
 }
 
-@media (max-width: 500px) {
+.tarif-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.tarif-card {
+  background: #3B5562;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+  max-width: 90%;
+  color: white;
+  border: 2px solid transparent;
+  transition: all 0.3s ease-in-out;
+}
+
+.tarif-card.selected {
+  border-color: #60b776;
+  background: #4b6b78;
+}
+
+.badge {
+  background: white;
+  color: black;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.tarif-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.tarif-price {
+  font-size: 26px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.tarif-desc {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.tarif-btn {
+  margin-top: 15px;
+  background: #002233;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-weight: bold;
+}
+
+.tarif-btn.selected-btn {
+  background: #002233;
+  color: white;
+}
+
+.tarif-btn.disabled-btn {
+  background: #002233;
+  color: #d1d5db;
+  cursor: not-allowed;
+}
+
+.tarif-btn:hover {
+  background: #60b776;
+  color: black;
+}
+
+.tarif-warning {
+  color: #002233;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+
+
+@media (max-width: 300px) {
    .Describe{
     height: 1.2rem;
     padding: 0 .5rem;
     }
+    .tarif-container {
+    flex-direction: column;
+    align-items: center;
   }
+
+  .tarif-card {
+    width: 95%;
+  }
+
+  .tarif-title {
+    font-size: 18px;
+  }
+
+  .tarif-price {
+    font-size: 20px;
+  }
+
+  .tarif-desc {
+    font-size: 12px;
+  }
+}
+
+
+
 
 </style>
