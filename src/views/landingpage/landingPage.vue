@@ -203,10 +203,17 @@
 
     import phone1 from '../../assets/img/phone1.svg';
     import phone2 from '../../assets/img/phone2.svg';
-    import {ref} from 'vue';
+    import {onMounted, ref} from 'vue';
     import littlephone from '../../assets/img/littlephone.svg';
     import confiance from '../../assets/img/confiance.svg';
+    import {useRouter} from 'vue-router';
 
+    const router = useRouter();
+    function isconnect(){
+        if(sessionStorage.getItem('token')){
+            router.push('/app');
+        }
+    }
 
     const previousElement = ref(null);
 
@@ -232,7 +239,7 @@
             icon.style.transform = "rotate(180deg)";
         }
     };
-
+    onMounted(isconnect);
 </script>
 
 <style scoped>

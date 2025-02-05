@@ -1,6 +1,5 @@
 <template>
     <div class="relative h-auto">
-    <div class="text-white text-lg font-bold">isCompany: {{ sessionStore.isCompany }}</div>
 
     <div class="relative z-20 flex w-full flex-col h-full">
         <h1 class="container relative z-20 text-white text-[24px] font-bold mt-[4rem] max-[500px]:text-[17px]">Crée une nouvelle activité</h1>

@@ -1,12 +1,11 @@
 <template>
+    
     <div>
-      <PopUp  :isVisible="msg_show" :type="msg_type" :title="msg_Title" :content="msg_content" @update:isVisible="msg_show = false" />
+      <PopUp :isVisible="msg_show" :type="msg_type" :title="msg_Title" :content="msg_content" @update:isVisible="msg_show = false" />
       <div v-if="sessionStore.isLoggedIn" class="relative z-20 flex flex-col h-full gap-6">
           <SearchBar :username="sessionStore.username" v-model:searchQuery="searchQuery" />
       </div>
       <div v-if="sessionStore.isLoggedIn" class="container flex flex-col gap-4 mt-6">
-        <!-- Affichage de la valeur de isCompany -->
-        <div class="text-white text-lg font-bold">isCompany: {{ sessionStore.isCompany }}</div>
         <div class="flex flex-col">
           <div class="flex justify-between">
             <h2 class="text-white text-[30px] font-bold max-[500px]:text-[18px]">Vos amis</h2>

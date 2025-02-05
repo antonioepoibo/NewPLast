@@ -34,17 +34,24 @@
                   </div>
 
                   <div>
-                      <h1 class="text-white font-bold text-[24px] max-[500px]:text-[17px]">Mes statistique</h1>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      <br>
-                      
+                      <h1 class="text-white font-bold text-[24px] max-[500px]:text-[17px]">Mes activités en cours</h1>
+                      <div class="w-[30rem] min-h-[20rem] my-10 max-[500px]:w-full max-[500px]:my-1 max-[500px]:min-h-[9rem]">
+                        <UserAgenda class="duration-200" :username="sessionStore.username" />
+                      </div>
+                  </div>
 
+                  <div>
+                      <h1 class="text-white font-bold text-[24px] max-[500px]:text-[17px]">Mes Avis</h1>
+                      <div class="text-white/50 mt-4 mx-4">
+                        <p>Vous n'avez aucun avis pour le moment</p>
+                      </div>
+                  </div>
+
+                  <div class="max-[500px]:mb-[5rem]">
+                      <h1 class="text-white font-bold text-[24px] max-[500px]:text-[17px]">Mes Amis</h1>
+                      <div class="w-[20rem]">
+                        <UserFriends />
+                      </div>
                   </div>
               </div>
           </div>
@@ -156,6 +163,8 @@ import { ref, onMounted } from 'vue';
 import { supabase } from '../supabase';
 import { useSessionStore } from '../stores/sessions';
 import DefaultImg from '../assets/img/default_img.png';
+import UserAgenda from '../components/UserAgenda.vue';
+import UserFriends from '../components/FriendsList.vue';
 
 
 

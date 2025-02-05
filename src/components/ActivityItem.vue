@@ -1,6 +1,6 @@
 <!-- src/components/ActivityItem.vue -->
 <template>
-    <div class="h-[37rem]">
+    <div class="h-[37rem] max-[500px]:h-[28rem]">
       <div class="relative w-[22rem] h-[36rem] mt-[1rem] cursor-pointer bg-[#3B5562] rounded-sm shadow-xl flex flex-col justify-between max-[500px]:w-[18rem] max-[500px]:h-[26rem] max-[400px]:w-[21rem]">
       <div class="bg-red-600 border-red-800 border-2 rounded-full absolute top-[-1rem] right-[-.7rem] z-60 rotate-12">
         <i @click="openReportModal" class="fa-solid fa-person-circle-exclamation text-white text-[20px] m-2"></i>
@@ -34,7 +34,7 @@
         </div>
         <p class="text-white text-[16px] opacity-80 mt-5 h-[3rem] italic max-[1300px]:text-[13px] px-3 max-[920px]:text-[10px]"> {{ truncateText(activity.desc || defaultText, 100) }}</p>
       </div>
-      <div class="py-5 flex justify-center relative z-40">
+      <div class="py-5 flex justify-center relative z-40 max-[500px]:py-1">
         <button v-if="!activity.subscribed && !activity.isOwner" @click="subscribeToActivity(activity.id)" class="border-2 border-green-600 text-green-400 bg-green-700/50 py-2 text-[14px] px-6  font-bold rounded-tl-lg rounded-br-lg max-[500px]:text-[10px] max-[500px]:px-4 max-[500px]:py-1 duration-200 hover:bg-green-400/50 hover:mb-6">S'abonner</button>
         <p v-else-if="activity.subscribed">Vous êtes abonné à l'activité!</p>
         <p v-else-if="activity.isOwner">Vous êtes le créateur de l'activité</p>
