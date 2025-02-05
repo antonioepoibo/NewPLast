@@ -1,8 +1,8 @@
 <template>
   <div class="relative h-auto">
     <div class="relative z-20 flex w-full flex-col h-full">
-    <div class="flex container gap-[5rem] max-[500px]:flex-col max-[500px]:gap-[1rem]">
-      <div class="flex flex-col gap-[5rem] relative z-20 my-10 max-[500px]:gap-[2rem]" :class="{'w-[auto]': pageStep === 'info', 'w-[auto]': pageStep === 'param'}">
+      <div class="flex container gap-[5rem] max-[500px]:flex-col max-[500px]:gap-[1rem]">
+        <div class="flex flex-col gap-[5rem] relative z-20 my-10 max-[500px]:gap-[2rem]" :class="{'w-[auto]': pageStep === 'info', 'w-[auto]': pageStep === 'param'}">
           <div class="flex items-center gap-6 max-[500px]:flex-col max-[500px]:text-center">
               <img :src="image_url ? image_url : DefaultImg" class="rounded-full w-[120px] h-[120px] object-cover" alt="">
               <div>
@@ -196,6 +196,8 @@
               </div>
           </div>
       </div>
+    </div>
+    </div>
     </div>
 </div>
 </div>
