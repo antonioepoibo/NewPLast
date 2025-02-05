@@ -55,55 +55,64 @@
     import ensiCaen from "../../assets/img/ensiCaen.svg";
     import orange from "../../assets/img/orange.svg";
     import {ref, computed, onMounted, onUnmounted} from "vue";
+    import titou from "../../assets/img/titou.svg";
+    import ilo from "../../assets/img/ilo.svg";
+    import hugo from "../../assets/img/hugo.svg";
+    import marly from "../../assets/img/marly.svg";
+    import antonio from "../../assets/img/antonio.svg";
+    import paul from "../../assets/img/paul.svg";
+    import cecile from "../../assets/img/cecile.svg";
+    import choco from "../../assets/img/choco.svg";
+
 
     const teams = ref([
         {
             name: "Hamard Titouan",
             role: "Graphique Design",
             logo: mds,
-            image: "/src/assets/img/titou.svg",
+            image: titou,
         },
         {
             name: "Montals Ilona",
             role: "Web designeuse",
             logo: mds,
-            image: "/src/assets/img/ilo.svg",
+            image: ilo,
         },
         {
             name: "Bohard Hugo",
             role: "Développeur Front",
             logo: mds,
-            image: "/src/assets/img/hugo.svg",
+            image: hugo,
         },
         {
             name: "Mathieu Marly",
             role: "Charger de development",
             logo: unicaen,
-            image: "/src/assets/img/marly.svg",
+            image: marly,
         },
         {
             name: "Cimino Antonio",
             role: "PDG - Developeur back",
             logo: ensiCaen,
-            image: "/src/assets/img/antonio.svg",
+            image: antonio,
         },
         {
             name: "Nguyen Paul",
             role: "Feature owner",
             logo: ensiCaen,
-            image: "/src/assets/img/paul.svg",
+            image: paul,
         },
         {
             name: "Lu Cecile",
             role: "Feature owner",
             logo: ensiCaen,
-            image: "/src/assets/img/cecile.svg",
+            image: cecile,
         },
         {
             name: "Chocolat chaud",
             role: "Reconfort",
             logo: orange,
-            image: "/src/assets/img/choco.svg",
+            image: choco,
         },
     ])
 

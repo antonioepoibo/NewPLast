@@ -11,7 +11,12 @@
             </div>
             <div class="flex gap-10 items-center text-white text-[18px] flex-shrink-0">
               <router-link to="/activite/add/" class="text-white hover:opacity-50 max-[1100px]:hidden"><i class="fa-solid fa-plus text-[24px]"></i></router-link>
-              <router-link to="/profil" class="max-[400px]:hidden"><img class="rounded-full w-[4rem] h-[4rem] object-cover" :src="image_url" alt=""></router-link>
+              <div class="relative">
+                <router-link to="/profil" class="max-[400px]:hidden"><img class="rounded-full w-[4rem] h-[4rem] object-cover" :src="image_url" alt=""></router-link>
+                <div v-if="sessionStore.isCompany" class="absolute top-[-10px] right-[-10px] bg-[#0a2431] w-6 h-6 rounded-full flex items-center justify-center">
+                  <i class="fa-solid fa-user-tie text-sm"></i>
+                </div>
+              </div>
               <button @click="logout"><i class="text-red-600 text-[24px] hover:text-red-400 duration-200 fa-solid fa-arrow-right-from-bracket"></i></button>
               <div id="spanCont" class="flex-col gap-2 hidden">
                 <span class="flex w-6 h-[3px] bg-white rounded-full"></span>

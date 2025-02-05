@@ -3,29 +3,29 @@
   <div class="relative w-full h-[100vh]">
     <img :src="fond" class="absolute top-0 left-0 right-0 bottom-0 z-10 w-full h-full object-cover" alt="Fond d'écran">
 
-    <div v-if="currentStep === 0" class="relative z-20 flex flex-col items-center justify-center m-auto h-full w-[40%] gap-6">
+    <div v-if="currentStep === 0" class="relative z-20 flex flex-col items-center justify-center m-auto h-full w-[40%] gap-6 max-[500px]:w-full">
       <img :src="newP" class="w-[15rem]" alt="">
       <h1 class="text-[30px] font-bold text-white mb-10 uppercase max-[600px]:text-[25px]">S'inscrire</h1>
-      <div class="flex justify-center gap-[8.5rem] w-full px-8 max-[600px]:gap-[11rem]">
-        <p @click="setToPhone" class="text-[14px] text-white" :class="{'underline': isEmail === false, 'opacity-40': isEmail === true}">Numéro de téléphone</p>
+      <div class="flex justify-center gap-[8.5rem] w-full px-8 max-[600px]:gap-[6rem] max-[500px]:items-center max-[500px]:w-[100vh]">
+        <p @click="setToPhone" class="text-[14px] text-white max-[500px]:text-[12px]" :class="{'underline': isEmail === false, 'opacity-40': isEmail === true}">Numéro de téléphone</p>
         <p @click="setToEmail" class="text-[14px] text-white" :class="{'underline': isEmail === true, 'opacity-40': isEmail === false}">Email</p>
       </div>
       <form  @submit.prevent="signUp" class="flex flex-col items-center gap-6 w-[58%]">
-        <div class="flex flex-col gap-2 w-[25rem]">
-          <label ref="label1" for="email" class="text-[14px] ml-6 text-white opacity-[72%]">{{ isEmail ? 'Adresse e-mail' : 'Numéro de téléphone' }}</label>
-          <input v-model="email" :type="isEmail ? 'email' : 'number'" required class="border bg-white rounded-full h-[3rem] pl-6" />
+        <div class="flex flex-col gap-2 w-[25rem] max-[500px]:w-[90vw]">
+          <label ref="label1" for="email" class="text-[14px] ml-6 text-white opacity-[72%] max-[500px]:ml-4">{{ isEmail ? 'Adresse e-mail' : 'Numéro de téléphone' }}</label>
+          <input v-model="email" :type="isEmail ? 'email' : 'number'" required class="border bg-white rounded-full h-[3rem] pl-6 max-[500px]:h-[2.5rem]" />
         </div>
-        <div class="flex flex-col gap-2 w-[25rem]">
-          <label for="name" class="text-[14px] ml-6 text-white opacity-[72%]">Nom</label>
-          <input v-model="name" type="text" required class="border bg-white rounded-full h-[3rem] pl-6" />
+        <div class="flex flex-col gap-2 w-[25rem] max-[500px]:w-[90vw]">
+          <label for="name" class="text-[14px] ml-6 text-white opacity-[72%] max-[500px]:ml-4">Nom</label>
+          <input v-model="name" type="text" required class="border bg-white rounded-full h-[3rem] pl-6 max-[500px]:h-[2.5rem]" />
         </div>
-        <div class="flex flex-col gap-2 w-[25rem]">
-          <label for="name" class="text-[14px] ml-6 text-white opacity-[72%]">Prénom</label>
-          <input v-model="Prénom" type="text" required class="border bg-white rounded-full h-[3rem] pl-6" />
+        <div class="flex flex-col gap-2 w-[25rem] max-[500px]:w-[90vw]">
+          <label for="name" class="text-[14px] ml-6 text-white opacity-[72%] max-[500px]:ml-4">Prénom</label>
+          <input v-model="Prénom" type="text" required class="border bg-white rounded-full h-[3rem] pl-6 max-[500px]:h-[2.5rem]" />
         </div>
-        <div class="relative flex flex-col gap-2 w-[25rem]">
-          <label for="password" class="text-[14px] ml-6 text-white opacity-[72%]">Mot de passe</label>
-          <input v-model="password" :type="isPasswordVisible" required class="relative border bg-white rounded-full h-[3rem] pl-6" />
+        <div class="relative flex flex-col gap-2 w-[25rem] max-[500px]:w-[90vw]">
+          <label for="password" class="text-[14px] ml-6 text-white opacity-[72%] max-[500px]:ml-4">Mot de passe</label>
+          <input v-model="password" :type="isPasswordVisible" required class="relative border bg-white rounded-full h-[3rem] pl-6 max-[500px]:h-[2.5rem]" />
           <i @click="see" class="absolute fa-solid fa-eye-slash right-5 top-[45%] cursor-pointer hover:opacity-60 duration-200"></i>
           <div class="flex gap-[2rem] justify-center">
             <div class="w-[6rem] flex flex-col items-center" :class="{'opacity-100' : /[A-Za-z]/.test(password) && password.length >= 8, 'opacity-40': !(/[A-Za-z]/.test(password) && password.length >= 8)}">
@@ -53,7 +53,7 @@
         </button>
       </form>
       <p v-if="message" class="text-red-500">{{ message }}</p>
-      <router-link to="/" class="mt-4 text-white text-center">Tu as déjà un compte ? <span class="hover:underline font-bold">Connecte toi !</span></router-link>
+      <router-link to="/signin" class="mt-4 text-white text-center max-[500px]:w-full">Tu as déjà un compte ? <span class="hover:underline font-bold">Connecte toi !</span></router-link>
  
       <!-- <div class="flex gap-4 items-center">
         <div class="bg-white rounded-lg p-1 opacity-40 duration-200 hover:opacity-100">
@@ -72,11 +72,11 @@
         <img :src="newP" class="w-[15rem]" alt="">
         <h1 class="text-[30px] font-bold text-white uppercase max-[600px]:text-[25px]">S'inscrire</h1>
         <div class="flex gap-2">
-          <span class="bg-gray-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-white rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-white rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-white rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-white rounded-full w-[5rem] h-[1rem]"></span>
+          <span class="bg-gray-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-white rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-white rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-white rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-white rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
         </div>
       </div>
       <div class="flex flex-col gap-6 items-center">
@@ -109,21 +109,21 @@
         <img :src="newP" class="w-[15rem]" alt="">
         <h1 class="text-[30px] font-bold text-white uppercase max-[600px]:text-[25px]">S'inscrire</h1>
         <div class="flex gap-2">
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-gray-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-white rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-white rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-white rounded-full w-[5rem] h-[1rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-gray-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-white rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-white rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-white rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
         </div>
       </div>
       <div class="flex flex-col gap-6 items-center">
         <h1 class="text-[18px] font-bold text-white  max-[600px]:text-[15px]">Sélectionne ta date de naissance</h1>
         <div class="flex gap-4">
-          <input type="number" v-model="day" class="border-b-2 border-white bg-transparent text-[24px] text-white py-2 text-center w-[5rem] italic" maxlength="2" required />
-          <input type="text" v-model="month" class="border-b-2 border-white bg-transparent text-[24px] text-white py-2 text-center italic" maxlength="9" required />
-          <input type="text" v-model="year" class="border-b-2 border-white bg-transparent text-[24px] text-white py-2 text-center w-[8rem] italic" maxlength="4" required />
+          <input type="number" v-model="day" class="border-b-2 border-white bg-transparent text-[24px] text-white py-2 text-center w-[5rem] max-[500px]:w-[3.5rem] italic max-[500px]:text-[16px]" maxlength="2" required />
+          <input type="text" v-model="month" class="border-b-2 border-white bg-transparent text-[24px] text-white py-2 text-center italic max-[500px]:w-[7rem] max-[500px]:text-[16px]" maxlength="9" required />
+          <input type="text" v-model="year" class="border-b-2 border-white bg-transparent text-[24px] text-white py-2 text-center w-[8rem] italic max-[500px]:w-[3.5rem] max-[500px]:text-[16px]" maxlength="4" required />
         </div>
-        <p class="text-[14px] text-white opacity-[72%] italic w-[60%] text-center">Attention, il se peut qu'on vous demande une carte d’identité pour prouver votre âge. Merci de ne pas mentir sur cette information</p>
+        <p class="text-[14px] text-white opacity-[72%] italic w-[60%] text-center max-[500px]:w-[80%]">Attention, il se peut qu'on vous demande une carte d’identité pour prouver votre âge. Merci de ne pas mentir sur cette information</p>
         <div v-bind:class="{
           'flex gap-4 items-center opacity-[72%]': true, 
           'text-red-600': ageStatus.status === 'refused',
@@ -157,16 +157,16 @@
         <img :src="newP" class="w-[15rem]" alt="">
         <h1 class="text-[30px] font-bold text-white uppercase max-[600px]:text-[25px]">S'inscrire</h1>
         <div class="flex gap-2">
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-gray-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-white rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-white rounded-full w-[5rem] h-[1rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-gray-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-white rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-white rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
         </div>
       </div>
       <div class="flex flex-col gap-6 items-center">
         <h1 class="text-[18px] font-bold text-white  max-[600px]:text-[15px]">Dis en plus sur toi...</h1>
-        <textarea v-model="bio" name="Bio" id="bio" class="resize-none bg-transparent border border-white text-white w-[32rem] h-[18rem] text-[18px] p-4 text-center rounded-xl" placeholder="Décris toi en quelques phrases "></textarea>
+        <textarea v-model="bio" name="Bio" id="bio" class="resize-none bg-transparent border border-white text-white w-[32rem] h-[18rem] text-[18px] p-4 text-center rounded-xl max-[500px]:w-full max-[500px]:text-[16px]" placeholder="Décris toi en quelques phrases "></textarea>
         <p @click="ImgLater('bio')" class="text-[14px] italic text-white m-auto opacity-[72%] duration-200 hover:underline">enregistrer cet information plus tard </p>
         <div class="flex gap-4">
           <button 
@@ -190,11 +190,11 @@
         <img :src="newP" class="w-[15rem]" alt="">
         <h1 class="text-[30px] font-bold text-white uppercase max-[600px]:text-[25px]">S'inscrire</h1>
         <div class="flex gap-2">
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-gray-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-white rounded-full w-[5rem] h-[1rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-gray-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-white rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
         </div>
       </div>
       <div class="flex flex-col gap-8 items-center">
@@ -202,34 +202,34 @@
         <h1 class="text-[18px] font-bold text-white  max-[600px]:text-[15px]">quelques mots pour te décrire...</h1>
         <p class="text-[14px] text-white opacity-[72%] italic">Choisie au moins 3 mots qui te définie le mieux !</p>
       </div>
-      <div class="flex gap-5 flex-wrap justify-center">
-        <div class="flex gap-2 mr-8 text-center text-white">
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Amical(e)'), 'opacity-50': !this.keyword.includes('Amical(e)')}" id="Amical(e)" class="Describe duration-200 hover:opacity-100 text-[14px]">Amical(e)</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Créatif(ve)'), 'opacity-50': !this.keyword.includes('Créatif(ve)')}" id="Créatif(ve)" class="Describe duration-200 hover:opacity-100 text-[14px]">Créatif(ve)</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Passionné(e)'), 'opacity-50': !this.keyword.includes('Passionné(e)')}" id="Passionné(e)" class="Describe duration-200 hover:opacity-100 text-[14px]">Passionné(e)</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Curieux(se)'), 'opacity-50': !this.keyword.includes('Curieux(se)')}" id="Curieux(se)" class="Describe duration-200 hover:opacity-100 text-[14px]">Curieux(se)</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Dynamique'), 'opacity-50': !this.keyword.includes('Dynamique')}" id="Dynamique" class="Describe duration-200 hover:opacity-100 text-[14px]">Dynamique</div>
+      <div class="flex gap-5 flex-wrap justify-center max-[500px]:w-full">
+        <div class="flex gap-2 mr-8 text-center text-white max-[500px]:justify-start max-[500px]:flex-wrap max-[500px]:mr-0">
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Amical(e)'), 'opacity-50': !this.keyword.includes('Amical(e)')}" id="Amical(e)" class="Describe">Amical(e)</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Créatif(ve)'), 'opacity-50': !this.keyword.includes('Créatif(ve)')}" id="Créatif(ve)" class="Describe">Créatif(ve)</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Passionné(e)'), 'opacity-50': !this.keyword.includes('Passionné(e)')}" id="Passionné(e)" class="Describe">Passionné(e)</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Curieux(se)'), 'opacity-50': !this.keyword.includes('Curieux(se)')}" id="Curieux(se)" class="Describe">Curieux(se)</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Dynamique'), 'opacity-50': !this.keyword.includes('Dynamique')}" id="Dynamique" class="Describe">Dynamique</div>
         </div>
-        <div class="flex gap-2 ml-8 text-center text-white">
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Optimiste'), 'opacity-50': !this.keyword.includes('Optimiste')}" id="Optimiste" class="Describe duration-200 hover:opacity-100 text-[14px]">Optimiste</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Drôle'), 'opacity-50': !this.keyword.includes('Drôle')}" id="Drôle" class="Describe duration-200 hover:opacity-100 text-[14px]">Drôle</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Empathique'), 'opacity-50': !this.keyword.includes('Empathique')}" id="Empathique" class="Describe duration-200 hover:opacity-100 text-[14px]">Empathique</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Ambitieux(se)'), 'opacity-50': !this.keyword.includes('Ambitieux(se)')}" id="Ambitieux(se)" class="Describe duration-200 hover:opacity-100 text-[14px]">Ambitieux(se)</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Aventurier(ère)'), 'opacity-50': !this.keyword.includes('Aventurier(ère)')}" id="Aventurier(ère)" class="Describe duration-200 hover:opacity-100 text-[14px]">Aventurier(ère)</div>
+        <div class="flex gap-2 ml-8 text-center text-white max-[500px]:justify-start max-[500px]:flex-wrap max-[500px]:ml-0">
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Optimiste'), 'opacity-50': !this.keyword.includes('Optimiste')}" id="Optimiste" class="Describe">Optimiste</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Drôle'), 'opacity-50': !this.keyword.includes('Drôle')}" id="Drôle" class="Describe">Drôle</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Empathique'), 'opacity-50': !this.keyword.includes('Empathique')}" id="Empathique" class="Describe">Empathique</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Ambitieux(se)'), 'opacity-50': !this.keyword.includes('Ambitieux(se)')}" id="Ambitieux(se)" class="Describe">Ambitieux(se)</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Aventurier(ère)'), 'opacity-50': !this.keyword.includes('Aventurier(ère)')}" id="Aventurier(ère)" class="Describe">Aventurier(ère)</div>
         </div>
-        <div class="flex gap-2 mr-8 text-center text-white">
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Sociable'), 'opacity-50': !this.keyword.includes('Sociable')}" id="Sociable" class="Describe duration-200 hover:opacity-100 text-[14px]">Sociable</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Réfléchi(e)'), 'opacity-50': !this.keyword.includes('Réfléchi(e)')}" id="Réfléchi(e)" class="Describe duration-200 hover:opacity-100 text-[14px]">Réfléchi(e)</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Indépendant(e)'), 'opacity-50': !this.keyword.includes('Indépendant(e)')}" id="Indépendant(e)" class="Describe duration-200 hover:opacity-100 text-[14px]">Indépendant(e)</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Spontané(e)'), 'opacity-50': !this.keyword.includes('Spontané(e)')}" id="Spontané(e)" class="Describe duration-200 hover:opacity-100 text-[14px]">Spontané(e)</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Bienveillant(e)'), 'opacity-50': !this.keyword.includes('Bienveillant(e)')}" id="Bienveillant(e)" class="Describe duration-200 hover:opacity-100 text-[14px]">Bienveillant(e)</div>
+        <div class="flex gap-2 mr-8 text-center text-white max-[500px]:justify-start max-[500px]:flex-wrap max-[500px]:mr-0">
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Sociable'), 'opacity-50': !this.keyword.includes('Sociable')}" id="Sociable" class="Describe">Sociable</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Réfléchi(e)'), 'opacity-50': !this.keyword.includes('Réfléchi(e)')}" id="Réfléchi(e)" class="Describe">Réfléchi(e)</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Indépendant(e)'), 'opacity-50': !this.keyword.includes('Indépendant(e)')}" id="Indépendant(e)" class="Describe">Indépendant(e)</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Spontané(e)'), 'opacity-50': !this.keyword.includes('Spontané(e)')}" id="Spontané(e)" class="Describe">Spontané(e)</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Bienveillant(e)'), 'opacity-50': !this.keyword.includes('Bienveillant(e)')}" id="Bienveillant(e)" class="Describe">Bienveillant(e)</div>
         </div>
-        <div class="flex gap-2 ml-8 text-center text-white">
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Sincère'), 'opacity-50': !this.keyword.includes('Sincère')}" id="Sincère" class="Describe duration-200 hover:opacity-100 text-[14px]">Sincère</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Énergique'), 'opacity-50': !this.keyword.includes('Énergique')}" id="Énergique" class="Describe duration-200 hover:opacity-100 text-[14px]">Énergique</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Inspirant(e)'), 'opacity-50': !this.keyword.includes('Inspirant(e)')}" id="Inspirant(e)" class="Describe duration-200 hover:opacity-100 text-[14px]">Inspirant(e)</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Ouvert(e)'), 'opacity-50': !this.keyword.includes('Ouvert(e)')}" id="Ouvert(e)" class="Describe duration-200 hover:opacity-100 text-[14px]">Ouvert(e)</div>
-          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Authentique'), 'opacity-50': !this.keyword.includes('Authentique')}" id="Authentique" class="Describe duration-200 hover:opacity-100 text-[14px]">Authentique</div>
+        <div class="flex gap-2 ml-8 text-center text-white max-[500px]:justify-start max-[500px]:flex-wrap max-[500px]:ml-0">
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Sincère'), 'opacity-50': !this.keyword.includes('Sincère')}" id="Sincère" class="Describe">Sincère</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Énergique'), 'opacity-50': !this.keyword.includes('Énergique')}" id="Énergique" class="Describe">Énergique</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Inspirant(e)'), 'opacity-50': !this.keyword.includes('Inspirant(e)')}" id="Inspirant(e)" class="Describe">Inspirant(e)</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Ouvert(e)'), 'opacity-50': !this.keyword.includes('Ouvert(e)')}" id="Ouvert(e)" class="Describe">Ouvert(e)</div>
+          <div @click="chose" :class="{'opacity-100': this.keyword.includes('Authentique'), 'opacity-50': !this.keyword.includes('Authentique')}" id="Authentique" class="Describe">Authentique</div>
         </div>
           
         </div>
@@ -250,41 +250,41 @@
         </div>
       </div>
     </div>
-    <div v-if="currentStep === 5" class="relative z-20 flex flex-col items-center justify-center m-auto h-full w-[40%] gap-6">
+    <div v-if="currentStep === 5" class="relative z-20 flex flex-col items-center justify-center m-auto h-full w-[40%] gap-6 max-[500px]:w-full">
       <div class="flex flex-col gap-6 items-center mb-10">
         <img :src="newP" class="w-[15rem]" alt="">
         <h1 class="text-[30px] font-bold text-white uppercase max-[600px]:text-[25px]">S'inscrire</h1>
         <div class="flex gap-2">
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-gray-400 rounded-full w-[5rem] h-[1rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-gray-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
         </div>
       </div>
       <div class="flex flex-col gap-6 items-center w-[70%]">
         <h1 class="text-[18px] font-bold text-white  max-[600px]:text-[15px]">Quelle est ton type de profil ?</h1>
         <div @click="Particulier" :class="{'opacity-100': isClickedPA, 'opacity-40': !isClickedPA}" class="flex bg-transparent border-2 border-white w-full h-[10rem] items-center justify-center gap-10 rounded-sm duration-200 hover:opacity-100">
-          <i class="fa-solid fa-user-tie text-[60px] text-white"></i>
+          <i class="fa-solid fa-user-tie text-[60px] text-white max-[500px]:text-[40px] max-[500px]:ml-2"></i>
           <div class="w-[70%] flex flex-col gap-2 my-4">
             <div class="flex flex-col">
-              <h1 class="text-[26px] text-white font-bold">Particulier</h1>
-              <p class="text-[12px] text-white italic opacity-[72%]">Profil gratuit avec offre payante *</p>
+              <h1 class="text-[26px] text-white font-bold max-[500px]:text-[20px]">Particulier</h1>
+              <p class="text-[12px] text-white italic opacity-[72%] max-[500px]:text-[8px]">Profil gratuit avec offre payante *</p>
             </div>
-            <h2 class="text-[14px] text-white italic">Un compte idéal pour les nouvelles personnes souhaitant se faire de nouveaux amis ou pour participer à des activités avec de nouvelles personnes.</h2>
+            <h2 class="text-[14px] text-white italic max-[500px]:text-[10px]">Un compte idéal pour les nouvelles personnes souhaitant se faire de nouveaux amis ou pour participer à des activités avec de nouvelles personnes.</h2>
           </div>
         </div>
         <div @click="Professionel" :class="{'opacity-100': isClickedPR, 'opacity-40': !isClickedPR}" class="flex bg-transparent border-2 border-white w-full h-[10rem] items-center justify-center gap-10 rounded-sm duration-200 hover:opacity-100">
-          <i class="fa-solid fa-user text-[60px] text-white"></i>
+          <i class="fa-solid fa-user text-[60px] text-white max-[500px]:text-[40px] max-[500px]:ml-2"></i>
           <div class="w-[70%] flex flex-col gap-2 my-4">
             <div class="flex flex-col">
-              <h1 class="text-[26px] text-white font-bold">Profesionnel</h1>
-              <p class="text-[12px] text-white italic opacity-[72%]">Profil gratuit avec offre payante *</p>
+              <h1 class="text-[26px] text-white font-bold  max-[500px]:text-[20px]">Profesionnel</h1>
+              <p class="text-[12px] text-white italic opacity-[72%] max-[500px]:text-[8px]">Profil gratuit avec offre payante *</p>
             </div>
-            <h2 class="text-[14px] text-white italic">Un compte réservé pour les professionnels ou les entreprises qui souhaitent promouvoir leurs entreprises proposant des activités.</h2>
+            <h2 class="text-[14px] text-white italic max-[500px]:text-[10px]">Un compte réservé pour les professionnels ou les entreprises qui souhaitent promouvoir leurs entreprises proposant des activités.</h2>
           </div>
         </div>
-        <div class="flex bg-transparent border-2 border-white w-full h-[8rem] items-center justify-center rounded-sm opacity-40 duration-200 hover:opacity-100">
+        <div class="flex bg-transparent border-2 border-white w-full h-[8rem] items-center justify-center rounded-sm opacity-40 duration-200 hover:opacity-100 max-[500px]:h-[4rem]">
           <h1 class="text-[26px] text-white font-bold">Coming soon</h1>
         </div>
         <div class="flex gap-4">
@@ -303,16 +303,16 @@
         </div>
       </div>
     </div>
-    <div v-if="currentStep === 6" class="relative z-20 flex flex-col items-center justify-center m-auto h-full w-[40%] gap-6">
+    <div v-if="currentStep === 6" class="relative z-20 flex flex-col items-center justify-center m-auto h-full w-[40%] gap-6 max-[500px]:w-full">
       <div class="flex flex-col gap-6 items-center mb-10">
         <img :src="newP" class="w-[15rem]" alt="">
         <h1 class="text-[30px] font-bold text-white uppercase max-[600px]:text-[25px]">S'inscrire</h1>
         <div class="flex gap-2 mb-10">
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
-          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
+          <span class="bg-green-400 rounded-full w-[5rem] h-[1rem] max-[500px]:w-[3.5rem]"></span>
         </div>
         <div class="flex flex-col gap-6 items-center w-[80%]">
           <h1 class="text-[24px] font-bold text-white  max-[600px]:text-[15px]">Félicitation, votre profil est crée !</h1>
@@ -320,29 +320,29 @@
         </div>
         <div class="flex flex-col gap-4 w-[85%]">
           <div class="flex bg-transparent border-2 border-white w-full h-[auto] items-center justify-center gap-10 rounded-sm py-6 my-6">
-            <img :src="this.image_url" class="relative w-[90px] h-[90px] rounded-full" alt="image de profil">
+            <img :src="this.image_url" class="relative w-[90px] h-[90px] rounded-full max-[500px]:w-[40px] max-[500px]:h-[40px]" alt="image de profil">
             <div class="flex flex-col gap-3 w-[70%]">
-              <div class="flex gap-[8rem] justify-between items-center">
-                <h1 class="text-[22px] font-bold text-white">{{ this.name && this.prénom ? "null" + " " + "null" : this.name + ' ' + this.Prénom}}</h1>
-                <p class="text-[14px] italic text-white">{{ this.day && this.month && this.year ?  this.day + '/' + this.month + '/' + this.year : "null" + '/' + "null" + '/' + "null" }}</p>
+              <div class="flex gap-[8rem] justify-between items-center max-[500px]:gap-[2rem]">
+                <h1 class="text-[22px] font-bold text-white max-[500px]:text-[8px]">{{ this.name && this.prénom ? "null" + " " + "null" : this.name + ' ' + this.Prénom}}</h1>
+                <p class="text-[14px] italic text-white max-[500px]:text-[8px]">{{ this.day && this.month && this.year ?  this.day + '/' + this.month + '/' + this.year : "null" + '/' + "null" + '/' + "null" }}</p>
               </div>
-              <div class="flex gap-[8rem] justify-between items-center">
-                <h1 class="text-[12px] italic text-white opacity-[72%]">{{ isClickedPA ? "Particulier" : "Professionel"}}</h1>
-                <p class="text-[12px] italic text-white opacity-[72%]">{{ this.email ? this.email : "contact@hugo-bohard.com" }}</p>
+              <div class="flex gap-[8rem] justify-between items-center max-[500px]:gap-[2rem]">
+                <h1 class="text-[12px] italic text-white opacity-[72%] max-[500px]:text-[8px]">{{ isClickedPA ? "Particulier" : "Professionel"}}</h1>
+                <p class="text-[12px] italic text-white opacity-[72%] max-[500px]:text-[8px]">{{ this.email ? this.email : "contact@hugo-bohard.com" }}</p>
               </div>
               <div class="flex gap-2">
                 <div v-for="key in this.keyword.split(',')" :key="key.id" class="bg-transparent border border-white rounded-full"><p class=text-[6px]>{{ key }}</p></div>
               </div>
-              <p class="text-[14px] text-white italic opacity-[72%] w-[88%]">{{ this.bio ? this.bio : "À définir plus tard" }}</p>
+              <p class="text-[14px] text-white italic opacity-[72%] w-[88%] max-[500px]:text-[8px]">{{ this.bio ? this.bio : "À définir plus tard" }}</p>
             </div>
           </div>
           <div class="flex gap-3 items-start">
             <input v-model="checkboxRGPD" type="checkbox" required>
-            <p class="text-[10px] text-white italic">En créant un compte, vous acceptez les Conditions Générales d'Utilisation du site (CGU) et les  Conditions Générales de Vente (CGV). Ces conditions régissent votre utilisation des services proposés, les modalités d'achat, de paiement et de livraison des services, y compris vos droits et obligations en tant qu'utilisateur. Il est important de lire attentivement ces conditions avant de continuer</p>
+            <p class="text-[10px] text-white italic max-[500px]:text-[6px]">En créant un compte, vous acceptez les Conditions Générales d'Utilisation du site (CGU) et les  Conditions Générales de Vente (CGV). Ces conditions régissent votre utilisation des services proposés, les modalités d'achat, de paiement et de livraison des services, y compris vos droits et obligations en tant qu'utilisateur. Il est important de lire attentivement ces conditions avant de continuer</p>
           </div>
           <div class="flex gap-3 items-start">
             <input v-model="checkboxCG" type="checkbox" required>
-            <p class="text-[10px] text-white italic">En créant un compte, vous acceptez les Conditions Générales d'Utilisation du site (CGU) et les  Conditions Générales de Vente (CGV). Ces conditions régissent votre utilisation des services proposés, les modalités d'achat, de paiement et de livraison des services, y compris vos droits et obligations en tant qu'utilisateur. Il est important de lire attentivement ces conditions avant de continuer</p>
+            <p class="text-[10px] text-white italic  max-[500px]:text-[6px]">En créant un compte, vous acceptez les Conditions Générales d'Utilisation du site (CGU) et les  Conditions Générales de Vente (CGV). Ces conditions régissent votre utilisation des services proposés, les modalités d'achat, de paiement et de livraison des services, y compris vos droits et obligations en tant qu'utilisateur. Il est important de lire attentivement ces conditions avant de continuer</p>
           </div>
         </div>
         <div class="flex gap-4">
@@ -589,5 +589,19 @@ input[type=number] {
   border-radius: 100px;
   padding: 0 1rem;
   cursor: pointer;
+  transition: opacity 0.3s ease;
+  font-size: 14px;
+}
+.Describe:hover{
+  opacity: 100;
+}
+
+@media (max-width: 500px) {
+  .Describe{
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 2px;
+    font-size: 12px;
+  }
 }
 </style>

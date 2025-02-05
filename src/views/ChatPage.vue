@@ -5,58 +5,58 @@
     </div>
     
     <div v-if="$route.query.owner && $route.query.activityId" class="container chat-container">
-      <div v-for="act in activity" class="bg-[#021925] border border-1 border-b-0 flex w-full" :key="act.id">
-        <img :src="act.image_url" class="w-[30rem] object-cover p-6" alt="">
+      <div v-for="act in activity" class="bg-[#021925] border border-1 border-b-0 flex w-full max-[500px]:flex-col" :key="act.id">
+        <img :src="act.image_url" class="w-[30rem] object-cover p-6 max-[500px]:h-[10rem]" alt="">
         <div class="relative flex justify-between w-full my-6">
-          <div class="flex flex-col gap-2 w-[30rem]">
+          <div class="flex flex-col gap-2 w-[30rem] max-[500px]:w-[90%] max-[500px]:m-auto">
             <div class="">
               <div class="flex gap-4 items-center">
-                <p class="text-[30px] font-bold text-white">{{act.name }}</p>
+                <p class="text-[30px] font-bold text-white max-[500px]:text-[20px]">{{ act.name }}</p>
                 <!-- Affichage du prix -->
                 <div class="flex gap-2">
-                    <i v-for="n in parseInt(activity[0].price.toString().charAt(0))" class="fa-solid fa-sack-dollar text-white"></i>
+                    <i v-for="n in parseInt(activity[0].price.toString().charAt(0))" class="fa-solid fa-sack-dollar text-white max-[500px]:text-[10px]"></i>
                 </div>
               </div>
-              <div class="flex gap-4">
-                <p class="text-white opacity-70 text-[14px]">Par {{ act.owner }}</p>
-                <p class="text-white opacity-70 text-[14px]">-</p>
-                <p class="text-white opacity-70 text-[14px]">Le {{ new Date(act.start_time).toLocaleDateString('fr-FR') }} à {{ act.start_time.split('T')[1] }}</p>
+              <div class="flex gap-4 max-[500px]:items-center">
+                <p class="text-white opacity-70 text-[14px] max-[500px]:text-[10px]">Par {{ ownerNames[act.owner] || 'Chargement...' }}</p>
+                <p class="text-white opacity-70 text-[14px] max-[500px]:text-[10px]">-</p>
+                <p class="text-white opacity-70 text-[14px] max-[500px]:text-[10px]">Le {{ new Date(act.start_time).toLocaleDateString('fr-FR') }} à {{ act.start_time.split('T')[1] }}</p>
               </div>
             </div>
             <div class="flex gap-2 items-center">
               <span class="text-slate-400 cursor-default border border-slate-400 border-1 px-4 rounded-full text-[12px] duration-200 hover:text-white hover:border-white" v-for="desc in act.type.split(',')">{{ desc }}</span>
             </div>
             <div>
-              <p class="text-white italic opacity-70">"{{ act.desc }}"</p>
+              <p class="text-white italic opacity-70 max-[500px]:text-[12px]">"{{ act.desc }}"</p>
             </div>
             <div class="flex gap-2 items-center">
               <div class="flex gap-2">
-                <i @click="$router.push(`/friendsprofile?profildata=${avatar.id}`)" :title="avatar.full_name" v-for="avatar in avatarSubscription" class="fa-solid fa-person text-slate-500 hover:text-white duration-200 text-[28px]"></i>
+                <i @click="$router.push(`/friendsprofile?profildata=${avatar.id}`)" :title="avatar.full_name" v-for="avatar in avatarSubscription" class="fa-solid fa-person text-slate-500 hover:text-white duration-200 text-[28px] max-[500px]:text-[20px]"></i>
               </div>
-              <p class="text-white text-[28px]">|</p>
+              <p class="text-white text-[28px] max-[500px]:text-[16px]">|</p>
               <div :title="'limite de ' + act.max_participants + ' personne(s)' " class="relative flex gap-2 group">
-                <i class="fa-solid fa-people-group text-slate-500 text-[28px] duration-200 group-hover:text-white"></i>
-                <div class="absolute text-center top-[-7px] right-[-7px] w-3 h-3 rounded-full bg-slate-500 duration-200 group-hover:bg-white"><p class="text-[8px] text-[#021925] font-bold">{{ act.max_participants }}</p></div>
+                <i class="fa-solid fa-people-group text-slate-500 text-[28px] duration-200 group-hover:text-white max-[500px]:text-[20px]"></i>
+                <div class="absolute text-center top-[-7px] right-[-7px] w-3 h-3 rounded-full bg-slate-500 duration-200 group-hover:bg-white max-[500px]:w-[.7] max-[500px]:h-[.7]"><p class="text-[8px] text-[#021925] font-bold">{{ act.max_participants }}</p></div>
               </div>
             </div>
-            <iframe :src="mapUrl(act.localisation)" width="600" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg"> </iframe>
+            <iframe :src="mapUrl(act.localisation)" width="600" height="200" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" class="rounded-lg max-[500px]:w-full max-[500px]:flex max-[500px]:justify-center"> </iframe>
           </div>
-          <div class="relative flex items-center h-[55px] w-[200px] overflow-visible">
+          <div class="relative flex items-center h-[55px] w-[200px] overflow-visible max-[500px]:hidden">
             <img @click="$router.push(`/friendsprofile?profildata=${avatar.id}`)" :title="avatar.full_name" v-for="(avatar, index) in avatarSubscription" :key="avatar.id" :src="avatar.avatar_url" :style="{ left: `${index * 40}px` }" class="absolute w-[55px] h-[55px] rounded-full border-[#021925] border-4" alt="" />
           </div>
         </div>
       </div>
       <div class="relative messages-container h-[15rem]">
-        <p class="text-white text-[16px] border border-1 px-6 absolute top-[0px] left-1/2 transform -translate-x-1/2">Chat</p>
-        <div v-for="message in messages" :key="message.id" class="message-item">
+        <p class="text-white text-[16px] border border-1 px-6 absolute top-[0px] left-1/2 transform -translate-x-1/2 max-[500px]:text-[12px]">Chat</p>
+        <div v-for="message in messages" :key="message.id" class="message-item max-[500px]:text-[16px]">
           <strong>{{ message.sender }}</strong>: {{ message.message }}
         </div>
       </div>
-      <form @submit.prevent="sendMessage" class="bg-[#021925] w-full px-4 border border-1">
-        <input v-model="newMessage" placeholder="Ecrit ton message ici..." class="message-input"/>
-        <div class="flex gap-4">
-          <button @click="sendMessage" type="submit" class="send-button">Envoyer</button>
-          <button type="button" class="repport-button" @click="openReportModal">Signaler</button>
+      <form @submit.prevent="sendMessage" class="bg-[#021925] w-full px-4 border border-1 max-[500px]:mb-[5rem] max-[500px]:text-[14px]">
+        <input v-model="newMessage" placeholder="Ecrit ton message ici..." class="message-input max-[500px]:w-[10rem] max-[500px]:text-[14px]"/>
+        <div class="flex gap-4 max-[500px]:flex-col max-[500px]:items-center max-[500px]:gap-1 max-[500px]:my-2">
+          <button @click="sendMessage" type="submit" class="send-button max-[500px]:w-[4.5rem]">Envoyer</button>
+          <button type="button" class="repport-button max-[500px]:w-[4.5rem]" @click="openReportModal">Signaler</button>
         </div>
       </form>
 
@@ -87,6 +87,8 @@ let messageSubscription;
 const activity = ref([]);
 const avatarSubscription = ref([]);
 const userlenght = ref([]);
+const ownerNames = ref({});
+
 
 // Fetch old messages
 async function fetchMessages() {
@@ -125,8 +127,31 @@ async function GetActivityById(){
    }
 
    activity.value = data || [];
+
+   // Récupère les noms des propriétaires
+   await fetchOwnerNames();
    GetUserWithID();
 }
+
+async function fetchOwnerNames() {
+  const ownerIds = activity.value.map(act => act.owner);
+  
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('id, full_name')
+    .in('id', ownerIds);
+
+  if (error) {
+    console.error('Erreur lors de la récupération des noms des propriétaires:', error);
+    return;
+  }
+
+  data.forEach(profile => {
+    ownerNames.value[profile.id] = profile.full_name;
+  });
+}
+
+
 
 async function GetUserWithID(){
   const {data, error} = await supabase
@@ -183,6 +208,22 @@ const isReportModalOpen = ref(false); // État de la fenêtre modale
 function openReportModal() {
   isReportModalOpen.value = true;
 }
+
+async function getName(id) {
+  const { data, error } = await supabase
+    .from('profiles')
+    .select('full_name')
+    .eq('id', id)
+    .single(); // Ajoute .single() si tu es sûr que l'id est unique
+
+  if (error) {
+    console.error('Erreur Supabase:', error);
+    return null; // Retourne null en cas d'erreur pour éviter les plantages
+  }
+
+  return data.full_name; // Pas besoin de await ici
+}
+
 // // Fetch messages on component mount and subscribe to real-time updates
 // onMounted(() => {
 
@@ -205,6 +246,7 @@ onMounted(async () => {
         
         if (sessionData?.session) {
             sessionStore.setSession(sessionData.session);
+            
             fetchMessages();
             GetActivityById();
         } else {
@@ -329,7 +371,26 @@ form {
 
 @media (max-width: 400px){
   .chat-container {
-    height: 80vh;
+    height: auto;
+  }
+
+  .send-button{
+    font-size: 12px;
+    padding: 0 0;
+    height: 2rem;
+    margin: 0;
+  }
+  .repport-button{
+    font-size: 12px;
+    padding: 0 0;
+    height: 2rem;
+    margin: 0;
+  }
+  .message-item{
+    font-size: 14px;
+  }
+  .message-strong{
+    font-size: 14px;
   }
 }
 </style>
